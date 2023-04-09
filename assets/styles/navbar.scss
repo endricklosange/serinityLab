@@ -1,0 +1,41 @@
+@import 'variables.scss';
+
+.form-inline {
+    position: relative;
+}
+nav.navbar.navbar-expand-lg.navbar-light.bg-primary {
+    border-bottom: #8B8B8B solid 2px;
+}
+.form-inline button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+div#navbarSupportedContent {
+    justify-content: center;
+}
+a.navbar-brand {
+    font-family: 'Gloock', serif;
+    color: white;
+    margin-left: 15px;
+
+    &:hover {
+        color: white;
+    }
+}
+li.nav-item a {
+    color: black;
+}
+nav.navbar.navbar-expand-lg.navbar-light.bg-primary {
+    padding: 11px 20px;
+}
+.navRadius{
+    background-color: white;
+    border-radius: 17px;
+    padding: 0px 57px;
+    margin: 0 1px;
+    height: 40px;
+}
+.search::placeholder {
+    text-align: center;
+  }

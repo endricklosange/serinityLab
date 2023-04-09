@@ -15,31 +15,62 @@
       padding: 2px 6px;
     }
   </style>
-
-  <div class="example-wrapper">
-    <h1>Hello
-      {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-      <li>Your controller at
-        <code>
-          <a href="{{ '/root/serinityLab/src/Controller/LandingPageController.php'|file_link(0) }}">src/Controller/LandingPageController.php</a>
-        </code>
-      </li>
-      <li>Your template at
-        <code>
-          <a href="{{ '/root/serinityLab/templates/landing_page/index.html.twig'|file_link(0) }}">templates/landing_page/index.html.twig</a>
-        </code>
-      </li>
-    </ul>
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="..." alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+  <section class="section1 bg-primary">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Trouvez l’activité qu’il vous faut</h1>
+          <p>Pour être au courant de l’ouverture du site, laissez nous votre mail</p>
+          <form class="form-inline">
+            <input class="form-control navRadius search" type="search" placeholder="Rechercher" aria-label="Search">
+            <button class="btn" type="submit"><img class="searchIcone" src="{{ asset('build/images/Vector.svg') }}" alt="searchIcone"></button>
+          </form>
+        </div>
+        <div class="col-md-6 position-relative">
+          <img class="yogaWomen" src="{{ asset('build/images/yogaWomen.svg') }}" alt="yogaWomen">
+          <img class="headMassage" src="{{ asset('build/images/headMassage.svg') }}" alt="headMassage">
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+  <section class="section2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>La possibilité de voir les activités autour de vous</h2>
+          <p>En effet, grâce à une map vous pouvez voir les différentes activités près de vous. Vous pourrez ainsi repérer les salles de sports ou activités de bien être qui vous convient.</p>
+        </div>
+        <div class="col-md-6 position-relative">
+          <img class="watchPhone" src="{{ asset('build/images/watchPhone.svg') }}" alt="watchPhone">
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section3 bg-primary py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 position-relative">
+          <img class="imageFiltre" src="{{ asset('build/images/imageFilre.svg') }}" alt="imageFiltre">
+        </div>
+        <div class="col-md-6">
+          <h2>Retrouvez le filtre pour vous trouvez l’activité qui est faites pour vous</h2>
+          <p>Vous avez la possibilité de retrouver un filtre qui va vous permettre de tomber sur l’activité que vous rechercher. Que ce soit par thème, prix ou proximité.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Discutez et échangez avec les utilisateurs du site</h2>
+          <p>Vous pouvez avec un chat intégré sur le site, échangez avec d’autres utilisateurs du site. Cela peut être pour des conseils d’activités ou pour se motiver.</p>
+        </div>
+        <div class="col-md-6 position-relative">
+          <img class="imageTalk" src="{{ asset('build/images/imageTalk.svg') }}" alt="imageTalk">
+        </div>
+      </div>
+    </div>
+  </section>
+
 {% endblock %}

@@ -1,10 +1,9 @@
+@import 'variables.scss';
 @import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Gloock&display=swap');
+@import 'navbar.scss';
+@import 'landingPage.scss';
 
-$primary: #304035;
-$secondary: #517360;
-$info: #8c873b;
-$black: #131315;
-$white: #f9f9f9;
 body {
-    background-color: red;
+    background-color: rgb(255, 255, 255);
 }
