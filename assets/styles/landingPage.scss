@@ -1,17 +1,36 @@
-.section1{
+.section1 {
     padding-top: 85px;
     padding-bottom: 253px;
-    h1,p{
+    h1,
+    p {
         color: white;
     }
-    h1{
+    h1 {
         font-size: 85px;
-        font-family: 'Gloock', serif;
+        font-family: "Gloock", serif;
     }
-    p{
+    p {
         font-size: 32px;
-        font-family: 'Gentium Book Plus', serif;
+        font-family: "Gentium Book Plus", serif;
         margin-top: 45px;
+    }
+    .sendEmail {
+        display: flex;
+        font-size: 36px;
+        input#contact_email {
+            padding: 4px 20px;
+            background: none;
+            color: white;
+            border: white solid 2px;
+            &::placeholder {
+                color: white;
+            }
+        }
+        input.btn.btn-secondary {
+            padding: 0 25px;
+            border-radius: 0;
+            font-size: 36px;
+        }
     }
     img.yogaWomen {
         z-index: 1;
@@ -24,65 +43,214 @@
         z-index: 0;
     }
 }
-.section2{
+
+.section2 {
     padding-top: 50px;
-   
-    h2{
+    padding-bottom: 50px;
+
+    h2 {
         font-size: 60px;
-        font-family: 'Gloock', serif;
+        font-family: "Gloock", serif;
     }
-    p{
+    p {
         font-size: 32px;
-        font-family: 'Gentium Book Plus', serif;
+        font-family: "Gentium Book Plus", serif;
         margin-top: 45px;
     }
-    img.yogaWomen {
-        z-index: 1;
-        position: relative;
-    }
-    img.headMassage {
-        position: absolute;
-        top: 302px;
-        left: 356px;
-        z-index: 0;
-    }
 }
-.section3{
-   
-    h2,p{
-        color: white;;
+.section3 {
+    h2,
+    p {
+        color: white;
     }
-    h2{
+    h2 {
         padding-top: 45px;
         font-size: 60px;
-        font-family: 'Gloock', serif;
+        font-family: "Gloock", serif;
     }
-    p{
+    p {
         font-size: 32px;
-        font-family: 'Gentium Book Plus', serif;
+        font-family: "Gentium Book Plus", serif;
         margin-top: 45px;
     }
 }
-.section4{
+.section4 {
     padding-top: 50px;
-   
-    h2{
+    padding-bottom: 50px;
+
+    h2 {
         font-size: 60px;
-        font-family: 'Gloock', serif;
+        font-family: "Gloock", serif;
     }
-    p{
+    p {
         font-size: 32px;
-        font-family: 'Gentium Book Plus', serif;
+        font-family: "Gentium Book Plus", serif;
         margin-top: 45px;
     }
-    img.yogaWomen {
-        z-index: 1;
-        position: relative;
+}
+
+@media only screen and (max-width: $landscapeTablets) {
+    .section1 {
+        padding-bottom: 89px;
+        img.headMassage {
+            display: none !important;
+        }
     }
-    img.headMassage {
-        position: absolute;
-        top: 302px;
-        left: 356px;
-        z-index: 0;
+}
+@media only screen and (max-width: $portraitTablets) {
+    .section1 {
+        padding-top: 85px;
+        padding-bottom: 80px;
+        h1,
+        p {
+            color: white;
+        }
+        h1 {
+            font-size: 70px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 29px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 45px;
+        }
+        img.yogaWomen {
+            z-index: 1;
+            position: relative;
+        }
+    }
+    .section2 {
+        padding-top: 50px;
+
+        h2 {
+            font-size: 50px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 29px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 45px;
+        }
+    }
+    .section3 {
+        h2,
+        p {
+            color: white;
+        }
+        h2 {
+            padding-top: 45px;
+            font-size: 50px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 29px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 45px;
+        }
+    }
+    .section4 {
+        padding-top: 50px;
+
+        h2 {
+            font-size: 50px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 29px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 45px;
+        }
+    }
+}
+@media only screen and (max-width: $landscapeMobile) {
+    .section1 {
+        padding-top: 75px;
+        padding-bottom: 80px;
+        text-align: center;
+        .sendEmail {
+            justify-content: center;
+            display: flex;
+            font-size: 14px;
+            margin-bottom: 28px;
+            input#contact_email {
+                padding: 4px 20px;
+                background: none;
+                color: white;
+                border: white solid 2px;
+                &::placeholder {
+                    color: white;
+                }
+            }
+            input.btn.btn-secondary {
+                padding: 0 25px;
+                border-radius: 0;
+                font-size: 14px;
+            }
+        }
+        h1,
+        p {
+            color: white;
+        }
+        h1 {
+            font-size: 50px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 25px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 25px;
+        }
+        img.yogaWomen {
+            z-index: 1;
+            position: relative;
+        }
+    }
+    .section2 {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        text-align: center;
+
+        h2 {
+            font-size: 40px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 25px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 25px;
+        }
+    }
+    .section3 {
+        text-align: center;
+
+        h2,
+        p {
+            color: white;
+        }
+        h2 {
+            padding-top: 45px;
+            font-size: 40px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 25px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 25px;
+        }
+    }
+    .section4 {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        text-align: center;
+
+        h2 {
+            font-size: 40px;
+            font-family: "Gloock", serif;
+        }
+        p {
+            font-size: 25px;
+            font-family: "Gentium Book Plus", serif;
+            margin-top: 25px;
+        }
     }
 }

@@ -3,6 +3,9 @@
 .form-inline {
     position: relative;
 }
+img.userLogo {
+    margin-left: 10px;
+}
 nav.navbar.navbar-expand-lg.navbar-light.bg-primary {
     border-bottom: #8B8B8B solid 2px;
 }
@@ -39,3 +42,11 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-primary {
 .search::placeholder {
     text-align: center;
   }
+  input.form-control.navRadius.search {
+    border: none;
+}
+@media only screen and (max-width: $portraitTablets) {
+    .userNav{
+        display: none;
+    }
+}
