@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LandingPageController!{% endblock %}
+{% block title %}SerinityLab{% endblock %}
 
 {% block body %}
   <section class="section1 bg-primary">
@@ -9,9 +9,11 @@
         <div class="col-md-6">
           <h1>Trouvez l’activité qu’il vous faut</h1>
           <p>Pour être au courant de l’ouverture du site, laissez nous votre mail</p>
-              {{ include('component/_form.html.twig') }}
+          {{ include('component/_form.html.twig') }}
         </div>
         <div class="col-md-6 position-relative">
+        <div data-aos="flip-left"></div>
+
           <img class="yogaWomen img-fluid" src="{{ asset('build/images/yogaWomen.svg') }}" alt="yogaWomen">
           <img class="headMassage img-fluid" src="{{ asset('build/images/headMassage.svg') }}" alt="headMassage">
         </div>

@@ -1,4 +1,12 @@
+
 {{ form_start(form, {'attr': {'class': 'sendEmail'}}) }}
+
+{{ form_errors(form,{'attr': {'class': 'error'}}) }}
 {{ form_row(form.email) }}
 <input type="submit" value="Envoyer" class="btn btn-secondary">
 {{ form_end(form) }}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message}}
+    </div>
+{% endfor %}

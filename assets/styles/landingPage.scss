@@ -12,11 +12,15 @@
     p {
         font-size: 32px;
         font-family: "Gentium Book Plus", serif;
-        margin-top: 45px;
+        margin-top: 24px;
     }
     .sendEmail {
         display: flex;
         font-size: 36px;
+        position: relative;
+        margin-top: 37px;
+        margin-bottom: 10px;
+
         input#contact_email {
             padding: 4px 20px;
             background: none;
@@ -31,6 +35,16 @@
             border-radius: 0;
             font-size: 36px;
         }
+         li {
+            color: white;
+            font-size: 0.4em;
+        }
+        
+        ul {
+            bottom: 52px;
+            position: absolute;
+        }
+        
     }
     img.yogaWomen {
         z-index: 1;
@@ -88,6 +102,8 @@
         margin-top: 45px;
     }
 }
+
+
 
 @media only screen and (max-width: $landscapeTablets) {
     .section1 {
