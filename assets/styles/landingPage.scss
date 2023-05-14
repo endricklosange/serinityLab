@@ -270,3 +270,17 @@
         }
     }
 }
+    
+
+
+  @media only screen and (min-width: 1024px) and (max-width: 1600px) {
+    img.yogaWomen.img-fluid {
+        width: 64%;
+    }
+    img.headMassage.img-fluid {
+        width: 47%;
+    }  
+    .section1 img.headMassage {
+        left: 284px;
+    }
+}

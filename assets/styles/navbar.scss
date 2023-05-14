@@ -1,4 +1,4 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .form-inline {
     position: relative;
@@ -6,8 +6,8 @@
 img.userLogo {
     margin-left: 10px;
 }
-nav.navbar.navbar-expand-lg.navbar-light.bg-primary {
-    border-bottom: #8B8B8B solid 2px;
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary {
+    border-bottom: #8b8b8b solid 2px;
 }
 .form-inline button {
     position: absolute;
@@ -18,7 +18,7 @@ div#navbarSupportedContent {
     justify-content: center;
 }
 a.navbar-brand {
-    font-family: 'Gloock', serif;
+    font-family: "Gloock", serif;
     color: white;
     margin-left: 15px;
 
@@ -29,24 +29,34 @@ a.navbar-brand {
 li.nav-item a {
     color: black;
 }
-nav.navbar.navbar-expand-lg.navbar-light.bg-primary {
-    padding: 11px 20px;
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary {
+    padding: 15px 20px;
 }
-.navRadius{
-    background-color: white;
-    border-radius: 17px;
-    padding: 0px 57px;
+.navRadius {
+    background-color: #ffffff00;
+    border-radius: 0;
+    padding: 0px 57px 0 10px;
+    border-bottom: solid white  1.5px !important;
     margin: 0 1px;
     height: 40px;
 }
+ul.navbar-nav {
+    width: 100%;
+    justify-content: center;
+}
+
+li.nav-item {
+    width: 57%;
+}
+
 .search::placeholder {
-    text-align: center;
-  }
-  input.form-control.navRadius.search {
+    color: rgba(255, 255, 255, 0.542);
+}
+input.form-control.navRadius.search {
     border: none;
 }
 @media only screen and (max-width: $portraitTablets) {
-    .userNav{
+    .userNav {
         display: none;
     }
 }
