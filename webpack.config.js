@@ -24,6 +24,7 @@ Encore
 
         // only copy files matching this pattern
         // pattern: /\.(png|jpg|jpeg)$/
+        
     })
     /*
      * ENTRY CONFIG

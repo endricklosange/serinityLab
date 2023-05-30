@@ -1,0 +1,111 @@
+{{ form_start(form) }}
+
+{{ form_widget(form._token)}}
+<div class="form-group">
+  {{ form_label(form.name, 'Nom') }}
+  {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div class="form-group">
+  {{ form_label(form.description, 'Description') }}
+  {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div class="form-group">
+  {{ form_label(form.category_id, 'Catégorie') }}
+  {{ form_widget(form.category_id, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div id="services" class="form-group" data-prototype="{{ form_row(form.services.vars.prototype)|e('html_attr') }}">
+  {{ form_row(form.services) }}
+              <span></span>
+</div>
+<div id="activityImages" class="form-group" data-prototype="{{ form_row(form.activityImages.vars.prototype)|e('html_attr') }}">
+  {{ form_row(form.activityImages) }}
+              <span></span>
+</div>
+<div class="form-group">
+  {{ form_label(form.price, 'Prix') }}
+  {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div class="form-group">
+  {{ form_label(form.address, 'Adresse') }}
+  {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div class="form-group">
+  {{ form_label(form.latitude, 'Latitude') }}
+  {{ form_widget(form.latitude, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div class="form-group">
+  {{ form_label(form.longitude, 'Longitude') }}
+  {{ form_widget(form.longitude, {'attr': {'class': 'form-control'}}) }}
+</div>
+<button type="submit" class="btn btn-primary">Ajouter</button>
+{{ form_end(form, {render_rest: false}) }}
+{% block javascripts %}
+  <script>
+    let collection, boutonAjout, span;
+    window.onload = () => {
+      collection = document.querySelector("#services");
+      span = collection.querySelector("span");
+
+      boutonAjout = document.createElement("button");
+      boutonAjout.className = "ajout-service btn btn-secondary";
+      boutonAjout.type = "button";
+      boutonAjout.innerText = "Ajouter un service";
+
+      let nouveauBouton = span.append(boutonAjout);
+
+      collection.dataset.index = collection.querySelectorAll("input").length;
+
+      boutonAjout.addEventListener("click", function () {
+        addButton(collection, nouveauBouton);
+      });
+
+      // Code spécifique pour le champ "activityImages"
+      let collectionActivityImages = document.querySelector("#activityImages");
+      let spanActivityImages = collectionActivityImages.querySelector("span");
+
+      let boutonAjoutActivityImages = document.createElement("button");
+      boutonAjoutActivityImages.className = "ajout-activityImages btn btn-secondary";
+      boutonAjoutActivityImages.type = "button";
+      boutonAjoutActivityImages.innerText = "Ajouter une image d'activité";
+
+      let nouveauBoutonActivityImages = spanActivityImages.append(boutonAjoutActivityImages);
+
+      collectionActivityImages.dataset.index = collectionActivityImages.querySelectorAll("input").length;
+
+      boutonAjoutActivityImages.addEventListener("click", function () {
+        addButton(collectionActivityImages, nouveauBoutonActivityImages);
+      });
+    };
+
+    function addButton(collection, nouveauBouton) {
+      let prototype = collection.dataset.prototype;
+
+      let index = collection.dataset.index;
+
+      prototype = prototype.replace(/__name__/g, index);
+
+      let content = document.createElement("html");
+      content.innerHTML = prototype;
+      let newForm = content.querySelector("div");
+
+      let boutonSuppr = document.createElement("button");
+      boutonSuppr.type = "button";
+      boutonSuppr.className = "btn red btn btn-danger";
+      boutonSuppr.id = "delete-service-" + index;
+      boutonSuppr.innerText = "Supprimer ce service";
+
+      newForm.append(boutonSuppr);
+
+      collection.dataset.index++;
+
+      let boutonAjout = collection.querySelector(".ajout-service");
+
+      span.insertBefore(newForm, boutonAjout);
+
+      boutonSuppr.addEventListener("click", function () {
+        this.previousElementSibling.parentElement.remove();
+      });
+    }
+  </script>
+{% endblock %}
+
