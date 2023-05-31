@@ -56,7 +56,6 @@ class AdminActivityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $activityRepository->save($activity, true);
-
             return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
         }
 

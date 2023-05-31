@@ -10,6 +10,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ActivityType extends AbstractType
@@ -17,9 +21,9 @@ class ActivityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
-            ->add('category_id',EntityType::class,[
+            ->add('name', TextType::class)
+            ->add('description', TextareaType::class)
+            ->add('category_id', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'label' => 'Categorie',
@@ -38,11 +42,19 @@ class ActivityType extends AbstractType
                 'allow_delete' => true, // Autoriser la suppression de services existants
                 'by_reference' => false, // Assurez-vous que les services sont gérés par la méthode addActivityImage/removeActivityImage de l'entité Activity
             ])
-            ->add('price')
-            ->add('address')
-            ->add('latitude')
-            ->add('longitude')          
-        ;
+            ->add('price', MoneyType::class, [
+                'label' => 'Prix',
+                'scale' => 2,
+            ])
+            ->add('address', TextType::class)
+            ->add('latitude', NumberType::class, [
+                'scale' => 8,
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('longitude', NumberType::class, [
+                'scale' => 8,
+                'attr' => ['class' => 'form-control'],
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

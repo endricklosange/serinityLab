@@ -14,8 +14,11 @@ class ActivityImageType extends AbstractType
     {
         $builder->add('imageFile', VichImageType::class,[
             'label' => 'Image',
-            'required' => false,
             'download_uri' => false,
+            'required' => false,
+            'attr' => [
+                'class' => 'form-control'
+            ],
         ]);
     }
 

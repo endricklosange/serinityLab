@@ -15,11 +15,11 @@
 </div>
 <div id="services" class="form-group" data-prototype="{{ form_row(form.services.vars.prototype)|e('html_attr') }}">
   {{ form_row(form.services) }}
-              <span></span>
+  <span></span>
 </div>
 <div id="activityImages" class="form-group" data-prototype="{{ form_row(form.activityImages.vars.prototype)|e('html_attr') }}">
   {{ form_row(form.activityImages) }}
-              <span></span>
+  <span></span>
 </div>
 <div class="form-group">
   {{ form_label(form.price, 'Prix') }}
@@ -39,73 +39,84 @@
 </div>
 <button type="submit" class="btn btn-primary">Ajouter</button>
 {{ form_end(form, {render_rest: false}) }}
+
 {% block javascripts %}
   <script>
-    let collection, boutonAjout, span;
-    window.onload = () => {
-      collection = document.querySelector("#services");
-      span = collection.querySelector("span");
+  let collection,
+    boutonAjout,
+    span;
+  window.onload = () => {
+    collection = document.querySelector("#services");
+    span = collection.querySelector("span");
 
-      boutonAjout = document.createElement("button");
-      boutonAjout.className = "ajout-service btn btn-secondary";
-      boutonAjout.type = "button";
-      boutonAjout.innerText = "Ajouter un service";
+    boutonAjout = document.createElement("button");
+    boutonAjout.className = "ajout-services btn btn-secondary";
+    boutonAjout.innerText = "Ajouter un service";
 
-      let nouveauBouton = span.append(boutonAjout);
+    let nouveauBouton = span.append(boutonAjout);
 
-      collection.dataset.index = collection.querySelectorAll("input").length;
+    collection.dataset.index = collection.querySelectorAll("input").length;
 
-      boutonAjout.addEventListener("click", function () {
-        addButton(collection, nouveauBouton);
+    boutonAjout.addEventListener("click", function () {
+      addButton(collection, nouveauBouton);
+    });
+
+    // Code pour le champ "activityImages"
+    let activityImagesCollection = document.querySelector("#activityImages");
+    let activityImagesSpan = activityImagesCollection.querySelector("span");
+
+    let activityImagesBoutonAjout = document.createElement("button");
+    activityImagesBoutonAjout.className = "ajout-activityImages btn btn-secondary";
+    activityImagesBoutonAjout.innerText = "Ajouter une image";
+
+    let activityImagesNouveauBouton = activityImagesSpan.append(activityImagesBoutonAjout);
+
+    activityImagesCollection.dataset.index = activityImagesCollection.querySelectorAll("input").length;
+
+    activityImagesBoutonAjout.addEventListener("click", function () {
+      addButton(activityImagesCollection, activityImagesNouveauBouton);
+    });
+
+    // Code pour les boutons de suppression existants lors de l'édition
+    let existingServicesDeleteButtons = document.querySelectorAll(".delete-service");
+    existingServicesDeleteButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        deleteButton(this);
       });
+    });
 
-      // Code spécifique pour le champ "activityImages"
-      let collectionActivityImages = document.querySelector("#activityImages");
-      let spanActivityImages = collectionActivityImages.querySelector("span");
-
-      let boutonAjoutActivityImages = document.createElement("button");
-      boutonAjoutActivityImages.className = "ajout-activityImages btn btn-secondary";
-      boutonAjoutActivityImages.type = "button";
-      boutonAjoutActivityImages.innerText = "Ajouter une image d'activité";
-
-      let nouveauBoutonActivityImages = spanActivityImages.append(boutonAjoutActivityImages);
-
-      collectionActivityImages.dataset.index = collectionActivityImages.querySelectorAll("input").length;
-
-      boutonAjoutActivityImages.addEventListener("click", function () {
-        addButton(collectionActivityImages, nouveauBoutonActivityImages);
+    let existingImagesDeleteButtons = document.querySelectorAll(".delete-image");
+    existingImagesDeleteButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        deleteButton(this);
       });
-    };
+    });
+  };
 
-    function addButton(collection, nouveauBouton) {
-      let prototype = collection.dataset.prototype;
+  function addButton(collection, nouveauBouton) {
+    let prototype = collection.dataset.prototype;
+    let index = collection.dataset.index;
+    prototype = prototype.replace(/__name__/g, index);
+    let content = document.createElement("html");
+    content.innerHTML = prototype;
+    let newForm = content.querySelector("div");
+    let boutonSuppr = document.createElement("button");
+    boutonSuppr.type = "button";
+    boutonSuppr.className = "delete-service btn red btn btn-danger"; // Ajout de la classe "delete-service"
+    boutonSuppr.id = "delete-services-" + index;
+    boutonSuppr.innerText = "Supprimer ce service";
+    newForm.append(boutonSuppr);
+    collection.dataset.index++;
+    let boutonAjout = collection.querySelector(".ajout-departement");
+    span.insertBefore(newForm, boutonAjout);
+    boutonSuppr.addEventListener("click", function () {
+      deleteButton(this);
+    });
+  }
 
-      let index = collection.dataset.index;
+  function deleteButton(button) {
+    button.previousElementSibling.parentElement.remove();
+  }
+</script>
 
-      prototype = prototype.replace(/__name__/g, index);
-
-      let content = document.createElement("html");
-      content.innerHTML = prototype;
-      let newForm = content.querySelector("div");
-
-      let boutonSuppr = document.createElement("button");
-      boutonSuppr.type = "button";
-      boutonSuppr.className = "btn red btn btn-danger";
-      boutonSuppr.id = "delete-service-" + index;
-      boutonSuppr.innerText = "Supprimer ce service";
-
-      newForm.append(boutonSuppr);
-
-      collection.dataset.index++;
-
-      let boutonAjout = collection.querySelector(".ajout-service");
-
-      span.insertBefore(newForm, boutonAjout);
-
-      boutonSuppr.addEventListener("click", function () {
-        this.previousElementSibling.parentElement.remove();
-      });
-    }
-  </script>
 {% endblock %}
-

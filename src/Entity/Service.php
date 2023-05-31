@@ -27,6 +27,9 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Activity $activity_id = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $price = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class Service
     public function setActivityId(?Activity $activity_id): self
     {
         $this->activity_id = $activity_id;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }
