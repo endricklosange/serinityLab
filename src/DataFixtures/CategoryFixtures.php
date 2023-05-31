@@ -5,8 +5,9 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class CategoryFixtures extends Fixture
+class CategoryFixtures extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -21,4 +22,9 @@ class CategoryFixtures extends Fixture
 
         $manager->flush();
     }
+    public function getOrder()
+    {
+        return 1;
+    }
+    
 }
