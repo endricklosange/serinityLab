@@ -13,10 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('admin/activity')]
 class AdminActivityController extends AbstractController
 {
-    #[Route('/', name: 'app_activity_index', methods: ['GET'])]
+    #[Route('/', name: 'app_admin_activity_index', methods: ['GET'])]
     public function index(ActivityRepository $activityRepository): Response
     {
-        return $this->render('activity/index.html.twig', [
+        return $this->render('admin/activity/index.html.twig', [
             'activities' => $activityRepository->findAll(),
         ]);
     }
@@ -31,19 +31,19 @@ class AdminActivityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $activityRepository->save($activity, true);
 
-            return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('activity/new.html.twig', [
+        return $this->renderForm('admin/activity/new.html.twig', [
             'activity' => $activity,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_activity_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_admin_activity_show', methods: ['GET'])]
     public function show(Activity $activity): Response
     {
-        return $this->render('activity/show.html.twig', [
+        return $this->render('admin/activity/show.html.twig', [
             'activity' => $activity,
         ]);
     }
@@ -56,10 +56,10 @@ class AdminActivityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $activityRepository->save($activity, true);
-            return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('activity/edit.html.twig', [
+        return $this->renderForm('admin/activity/edit.html.twig', [
             'activity' => $activity,
             'form' => $form,
         ]);
@@ -72,6 +72,6 @@ class AdminActivityController extends AbstractController
             $activityRepository->remove($activity, true);
         }
 
-        return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
     }
 }

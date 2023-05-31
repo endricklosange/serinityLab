@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activités{% endblock %}
+{% block title %}{{category.name}}{% endblock %}
 
 {% block body %}
-
   <div class="container ">
-    {% for category in categories %}
+   {% for category in categories %}
       <a href="{{ path('app_activity_category', { 'id': category.id }) }}">{{ category.name }}</a>
     {% endfor %}
+  <h1>{{category.name}}</h1>
     <div class="row my-5">
       {% for activity in activities %}
         <div class="col-md-4">
@@ -30,7 +30,7 @@
           </a>
         </div>
       {% endfor %}
-
+      
     </div>
   </div>
 {% endblock %}
