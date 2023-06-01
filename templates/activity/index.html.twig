@@ -3,34 +3,12 @@
 {% block title %}Activités{% endblock %}
 
 {% block body %}
-
   <div class="container ">
     {% for category in categories %}
       <a href="{{ path('app_activity_category', { 'id': category.id }) }}">{{ category.name }}</a>
     {% endfor %}
     <div class="row my-5">
-      {% for activity in activities %}
-        <div class="col-md-4">
-          <a href="{{ path('app_activity_show', {'id': activity.id}) }}" class="card">
-            <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-              {% if activity.activityImages[0] is defined %}
-                <img src="/images/activity/{{activity.activityImages[0].name}}" class="img-fluid"/>
-              {% else %}
-                <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
-              {% endif %}
-              <a href="#!">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-              </a>
-            </div>
-
-            <div class="card-body">
-              <h5 class="card-title">{{activity.name}}</h5>
-              <p class="card-text">{{activity.price}}€</p>
-            </div>
-          </a>
-        </div>
-      {% endfor %}
-
+            {% include 'activity/_product.html.twig' %}
     </div>
   </div>
 {% endblock %}

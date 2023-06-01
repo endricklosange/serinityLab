@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Activity;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Activity>
@@ -39,28 +40,16 @@ class ActivityRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Activity[] Returns an array of Activity objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByLocation($latitude, $longitude)
+    {
+        $qb = $this->createQueryBuilder('a');
 
-//    public function findOneBySomeField($value): ?Activity
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        // Calcul de la distance entre la position de l'utilisateur et les activités
+        $qb->select('a')
+            ->addSelect('(6371 * ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(a.latitude)) * COS(RADIANS(a.longitude) - RADIANS(:longitude)) + SIN(RADIANS(:latitude)) * SIN(RADIANS(a.latitude)))) AS HIDDEN distance')
+            ->setParameter('latitude', $latitude)
+            ->setParameter('longitude', $longitude)
+            ->orderBy('distance');
+        return $qb->getQuery()->getResult();
+    }
 }
