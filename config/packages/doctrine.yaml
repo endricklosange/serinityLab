@@ -10,6 +10,13 @@ doctrine:
         enable_lazy_ghost_objects: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
+        dql:
+            string_functions:
+                ACOS: DoctrineExtensions\Query\Mysql\Acos
+            numeric_functions:
+                COS: DoctrineExtensions\Query\Mysql\Cos
+                RADIANS: DoctrineExtensions\Query\Mysql\Radians              
+                SIN: DoctrineExtensions\Query\Mysql\Sin              
         mappings:
             App:
                 is_bundle: false
