@@ -1,10 +1,10 @@
 
-{{ form_start(form, {'attr': {'class': 'sendEmail'}}) }}
+{{ form_start(formContact, {'attr': {'class': 'sendEmail'}}) }}
 
-{{ form_errors(form,{'attr': {'class': 'error'}}) }}
-{{ form_row(form.email) }}
+{{ form_errors(formContact,{'attr': {'class': 'error'}}) }}
+{{ form_row(formContact.email) }}
 <input type="submit" value="Envoyer" class="btn btn-secondary">
-{{ form_end(form) }}
+{{ form_end(formContact) }}
 {% for message in app.flashes('success') %}
     <div class="alert alert-success">
         {{ message}}

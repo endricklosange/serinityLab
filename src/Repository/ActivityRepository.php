@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Search;
 use App\Entity\Activity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
@@ -52,4 +53,15 @@ class ActivityRepository extends ServiceEntityRepository
             ->orderBy('distance');
         return $qb->getQuery()->getResult();
     }
+   public function findSearch(Search $search): array
+{
+    $query = $this->createQueryBuilder('a')
+        ->leftJoin('a.category_id', 'c')
+        ->where('c.name LIKE :search OR a.name LIKE :search OR a.address LIKE :search')
+        ->setParameter('search', '%' . $search . '%')
+        ->getQuery();
+
+    return $query->getResult();
+}
+
 }

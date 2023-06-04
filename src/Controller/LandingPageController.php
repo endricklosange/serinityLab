@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Search;
 use App\Entity\Contact;
 use App\Form\ContactType;
+use App\Form\SearchFormType;
 use Symfony\Component\Mime\Email;
 use App\Repository\ContactRepository;
+use App\Repository\ActivityRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -16,12 +20,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LandingPageController extends AbstractController
 {
     #[Route('/', name: 'app_landing_page')]
-    public function sendEmail(Request $request, ContactRepository $contactRepository): Response
+    public function sendEmail(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository,ContactRepository $contactRepository): Response
     {
         $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
+        $formContact = $this->createForm(ContactType::class, $contact);
+        $formContact->handleRequest($request);
+        $data = new Search();
+        $form = $this->createForm(SearchFormType::class, $data);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' =>  $activityRepository->findSearch($data),
+                'form' => $form,
+                
+            ]);
+        }
+        if ($formContact->isSubmitted() && $formContact->isValid()) {
             /*$data = $form->getData();
             $email = (new Email())
                 ->from($data->getEmail())
@@ -38,7 +54,8 @@ class LandingPageController extends AbstractController
         }
 
         return $this->render('landing_page/index.html.twig', [
-            'form' => $form->createView()
+            'form' => $form,
+            'formContact' => $formContact
         ]);
     }
 }
