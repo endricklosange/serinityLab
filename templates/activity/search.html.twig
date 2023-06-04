@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activités{% endblock %}
+
+{% block body %}
+  <div class="container ">
+    {% for category in categories %}
+      <a href="{{ path('app_activity_category', { 'id': category.id }) }}">{{ category.name }}</a>
+    {% endfor %}
+    <button type="button" name="filterBtn" id="filterBtn" class="btn btn-primary">Filtre</button>
+
+    <div class="row my-5">
+
+      <div id="filterContent">
+        {% include 'activity/_filter.html.twig' %}
+      </div>
+        <div class="row">
+          {% include 'activity/_product.html.twig' %}
+        </div>
+    </div>
+  </div>
+{% endblock %}
+

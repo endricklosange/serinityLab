@@ -25,6 +25,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "nouislider": "^15.7.0",
         "sass-lint": "^1.13.1"
     }
 }

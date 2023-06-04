@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Filter;
 use App\Entity\Search;
 use App\Data\SearchData;
 use App\Entity\Activity;
+use App\Form\FilterType;
 use App\Form\SearchFormType;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
@@ -40,7 +42,7 @@ class ActivityController extends AbstractController
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
                 'form' => $form,
-                
+
             ]);
         }
 
@@ -52,7 +54,7 @@ class ActivityController extends AbstractController
                     ['created_at' => 'ASC']
                 )
             ]);
-        }else{
+        } else {
             return $this->render('/activity/index.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' => $activityRepository->findByLocation($userLocation['latitude'], $userLocation['longitude']),
@@ -62,23 +64,48 @@ class ActivityController extends AbstractController
         }
         // Passez les coordonnées à votre vue Twig
     }
-    #[Route('/search', name: 'app_activity_search')]
-    public function search(ActivityRepository $activityRepository, CategoryRepository $categoryRepository,Request $request): Response
+    #[Route('/search/', name: 'app_activity_search')]
+    public function search(ActivityRepository $activityRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
 
         $data = new Search();
+        $dataFilter = new Filter();
+        $session = $request->getSession();
+        $userLocation = array(
+            'latitude' => $session->get('latitude'),
+            'longitude' => $session->get('longitude')
+        );
+
         $form = $this->createForm(SearchFormType::class, $data);
         $form->handleRequest($request);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter);
+        $formFilter = $this->createForm(FilterType::class, $dataFilter, [
+            'default_min' => $min,
+            'default_max' => $max,
+        ]);
+        $formFilter->handleRequest($request);
+        if ($formFilter->isSubmitted() && $formFilter->isValid()) {
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' => $activityRepository->findFilter($dataFilter, $userLocation),
+                'form' => $form,
+                'formFilter' => $formFilter,
+                'min' => $min,
+                'max' => $max,
+            ]);
+        }
         return $this->render('/activity/search.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'activities' => $activityRepository->findSearch($data),
             'form' => $form,
-            
+            'formFilter' => $formFilter,
+            'min' => $min,
+            'max' => $max,
         ]);
     }
 
     #[Route('/category/{id}', name: 'app_activity_category', methods: ['GET'])]
-    public function showByCategory(Request $request,CategoryRepository $categoryRepository,ActivityRepository $activityRepository , int $id): Response
+    public function showByCategory(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, int $id): Response
     {
         $category = $categoryRepository->find($id);
 
@@ -96,7 +123,7 @@ class ActivityController extends AbstractController
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
                 'form' => $form,
-                
+
             ]);
         }
         return $this->render('/activity/category.html.twig', [
@@ -109,7 +136,7 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_activity_show', methods: ['GET'])]
-    public function show(Request $request,CategoryRepository $categoryRepository,ActivityRepository $activityRepository,Activity $activity): Response
+    public function show(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, Activity $activity): Response
     {
         $data = new Search();
         $form = $this->createForm(SearchFormType::class, $data);
@@ -120,7 +147,7 @@ class ActivityController extends AbstractController
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
                 'form' => $form,
-                
+
             ]);
         }
         return $this->render('/activity/show.html.twig', [

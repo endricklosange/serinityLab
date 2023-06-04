@@ -48,11 +48,11 @@ class ActivityType extends AbstractType
             ])
             ->add('address', TextType::class)
             ->add('latitude', NumberType::class, [
-                'scale' => 8,
+                'scale' => 14,
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('longitude', NumberType::class, [
-                'scale' => 8,
+                'scale' => 14,
                 'attr' => ['class' => 'form-control'],
             ]);;
     }

@@ -1,0 +1,78 @@
+{{ form_start(formFilter) }}
+
+<div class="form-group">
+  {{ form_label(formFilter.categories, null, {'label_attr': {'class': 'sr-only'}}) }}
+  {{ form_widget(formFilter.categories, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher'}}) }}
+</div>
+
+<div class="form-row">
+  <div class="row">
+    <div class="col-6">
+      {{ form_label(formFilter.min, null, {'label_attr': {'class': 'sr-only'}}) }}
+      {{ form_widget(formFilter.min, {'attr': {'id': 'min','class': 'form-control', 'placeholder': 'Prix minimum'}}) }}
+    </div>
+    <div class="col-6">
+      {{ form_label(formFilter.max, null, {'label_attr': {'class': 'sr-only'}}) }}
+      {{ form_widget(formFilter.max, {'attr': {'id': 'max','class': 'form-control', 'placeholder': 'Prix maximum',}}) }}
+    </div>
+  </div>
+  <div id="priceSlider" data-min="{{min}}" data-max="{{max}}"></div>
+</div>
+
+<div class="form-group">
+  {{ form_label(formFilter.ray, 'Dans un rayon de :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="wrapper">
+    <i class="uil uil-volume-mute" id="icon"></i>
+    {{ form_widget(formFilter.ray, {'attr': {'class': 'form-control range-slider','type': 'range','value': 0, 'placeholder': 'Rayon', 'min': 0, 'max': 100}}) }}
+    <span class="slide-value">{{ formFilter.ray.vars.value }}
+      Km</span>
+  </div>
+</div>
+<div class="form-group">
+  {{ form_label(formFilter.places, null, {'label_attr': {'class': 'sr-only'}}) }}
+  {{ form_widget(formFilter.places, {'attr': {'class': 'form-control', 'placeholder': 'lieu'}}) }}
+</div>
+<a href="{{ path('app_activity_search')}}">Tout effacer</a>
+<button type="submit" class="btn btn-primary">Valider</button>
+
+{% block javascripts %}
+  <script>
+    const icon = document.querySelector("#icon");
+    const range = document.querySelector(".range-slider");
+    const slideValue = document.querySelector(".slide-value");
+    const filterBtn = document.getElementById('filterBtn');
+    const filterContent = document.getElementById('filterContent');
+
+    range.addEventListener("input", () => {
+      let rangeVal = range.value + " Km";
+      slideValue.innerText = rangeVal;
+
+      if (rangeVal > 0) {
+        icon.classList.replace("uil-volume-mute", "uil-volume-down");
+      } else {
+        icon.classList.replace("uil-volume-down", "uil-volume-mute");
+      }
+      if (rangeVal > 30) {
+        icon.classList.replace("uil-volume-down", "uil-volume");
+      } else {
+        icon.classList.replace("uil-volume", "uil-volume-down");
+      }
+      if (rangeVal > 80) {
+        icon.classList.replace("uil-volume", "uil-volume-up");
+      } else {
+        icon.classList.replace("uil-volume-up", "uil-volume");
+      }
+    });
+        filterContent.style.display = 'none';
+
+    filterBtn.addEventListener('click', () => {
+      if (filterContent.style.display === 'none') {
+        filterContent.style.display = 'block';
+      } else {
+        filterContent.style.display = 'none';
+      }
+    });
+  </script>
+
+{% endblock %}
+{{ form_end(form) }}
