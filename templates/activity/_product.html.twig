@@ -1,5 +1,22 @@
 {% for activity in activities %}
   <div class="col-md-4">
+    {% if is_granted("ROLE_USER") %}
+    
+      {% for favorite in activity.favorite %}
+        {% if favorite.id == app.user.id %}
+        <a href="{{ path('app_activity_delete_favorite', {'id': activity.id}) }}" class="favoritesLink"><img src="{{ asset('build/images/fullHeart.png') }}" class="img-fluid" width="20px"/>
+
+        {% else %}
+
+        {% endif %}
+        {% else %}
+        <a href="{{ path('app_activity_add_favorite', {'id': activity.id}) }}" class="favoritesLink"><img src="{{ asset('build/images/emptyHeart.png') }}" class="img-fluid" width="20px"/>
+      {% endfor %}
+    {% else %}
+
+      {% endif %}
+
+    </a>
     <a href="{{ path('app_activity_show', {'id': activity.id}) }}" class="card">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
         {% if activity.activityImages[0] is defined %}

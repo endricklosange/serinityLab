@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Filter;
 use App\Entity\Search;
 use App\Data\SearchData;
@@ -10,7 +11,9 @@ use App\Form\FilterType;
 use App\Form\SearchFormType;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +55,9 @@ class ActivityController extends AbstractController
                 'activities' => $activityRepository->findBy(
                     [],
                     ['created_at' => 'ASC']
-                )
+                ),
+                'form' => $form
+
             ]);
         } else {
             return $this->render('/activity/index.html.twig', [
@@ -62,7 +67,28 @@ class ActivityController extends AbstractController
 
             ]);
         }
-        // Passez les coordonnées à votre vue Twig
+    }
+    #[Route('/favorite', name: 'app_activity_favorite')]
+    public function favorite(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository ): Response
+    {
+        $data = new Search();
+        $user = $this->getUser();
+        $form = $this->createForm(SearchFormType::class, $data);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' =>  $activityRepository->findSearch($data),
+                'form' => $form,
+
+            ]);
+        }
+        return $this->render('/activity/favorites.html.twig', [
+            'categories' => $categoryRepository->findAll(),
+            'activities' =>  $user->getFavorite(),
+            'form' => $form,
+
+        ]);
     }
     #[Route('/search/', name: 'app_activity_search')]
     public function search(ActivityRepository $activityRepository, CategoryRepository $categoryRepository, Request $request): Response
@@ -155,5 +181,32 @@ class ActivityController extends AbstractController
             'form' => $form,
 
         ]);
+    }
+    
+    #[Route('favorite/add/{id}', name: 'app_activity_add_favorite')]
+    public function addFavorite( Activity $activity,EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser(); // Récupérer l'utilisateur connecté
+
+        $activity->addFavorite($user); // Ajouter l'activité aux favoris de l'utilisateur
+
+        $entityManager->persist($user); // Persistez les modifications de l'utilisateur en base de données
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_activity');
+        //return new Response('Activité ajoutée en favori avec succès');
+    }
+    #[Route('favorite/delete/{id}', name: 'app_activity_delete_favorite')]
+    public function deleteFavorite(Activity $activity,EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser(); // Récupérer l'utilisateur connecté
+
+        $activity->removeFavorite($user); // Ajouter l'activité aux favoris de l'utilisateur
+
+        $entityManager->persist($user); // Persistez les modifications de l'utilisateur en base de données
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_activity');
+        //return new Response('Activité ajoutée en favori avec succès');
     }
 }
