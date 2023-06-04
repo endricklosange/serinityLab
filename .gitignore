@@ -24,5 +24,6 @@
 /node_modules/
 /public/build/
 npm-debug.log
+dump_create.sql
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
