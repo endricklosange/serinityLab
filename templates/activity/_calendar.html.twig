@@ -1,0 +1,46 @@
+<div id="calendar"></div>
+<div id="hours-container"></div>
+
+{% block javascripts %}
+
+  <script>
+  function getHoursForDate(clickedDate) {
+  // Ici, vous devez implémenter la logique pour récupérer les heures liées à la date cliquée
+  // Vous pouvez effectuer une requête Ajax vers un serveur ou accéder à des données stockées localement
+
+  // Pour cet exemple, nous allons simplement retourner un tableau statique d'heures
+  // Vous pouvez remplacer cette logique avec votre propre méthode de récupération des heures
+
+  var hours = ["10:00", "12:00", "14:00", "16:00"];
+  return hours;
+}
+    document.addEventListener('DOMContentLoaded', function () {
+      let calendarEl = document.getElementById('calendar');
+      let calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        timeZone: 'Europe/Paris',
+        dateClick: function (info) {
+          var clickedDate = info.date;
+          var formattedDate = clickedDate.toLocaleDateString(); // Formate la date selon les paramètres locaux du navigateur
+
+        console.log(formattedDate)
+          // Récupérer les heures associées à la date et effectuer une action avec elles
+          var hours = getHoursForDate(clickedDate);
+
+          // Afficher les heures
+          var hoursContainer = document.getElementById('hours-container');
+          hoursContainer.innerHTML = '';
+
+          for (var i = 0; i < hours.length; i++) {
+            var hour = hours[i];
+            var hourElement = document.createElement('div');
+            hourElement.textContent = hour;
+            hoursContainer.appendChild(hourElement);
+          }
+        }
+      });
+      calendar.render();
+    });
+  </script>
+{% endblock %}

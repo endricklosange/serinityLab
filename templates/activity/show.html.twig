@@ -5,6 +5,22 @@
 {% block body %}
     <h1>Activity</h1>
 
+<div class="container">
+    <div class="row">
+        <p>All img</p>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <p>All Containt</p>
+        </div>
+        <div class="col-md-4">
+            <h1>{{ activity.name }}</h1>
+            <p>prestations</p>
+            <p>Disponibilités</p>
+            {% include 'activity/_calendar.html.twig' %}
+        </div>
+    </div>
+</div>
     <table class="table">
         <tbody>
             <tr>
