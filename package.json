@@ -1,5 +1,5 @@
 {
-    "devDependencies": {
+    "dependencies": {
         "@babel/core": "^7.17.0",
         "@babel/preset-env": "^7.16.0",
         "@hotwired/stimulus": "^3.0.0",
@@ -9,8 +9,11 @@
         "bootstrap": "^5.2.3",
         "core-js": "^3.23.0",
         "file-loader": "^6.0.0",
+        "moment": "^2.29.4",
+        "nouislider": "^15.7.0",
         "regenerator-runtime": "^0.13.9",
         "sass": "^1.61.0",
+        "sass-lint": "^1.13.1",
         "sass-loader": "^13.0.0",
         "webpack": "^5.74.0",
         "webpack-cli": "^4.10.0",
@@ -23,9 +26,5 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
-    },
-    "dependencies": {
-        "nouislider": "^15.7.0",
-        "sass-lint": "^1.13.1"
     }
 }

@@ -12,29 +12,18 @@
                 <td>{{ reservation.id }}</td>
             </tr>
             <tr>
-                <th>Service_id</th>
-                <td>{{ reservation.serviceId }}</td>
-            </tr>
-            <tr>
-                <th>User_id</th>
-                <td>{{ reservation.userId }}</td>
-            </tr>
-            <tr>
                 <th>Reservation_start</th>
-                <td>{{ reservation.reservationStart ? reservation.reservationStart|date('Y-m-d') : '' }}</td>
+                <td>{{ reservation.reservationStart ? reservation.reservationStart|date('Y-m-d H:i') : '' }}</td>
             </tr>
             <tr>
                 <th>Reservation_end</th>
-                <td>{{ reservation.reservationEnd ? reservation.reservationEnd|date('Y-m-d') : '' }}</td>
+                <td>{{ reservation.reservationEnd ? reservation.reservationEnd|date('Y-m-d H:i') : '' }}</td>
             </tr>
             <tr>
                 <th>Status</th>
                 <td>{{ reservation.status ? 'Yes' : 'No' }}</td>
             </tr>
-            <tr>
-                <th>Pay</th>
-                <td>{{ reservation.pay ? 'Yes' : 'No' }}</td>
-            </tr>
+
             <tr>
                 <th>Created_at</th>
                 <td>{{ reservation.createdAt ? reservation.createdAt|date('Y-m-d H:i:s') : '' }}</td>

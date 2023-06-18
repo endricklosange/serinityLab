@@ -55,7 +55,7 @@ class Activity
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favorite')]
     private Collection $favorite;
 
-    #[ORM\OneToMany(mappedBy: 'activity_id', targetEntity: Reservation::class)]
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Reservation::class)]
     private Collection $reservations;
 
     public function __construct()

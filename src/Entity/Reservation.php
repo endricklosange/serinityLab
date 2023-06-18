@@ -16,23 +16,18 @@ class Reservation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $service_id = null;
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Activity $activity = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $user_id = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $reservation_start = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $reservation_end = null;
 
     #[ORM\Column]
     private ?bool $status = false;
-
-    #[ORM\Column]
-    private ?bool $pay = false;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
@@ -40,9 +35,10 @@ class Reservation
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reservations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Activity $activity = null;
+    #[ORM\OneToOne(mappedBy: 'reservation', cascade: ['persist', 'remove'])]
+    private ?Order $orderService = null;
+
+   
 
 
     public function getId(): ?int
@@ -50,29 +46,6 @@ class Reservation
         return $this->id;
     }
 
-    public function getServiceId(): ?int
-    {
-        return $this->service_id;
-    }
-
-    public function setServiceId(?int $service_id): self
-    {
-        $this->service_id = $service_id;
-
-        return $this;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(?int $user_id): self
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
 
     public function getReservationStart(): ?\DateTimeInterface
     {
@@ -106,18 +79,6 @@ class Reservation
     public function setStatus(bool $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function isPay(): ?bool
-    {
-        return $this->pay;
-    }
-
-    public function setPay(bool $pay): self
-    {
-        $this->pay = $pay;
 
         return $this;
     }
@@ -156,6 +117,23 @@ class Reservation
     public function setActivity(?Activity $activity): self
     {
         $this->activity = $activity;
+
+        return $this;
+    }
+
+    public function getOrderService(): ?Order
+    {
+        return $this->orderService;
+    }
+
+    public function setOrderService(Order $orderService): self
+    {
+        // set the owning side of the relation if necessary
+        if ($orderService->getReservation() !== $this) {
+            $orderService->setReservation($this);
+        }
+
+        $this->orderService = $orderService;
 
         return $this;
     }

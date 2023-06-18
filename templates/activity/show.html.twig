@@ -1,64 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ activity.name }}{% endblock %}
+{% block title %}{{ activity.name }}
+{% endblock %}
 
 {% block body %}
-    <h1>Activity</h1>
+  <h1>Activity</h1>
 
-<div class="container">
+  <div class="container">
     <div class="row">
-        <p>All img</p>
+      <p>All img</p>
     </div>
     <div class="row">
-        <div class="col-md-8">
-            <p>All Containt</p>
-        </div>
-        <div class="col-md-4">
-            <h1>{{ activity.name }}</h1>
-            <p>prestations</p>
-            <p>Disponibilités</p>
-            {% include 'activity/_calendar.html.twig' %}
-        </div>
+      <div class="col-md-8">
+        <p>All Containt</p>
+      </div>
+      <div class="col-md-4">
+        <h1>{{ activity.name }}</h1>
+        <p>prestations</p>
+        <p>Disponibilités</p>
+        <form method="POST" action="{{ path('app_activity_show', {'id': activity.id}) }}">
+          <select class="select" name="service" onchange="updateTotal()">
+            <option value="" disabled="disabled" selected="selected" hidden="hidden">Découvrez les prestations</option>
+            {% for service in activity.services %}
+              <option value="{{ service.id }}" data-price="{{ service.price }}">
+                {{ service.name }}
+                {{ service.price }}€
+              </option>
+
+            {% endfor %}
+          </select>
+          {% include 'activity/_calendar.html.twig' %}
+          <div class="d-flex justify-content-between">
+            <p>Total</p>
+            <div id="total">0€</div>
+          </div>
+          <button type="submit">Reservez</button>
+        </form>
+      </div>
     </div>
-</div>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ activity.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ activity.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ activity.description }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ activity.price }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ activity.address }}</td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ activity.latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ activity.longitude }}</td>
-            </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ activity.createdAt ? activity.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Updated_at</th>
-                <td>{{ activity.updatedAt ? activity.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+  </div>
+  {% block javascriptsTotal %}
+    <script>
+      function updateTotal() {
+        var selectElement = document.querySelector('.select');
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var price = selectedOption.dataset.price;
+        document.getElementById('total').innerText = price + '€';
+      }
+    </script>
+
+  {% endblock %}
+
 {% endblock %}

@@ -1,46 +1,129 @@
 <div id="calendar"></div>
-<div id="hours-container"></div>
-
+<div id="hours-container" class="row"></div>
 {% block javascripts %}
 
   <script>
-  function getHoursForDate(clickedDate) {
-  // Ici, vous devez implémenter la logique pour récupérer les heures liées à la date cliquée
-  // Vous pouvez effectuer une requête Ajax vers un serveur ou accéder à des données stockées localement
 
-  // Pour cet exemple, nous allons simplement retourner un tableau statique d'heures
-  // Vous pouvez remplacer cette logique avec votre propre méthode de récupération des heures
+    function getHoursForDate(clickedDate, events) {
+      // Filtrer les événements qui correspondent à la date cliquée
+      let filteredEvents = events.filter(function (event) {
+        let eventStart = new Date(event.start);
+        return eventStart.toDateString() === clickedDate.toDateString();
+      });
 
-  var hours = ["10:00", "12:00", "14:00", "16:00"];
-  return hours;
-}
+      // Extraire les heures à partir des événements filtrés
+      let hours = filteredEvents.map(function (event) {
+        let eventStart = new Date(event.start);
+        let hour = eventStart.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Retourner un objet contenant l'ID de l'événement et l'heure
+        return {id: event.id,activity_id: event.activity_id, status: event.status, hour: hour};
+      });
+
+      return hours;
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       let calendarEl = document.getElementById('calendar');
       let calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'fr',
         timeZone: 'Europe/Paris',
+        events: {{reservationsJson|raw}},
+        selectable: true,
         dateClick: function (info) {
-          var clickedDate = info.date;
-          var formattedDate = clickedDate.toLocaleDateString(); // Formate la date selon les paramètres locaux du navigateur
+          let clickedDate = info.date;
+          let formattedDate = moment(clickedDate).format("dddd D MMMM YYYY");
 
-        console.log(formattedDate)
           // Récupérer les heures associées à la date et effectuer une action avec elles
-          var hours = getHoursForDate(clickedDate);
+          let events = {{reservationsJson|raw}};
+          let hours = getHoursForDate(clickedDate, events);
 
           // Afficher les heures
-          var hoursContainer = document.getElementById('hours-container');
+          let hoursContainer = document.getElementById('hours-container');
           hoursContainer.innerHTML = '';
+          let dateElement = document.createElement('div');
+          dateElement.textContent = formattedDate;
+          hoursContainer.appendChild(dateElement);
+          // ...
 
-          for (var i = 0; i < hours.length; i++) {
-            var hour = hours[i];
-            var hourElement = document.createElement('div');
-            hourElement.textContent = hour;
+          for (let i = 0; i < hours.length; i++) {
+            let eventHour = hours[i].hour;
+            let eventId = hours[i].id;
+            let eventStatus = hours[i].status;
+            let activity_id = hours[i].activity_id;
+            let hourElement = document.createElement('div');
+            hourElement.textContent = eventHour;
+            hourElement.classList.add('col-md-4');
             hoursContainer.appendChild(hourElement);
+
+            // Ajouter un gestionnaire d'événements click pour chaque heure
+            // Ajouter un gestionnaire d'événements click pour chaque heure
+            hourElement.addEventListener('click', function () {
+              console.log('ID de l\'événement :', eventId, eventStatus);
+
+              let xhr = new XMLHttpRequest();
+
+              xhr.open("POST", '/activity/'+ activity_id, true);
+
+              // Définir le type de contenu de la requête
+              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+              // Définir les données à envoyer dans la requête
+              let data = 'eventId=' + encodeURIComponent(eventId);
+
+              // Définir la fonction de rappel pour la réponse de la requête
+              xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                  if (xhr.status === 200) {
+                    // La requête a été traitée avec succès
+                    console.log('Réponse du serveur :', xhr.responseText);
+                  } else {
+                    // Une erreur s'est produite lors de la requête
+                    console.error('Erreur lors de la requête :', xhr.status);
+                  }
+                }
+              };
+
+              // Envoyer la requête avec les données
+              xhr.send(data);
+            });
+
           }
+
+          // ...
+
         }
       });
       calendar.render();
+    });
+  </script>
+  <script>
+    function applyClassToDayFrames() {
+      const dayFrames = document.querySelectorAll('.fc-day');
+
+      dayFrames.forEach(dayFrame => {
+        const eventHarness = dayFrame.querySelector('.fc-daygrid-event-harness');
+
+        if (!eventHarness) {
+          dayFrame.classList.add('fc-day-other');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      applyClassToDayFrames();
+
+      const buttons = document.querySelectorAll('.fc-button');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function () {
+          applyClassToDayFrames();
+        });
+      });
     });
   </script>
 {% endblock %}
