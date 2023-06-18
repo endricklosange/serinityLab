@@ -3,15 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Order;
 use App\Entity\Filter;
 use App\Entity\Search;
 use App\Data\SearchData;
 use App\Entity\Activity;
 use App\Form\FilterType;
 use App\Form\SearchFormType;
+use App\Form\ServiceBookType;
+use Symfony\Component\Form\FormError;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
+use App\Repository\ServiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,7 +74,7 @@ class ActivityController extends AbstractController
         }
     }
     #[Route('/favorite', name: 'app_activity_favorite')]
-    public function favorite(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository ): Response
+    public function favorite(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository): Response
     {
         $data = new Search();
         $user = $this->getUser();
@@ -161,9 +166,35 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_activity_show', methods: ['GET'])]
-    public function show(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, Activity $activity): Response
+    #[Route('/{id}', name: 'app_activity_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, Activity $activity, ReservationRepository $reservationRepository, ServiceRepository $serviceRepository,EntityManagerInterface $entityManager): Response
     {
+        $session = $request->getSession();
+        $eventId = $session->get('eventId');
+
+        if ($request->isMethod('POST')) {
+            $session = $request->getSession();
+            $service = $request->request->get('service');
+            $setEventId = $request->request->get('eventId');
+            $session->set('eventId', $setEventId);
+            $service = $request->request->get('service');
+            if (!empty($service) && !empty($eventId)) {
+                dump($service);
+                $reservation = $reservationRepository->find($eventId);
+                dump($eventId);
+                $reservation->setStatus(true);
+                dump($reservationRepository->find($eventId));
+                $order = new Order();
+                $order->setService($serviceRepository->find($service));
+                $order->setReservation($reservation);
+                $order->setUser($this->getUser());
+                $order->setPay(false);
+                $entityManager->persist($reservation);
+                $entityManager->persist($order);
+                $entityManager->flush();
+            } else {
+            }
+        }
         $data = new Search();
         $form = $this->createForm(SearchFormType::class, $data);
         $form->handleRequest($request);
@@ -176,15 +207,33 @@ class ActivityController extends AbstractController
 
             ]);
         }
+        $reservations = $activity->getReservations();
+        $reservationsFormat = [];
+        foreach ($reservations as $reservation) {
+            if (!$reservation->isStatus() === true) {
+                // Access reservation properties
+                $reservationsFormat[] = [
+                    'id' => $reservation->getId(),
+                    'start' => $reservation->getReservationStart()->format('Y-m-d H:i'),
+                    'end' => $reservation->getReservationEnd()->format('Y-m-d H:i'),
+                    'status' => $reservation->isStatus(),
+                    'activity_id' => $reservation->getActivity()->getId(),
+                    'backgroundColor' => '#759D88',
+                    'textColor' => '#FFFFFF',
+                ];
+            }
+        }
+        $reservationsJson = json_encode($reservationsFormat);
         return $this->render('/activity/show.html.twig', [
             'activity' => $activity,
             'form' => $form,
+            'reservationsJson' => $reservationsJson
 
         ]);
     }
-    
+
     #[Route('favorite/add/{id}', name: 'app_activity_add_favorite')]
-    public function addFavorite( Activity $activity,EntityManagerInterface $entityManager): Response
+    public function addFavorite(Activity $activity, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser(); // Récupérer l'utilisateur connecté
 
@@ -197,7 +246,7 @@ class ActivityController extends AbstractController
         //return new Response('Activité ajoutée en favori avec succès');
     }
     #[Route('favorite/delete/{id}', name: 'app_activity_delete_favorite')]
-    public function deleteFavorite(Activity $activity,EntityManagerInterface $entityManager): Response
+    public function deleteFavorite(Activity $activity, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser(); // Récupérer l'utilisateur connecté
 

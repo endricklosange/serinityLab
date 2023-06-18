@@ -55,11 +55,15 @@ class Activity
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favorite')]
     private Collection $favorite;
 
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Reservation::class)]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->activityImages = new ArrayCollection();
         $this->favorite = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,5 +262,39 @@ class Activity
         $this->favorite->removeElement($favorite);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setActivityId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getActivityId() === $this) {
+                $reservation->setActivityId(null);
+            }
+        }
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
