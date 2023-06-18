@@ -5,6 +5,15 @@
 
 {% block body %}
   <h1>Activity</h1>
+  {% if activity.activityImages %}
+    {% for activityImage in activity.activityImages %}
+      {% if activityImage %}
+        <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}">
+      {% endif %}
+      {% else %}
+          <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+    {% endfor %}
+  {% endif %}
 
   <div class="container">
     <div class="row">

@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  <div class="container">
+    {% set monthTranslations = {
+      'January': 'janvier',
+      'February': 'février',
+      'March': 'mars',
+      'April': 'avril',
+      'May': 'mai',
+      'June': 'juin',
+      'July': 'juillet',
+      'August': 'août',
+      'September': 'septembre',
+      'October': 'octobre',
+      'November': 'novembre',
+      'December': 'décembre',
+      '/': 'h'
+    } %}
+    {% for message in app.flashes('success') %}
+      <div style="color: green;
+                                    border: 2px green solid;
+                                    text-align: center;
+                                    padding: 5px;margin-bottom: 10px;">
+        {{ message }}
+      </div>
+    {% endfor %}
+
+    <form id='checkout-form' method='post' action="{{ path('app_stripe_charge') }}">
+      <div class="row">
+        <div class="col-md-6">
+          <input type='hidden' name='stripeToken' id='stripe-token-id'>
+          <!-- Champs de l'entité Order -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="lastname">Nom</label>
+                <input type="text" class="form-control" id="lastname" name="lastname">
+              </div>
+              <div class="form-group">
+                <label for="firstname">Prénom</label>
+                <input type="text" class="form-control" id="firstname" name="firstname">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="firstname">Email</label>
+                <input type="text" class="form-control" id="firstname" name="firstname" value="">
+              </div>
+              <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cardholder-name">Titulaire de la carte</label>
+            <input type="text" class="form-control" id="cardholder-name" name="cardholderName" required="required">
+          </div>
+          <label for="card-element" class="mb-1">Carte bancaire</label>
+          <div id="card-element" class="form-control"></div>
+
+        </div>
+        <div class="col-md-6">
+          <div>
+            <h2>Votre détente</h2>
+            <div class="row">
+              <div class="col-4">
+                {% if orderSession.reservation.activity.activityImages %}
+                  {% for activityImage in orderSession.reservation.activity.activityImages | slice(0, 1) %}
+                    {% if activityImage %}
+                      <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }} " class="img-fluid">
+                    {% endif %}
+                  {% else %}
+                    <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <div class="col-8">
+                <h3>{{orderSession.service.name}}</h3>
+                <p>{{orderSession.reservation.activity.address}}</p>
+                <p>
+                  {{ orderSession.reservation.reservationStart ? orderSession.reservation.reservationStart|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="d-flex justify-content-between">
+                <p>Prix</p>
+                <p>{{orderSession.service.price}}€</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="d-flex justify-content-between">
+                <p>Total</p>
+                <p>{{orderSession.service.price}}€</p>
+              </div>
+            </div>
+            <button id='pay-btn' class="btn btn-success mt-3" type="button" style="margin-top: 20px; width: 100%;padding: 7px;" onclick="createToken()">Payer
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    var stripe = Stripe("{{stripe_key}}");
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    function createToken() {
+      document.getElementById("pay-btn").disabled = true;
+      stripe.createToken(cardElement, {name: document.getElementById("cardholder-name").value}).then(function (result) {
+        if (typeof result.error != 'undefined') {
+          document.getElementById("pay-btn").disabled = false;
+          alert(result.error.message);
+        }
+
+        // creating token success
+        if (typeof result.token != 'undefined') {
+          document.getElementById("stripe-token-id").value = result.token.id;
+          document.getElementById('checkout-form').submit();
+        }
+      });
+    }
+  </script>
+{% endblock %}
