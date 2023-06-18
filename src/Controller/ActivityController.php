@@ -179,16 +179,14 @@ class ActivityController extends AbstractController
             $session->set('eventId', $setEventId);
             $service = $request->request->get('service');
             if (!empty($service) && !empty($eventId)) {
-                dump($service);
                 $reservation = $reservationRepository->find($eventId);
-                dump($eventId);
                 $reservation->setStatus(true);
-                dump($reservationRepository->find($eventId));
                 $order = new Order();
                 $order->setService($serviceRepository->find($service));
                 $order->setReservation($reservation);
                 $order->setUser($this->getUser());
                 $order->setPay(false);
+                $session->set('order', $order);
                 $entityManager->persist($reservation);
                 $entityManager->persist($order);
                 $entityManager->flush();

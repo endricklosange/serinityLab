@@ -1,14 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activités{% endblock %}
+{% block title %}Favoris{% endblock %}
 
 {% block body %}
   <div class="container ">
-    {% for category in categories %}
-      <a href="{{ path('app_activity_category', { 'id': category.id }) }}">{{ category.name }}</a>
-    {% endfor %}
     <div class="row my-5">
-            {% include 'activity/_product.html.twig' %}
+      <h1>Favoris</h1>
+
+      {% if activities %}
+        {% for activity in activities %}
+          <div class="row my-2">
+            <div class="col-4">
+              {% if activity.activityImages %}
+                {% for activityImage in activity.activityImages | slice(0, 1) %}
+                  {% if activityImage %}
+                    <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }} " class="img-fluid">
+                  {% endif %}
+                {% else %}
+                  <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="col-8">
+              <h3>{{activity.name}}</h3>
+              <p>{{activity.address}}</p>
+              <a href="{{ path('app_activity_show', {'id': activity.id}) }}" class="btn btn-primary">Voir l’activité</a>
+            </div>
+          </div>
+        </div>
+        {% else %}
+      <h2>Liker votre premier de favori</h2>
+      <p>Lors de vos recherches, cliquez sur le cœur pour enregistrer les activités qui vous intéressent dans vos favoris.</p>
+      {% endfor %}
+
+    {% endif %}
     </div>
   </div>
 {% endblock %}

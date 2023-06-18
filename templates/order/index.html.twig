@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+{% block body %}
+  {% set monthTranslations = {
+    'January': 'janvier',
+    'February': 'février',
+    'March': 'mars',
+    'April': 'avril',
+    'May': 'mai',
+    'June': 'juin',
+    'July': 'juillet',
+    'August': 'août',
+    'September': 'septembre',
+    'October': 'octobre',
+    'November': 'novembre',
+    'December': 'décembre',
+    '/': 'h'
+  } %}
+  <div class="container ">
+    <div class="row my-5">
+      <h1>Réservation</h1>
+      {% if orders %}
+        {% for order in orders %}
+          <div class="row my-2">
+            <div class="col-4">
+              {% if order.reservation.activity.activityImages %}
+                {% for activityImage in order.reservation.activity.activityImages | slice(0, 1) %}
+                  {% if activityImage %}
+                    <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }} " class="img-fluid">
+                  {% endif %}
+                {% else %}
+                  <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="col-8">
+              <h3>{{order.service.name}}</h3>
+              <p>{{order.reservation.activity.address}}</p>
+              <p>
+                {{ order.reservation.reservationStart ? order.reservation.reservationStart|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
+              </p>
+            <a href="{{ path('app_activity_show', {'id': order.reservation.activity.id}) }}" class="btn btn-primary">Voir l’activité</a>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <h2>Vous retrouverez ici vos différentes réservations</h2>
+        <p>Lors de vos réservation, vos activités se retrouveront sur cette page pour ne pas oublier ou regarder rapidement les informations.</p>
+      {% endfor %}
+
+    {% endif %}
+
+  </div>
+{% endblock %}
