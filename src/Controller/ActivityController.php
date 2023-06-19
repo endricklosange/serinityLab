@@ -11,12 +11,14 @@ use App\Entity\Activity;
 use App\Form\FilterType;
 use App\Form\SearchFormType;
 use App\Form\ServiceBookType;
+use App\Service\FilterService;
+use App\Service\SearchFormService;
+use App\Repository\ServiceRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
-use App\Repository\ServiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +30,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ActivityController extends AbstractController
 {
     #[Route('/', name: 'app_activity')]
-    public function index(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository): Response
+    public function index(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, SearchFormService $searchFormService): Response
     {
         if ($request->isMethod('POST')) {
             // Stocker les coordonnées dans les variables de session
@@ -49,7 +51,7 @@ class ActivityController extends AbstractController
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
-                'form' => $form,
+                'searchForm' => $form,
 
             ]);
         }
@@ -61,14 +63,14 @@ class ActivityController extends AbstractController
                     [],
                     ['created_at' => 'ASC']
                 ),
-                'form' => $form
+                'searchForm' => $form
 
             ]);
         } else {
             return $this->render('/activity/index.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' => $activityRepository->findByLocation($userLocation['latitude'], $userLocation['longitude']),
-                'form' => $form,
+                'searchForm' => $form,
 
             ]);
         }
@@ -107,8 +109,8 @@ class ActivityController extends AbstractController
             'longitude' => $session->get('longitude')
         );
 
-        $form = $this->createForm(SearchFormType::class, $data);
-        $form->handleRequest($request);
+        $searchForm = $this->createForm(SearchFormType::class, $data);
+        $searchForm->handleRequest($request);
         [$min, $max] = $activityRepository->findMinMax($dataFilter);
         $formFilter = $this->createForm(FilterType::class, $dataFilter, [
             'default_min' => $min,
@@ -119,7 +121,7 @@ class ActivityController extends AbstractController
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' => $activityRepository->findFilter($dataFilter, $userLocation),
-                'form' => $form,
+                'searchForm' => $searchForm,
                 'formFilter' => $formFilter,
                 'min' => $min,
                 'max' => $max,
@@ -128,7 +130,7 @@ class ActivityController extends AbstractController
         return $this->render('/activity/search.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'activities' => $activityRepository->findSearch($data),
-            'form' => $form,
+            'searchForm' => $searchForm,
             'formFilter' => $formFilter,
             'min' => $min,
             'max' => $max,
@@ -136,38 +138,47 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/category/{id}', name: 'app_activity_category', methods: ['GET'])]
-    public function showByCategory(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, int $id): Response
+    public function showByCategory(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository,FilterService $filterService, SearchFormService $searchFormService, int $id): Response
     {
         $category = $categoryRepository->find($id);
 
         if (!$category) {
             return $this->redirectToRoute('app_activity', [], Response::HTTP_SEE_OTHER);
         }
+        $session = $request->getSession();
+        $dataFilter = new Filter();
+        [$min, $max] = $activityRepository->findMinMax($dataFilter);
 
         $activities = $category->getActivities();
-        $data = new Search();
-        $form = $this->createForm(SearchFormType::class, $data);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $data = new Search;
+        $userLocation = array(
+            'latitude' => $session->get('latitude'),
+            'longitude' => $session->get('longitude')
+        );
+        $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
+        $searchForm = $searchFormService->createFormSearch($data);
+        if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
-                'form' => $form,
-
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+                
             ]);
         }
         return $this->render('/activity/category.html.twig', [
             'category' => $category,
             'categories' => $categoryRepository->findAll(),
             'activities' => $activities,
-            'form' => $form,
+            'searchForm' => $searchForm,
 
         ]);
     }
 
     #[Route('/{id}', name: 'app_activity_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, Activity $activity, ReservationRepository $reservationRepository, ServiceRepository $serviceRepository,EntityManagerInterface $entityManager): Response
+    public function show(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, Activity $activity, ReservationRepository $reservationRepository, ServiceRepository $serviceRepository,EntityManagerInterface $entityManager,FilterService $filterService, SearchFormService $searchFormService): Response
     {
         $session = $request->getSession();
         $eventId = $session->get('eventId');
@@ -193,16 +204,24 @@ class ActivityController extends AbstractController
             } else {
             }
         }
-        $data = new Search();
-        $form = $this->createForm(SearchFormType::class, $data);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $dataFilter = new Filter();
+        [$min, $max] = $activityRepository->findMinMax($dataFilter);
+        $data = new Search;
+        $userLocation = array(
+            'latitude' => $session->get('latitude'),
+            'longitude' => $session->get('longitude')
+        );
+        $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
+        $searchForm = $searchFormService->createFormSearch($data);
+        if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
-                'form' => $form,
-
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+                
             ]);
         }
         $reservations = $activity->getReservations();
@@ -224,7 +243,7 @@ class ActivityController extends AbstractController
         $reservationsJson = json_encode($reservationsFormat);
         return $this->render('/activity/show.html.twig', [
             'activity' => $activity,
-            'form' => $form,
+            'searchForm' => $searchForm,
             'reservationsJson' => $reservationsJson
 
         ]);
