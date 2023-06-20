@@ -31,7 +31,7 @@ class StripeController extends AbstractController
             ]);
         }
         else{
-            return $this->redirectToRoute('app_landing_page');
+            return $this->redirectToRoute('app_home_page');
         }
     }
 

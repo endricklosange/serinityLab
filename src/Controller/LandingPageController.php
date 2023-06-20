@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LandingPageController extends AbstractController
 {
-    #[Route('/', name: 'app_landing_page')]
+    #[Route('/', name: 'app_home_page')]
     public function sendEmail(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository,ContactRepository $contactRepository, FilterService $filterService, SearchFormService $searchFormService): Response
     {
         $contact = new Contact();
@@ -55,7 +55,7 @@ class LandingPageController extends AbstractController
                 'max' => $max,
             ]);
         }
-        return $this->render('landing_page/index.html.twig', [
+        return $this->render('home/index.html.twig', [
             'searchForm' => $searchFormService->createFormSearch($data),
             'formContact' => $formContact,
             'formFilter' => $filterForm

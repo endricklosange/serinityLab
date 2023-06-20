@@ -7,12 +7,13 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h1>Trouvez l’activité qu’il vous faut</h1>
-          <p>Pour être au courant de l’ouverture du site, laissez nous votre mail</p>
-          {{ include('component/_form.html.twig') }}
+          <h1>Trouvez <br>l’activité qu’il<br>vous faut</h1>
+          <p class="mt-5">Cherchez ce qu’il vous fait envie</p>
+          <a class="btn btnSl" href="{{ path('app_activity')}}">
+            Découvrez nos activités</a>
         </div>
         <div class="col-md-6 position-relative">
-        <div data-aos="flip-left"></div>
+          <div data-aos="flip-left"></div>
 
           <img class="yogaWomen img-fluid" src="{{ asset('build/images/yogaWomen.svg') }}" alt="yogaWomen">
           <img class="headMassage img-fluid" src="{{ asset('build/images/headMassage.svg') }}" alt="headMassage">

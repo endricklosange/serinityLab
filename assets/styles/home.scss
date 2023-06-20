@@ -1,18 +1,29 @@
+.btnSl {
+    background-color: $btnBack;
+    color: white;
+    font-size: 22px;
+    :hover{
+        background-color: $btnBack;
+    }
+}
 .section1 {
-    padding-top: 85px;
+    padding-top: 26px;
     padding-bottom: 253px;
     h1,
     p {
         color: white;
     }
     h1 {
-        font-size: 85px;
+        font-size: 76px;
         font-family: "Gloock", serif;
     }
     p {
         font-size: 32px;
         font-family: "Gentium Book Plus", serif;
         margin-top: 24px;
+    }
+    .btnSl{
+        margin-top: 12%;
     }
     .sendEmail {
         display: flex;
@@ -35,26 +46,29 @@
             border-radius: 0;
             font-size: 36px;
         }
-         li {
+        li {
             color: white;
             font-size: 0.4em;
         }
-        
+
         ul {
             bottom: 52px;
             position: absolute;
         }
-        
     }
     img.yogaWomen {
         z-index: 1;
         position: relative;
+        top: 4%;
     }
     img.headMassage {
         position: absolute;
-        top: 302px;
+        top: 48%;
         left: 356px;
         z-index: 0;
+    }
+    .col-md-6:first-child {
+        padding-top: 3%;
     }
 }
 
@@ -102,8 +116,6 @@
         margin-top: 45px;
     }
 }
-
-
 
 @media only screen and (max-width: $landscapeTablets) {
     .section1 {
@@ -270,17 +282,15 @@
         }
     }
 }
-    
 
-
-  @media only screen and (min-width: 1024px) and (max-width: 1600px) {
+@media only screen and (min-width: 1024px) and (max-width: 1600px) {
     img.yogaWomen.img-fluid {
-        width: 64%;
+        width: 45%;
     }
     img.headMassage.img-fluid {
-        width: 47%;
-    }  
+        width: 37%;
+    }
     .section1 img.headMassage {
-        left: 284px;
+        left: 40%;
     }
 }
