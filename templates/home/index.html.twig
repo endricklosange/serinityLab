@@ -1,64 +1,220 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      {% block title %}SerinityLab!{% endblock %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="SerinityLab"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="Pour être au courant de l’ouverture du site, laissez nous votre mail"/>
+    <meta property="og:image" content="https://serinitylab.fr{{ asset('build/images/Group_1.svg') }}"/>
+    <link rel="icon" type="image/svg" href="{{ asset('build/images/Group_1.svg') }}"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-{% block title %}SerinityLab{% endblock %}
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheets %}
+      {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-{% block body %}
-  <section class="section1 bg-primary">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h1>Trouvez <br>l’activité qu’il<br>vous faut</h1>
-          <p class="mt-5">Cherchez ce qu’il vous fait envie</p>
-          <a class="btn btnSl" href="{{ path('app_activity')}}">
-            Découvrez nos activités</a>
-        </div>
-        <div class="col-md-6 position-relative">
-          <div data-aos="flip-left"></div>
+    {% block javascripts %}
+      {{ encore_entry_script_tags('app') }}
+      {% include 'component/js.html.twig' %}
+      <script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
+"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fr.min.js"></script>
+    {% endblock %}
+  </head>
+  <body>
+    {% block navbar %}
+      {% include 'component/_navbar.html.twig' %}
+    {% endblock %}
+    {% block body %}
+      <section class="section1 bg-primary">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h1>Trouvez
+                <br>l’activité qu’il<br>vous faut</h1>
+              <p class="mt-5">Cherchez ce qu’il vous fait envie</p>
+              <a class="btnSl" href="{{ path('app_activity')}}">
+                Découvrez nos activités</a>
+            </div>
+            <div class="col-md-6 position-relative">
+              <div data-aos="flip-left"></div>
 
-          <img class="yogaWomen img-fluid" src="{{ asset('build/images/yogaWomen.svg') }}" alt="yogaWomen">
-          <img class="headMassage img-fluid" src="{{ asset('build/images/headMassage.svg') }}" alt="headMassage">
+              <img class="yogaWomen img-fluid" src="{{ asset('build/images/yogaWomen.svg') }}" alt="yogaWomen">
+              <img class="headMassage img-fluid" src="{{ asset('build/images/headMassage.svg') }}" alt="headMassage">
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
-  <section class="section2">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h2>La possibilité de voir les activités autour de vous</h2>
-          <p>En effet, grâce à une map vous pouvez voir les différentes activités près de vous. Vous pourrez ainsi repérer les salles de sports ou activités de bien être qui vous convient.</p>
+      </section>
+      <section class="section2">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 position-relative">
+              <img class="imgSection img-fluid" src="{{ asset('build/images/massageHome.jpg') }}" alt="watchPhone">
+            </div>
+            <div class="col-md-6">
+              <span class="categorie-home">Massage</span>
+              <h2>La possibilité de voir les activités autour de vous</h2>
+              <p>En effet, grâce à une map vous pouvez voir les différentes activités près de vous. Vous pourrez ainsi repérer les salles de sports ou activités de bien être qui vous convient.</p>
+              <div class="d-flex justify-content-end">
+                <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6 position-relative">
-          <img class="watchPhone img-fluid" src="{{ asset('build/images/watchPhone.svg') }}" alt="watchPhone">
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="section3 bg-primary py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 position-relative">
-          <img class="imageFiltre img-fluid" src="{{ asset('build/images/imageFilre.svg') }}" alt="imageFiltre">
-        </div>
-        <div class="col-md-6">
-          <h2>Retrouvez le filtre pour vous trouvez l’activité qui est faites pour vous</h2>
-          <p>Vous avez la possibilité de retrouver un filtre qui va vous permettre de tomber sur l’activité que vous rechercher. Que ce soit par thème, prix ou proximité.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="section4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h2>Discutez et échangez avec les utilisateurs du site</h2>
-          <p>Vous pouvez avec un chat intégré sur le site, échangez avec d’autres utilisateurs du site. Cela peut être pour des conseils d’activités ou pour se motiver.</p>
-        </div>
-        <div class="col-md-6 position-relative">
-          <img class="imageTalk img-fluid" src="{{ asset('build/images/imageTalk.svg') }}" alt="imageTalk">
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
+      <section class="section3 bg-primary py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <span class="categorie-home-white">Spa</span>
+              <h2>Retrouvez le filtre pour vous trouvez l’activité qui est faites pour vous</h2>
+              <p>Vous avez la possibilité de retrouver un filtre qui va vous permettre de tomber sur l’activité que vous rechercher. Que ce soit par thème, prix ou proximité.</p>
+              <div class="d-flex justify-content-end">
+                <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+              </div>
+            </div>
+            <div class="col-md-6 position-relative">
+              <img class="imgSection img-fluid" src="{{ asset('build/images/spaHome.jpg') }}" alt="imageFiltre">
+            </div>
+          </div>
+        </section>
+        <section class="section4">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6 position-relative">
+                <img class="imgSection img-fluid" src="{{ asset('build/images/salle-de-sport-home.jpg') }}" alt="imageTalk">
 
-{% endblock %}
+              </div>
+              <div class="col-md-6">
+                <span class="categorie-home">Salle de sport</span>
+                <h2>Discutez et échangez avec les utilisateurs du site</h2>
+                <p>Vous pouvez avec un chat intégré sur le site, échangez avec d’autres utilisateurs du site. Cela peut être pour des conseils d’activités ou pour se motiver.</p>
+                <div class="d-flex justify-content-end">
+                  <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+        <section class="section5 bg-primary py-5">
+          <div class="container">
+            <div class="row">
+
+              <div class="col-md-6">
+                <span class="categorie-home-white">Salon de beauté</span>
+                <h2>Retrouvez le filtre pour vous trouvez l’activité qui est faites pour vous</h2>
+                <p>Vous avez la possibilité de retrouver un filtre qui va vous permettre de tomber sur l’activité que vous rechercher. Que ce soit par thème, prix ou proximité.</p>
+                <div class="d-flex justify-content-end">
+                  <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+                </div>
+              </div>
+              <div class="col-md-6 position-relative">
+                <img class="imgSection img-fluid" src="{{ asset('build/images/imageFilre.svg') }}" alt="imageFiltre">
+              </div>
+            </div>
+          </section>
+          <footer class="footerHome bg-light p-5">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-4">
+                  <h3>Navigation</h3>
+                  <ul>
+                    <li>
+                      <a href="#">Accueil</a>
+
+                    </li>
+                    <li>
+                      <a href="#">Activités
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">Qui sommes-nous ?
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">Contact
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h3>INFORMATIONS</h3>
+                  <ul>
+                    <li>
+                      <a href="#">Politique de confidentialité</a>
+                    </li>
+                    <li>
+                      <a href="#">Mention légales</a>
+                    </li>
+                    <li>
+                      <a href="#">Conditions générales d'utilisation</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h3>Contact</h3>
+                  <ul>
+                    <li>
+                      <a href="#">Page de Contact</a>
+                    </li>
+                    <li>
+                      <a href="#">Tel : +33 01 24 35 27 27</a>
+                    </li>
+                    <li>
+                      <a href="#">Mail : contact@serinityLab.com</a>
+                    </li>
+                    <li>
+                      <a href="#">Adresse : 12 rue détente, Paris 75011</a>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+              <div class="row my-4">
+                <div class="col-md-4 d-flex justify-content-between">
+                  <p>SUIVEZ-NOUS!</p>
+                  <ul>
+                    <li class="socialMedia d-flex">
+                      <img class="ic_baseline-facebook" src="{{ asset('build/images/facebookBlack.svg') }}" alt="facebook">
+                      <img class="instagram mx-2" src="{{ asset('build/images/instagramBlack.svg') }}" alt="instagram">
+                      <img class="pinterest" src="{{ asset('build/images/pinterestLogoBlack.svg') }}" alt="tiktok">
+                      <img class="tiktok" src="{{ asset('build/images/tiktokBlack.svg') }}" alt="tiktok">
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <form method="POST" class="d-flex">
+                    <input type="email" id="email" name="email" required="required" placeholder="Newsletter">
+                    <input type="submit" value="Envoyer" class="btn-primary mx-1">
+                  </form>
+                </div>
+
+              </div>
+            </div>
+            <div class="row lastDivFooter">
+              <div class="col-md-3">
+                                  <a href="">Mentions légales</a>
+              </div>
+              <div class="col-md-3">
+                                  <a href="">Droits d’auteur</a>
+              </div>
+              <div class="col-md-3">
+                                  <a href="">Propriété intellectuelle</a>
+              </div>
+              <div class="col-md-3">
+                                  <a href="">Utilisation des cookies</a>
+              </div>
+            </div>
+          </footer>
+        {% endblock %}
+      </body>
+    </html>

@@ -1,14 +1,36 @@
+
 .btnSl {
     background-color: $btnBack;
-    color: white;
+    color: white !important;
     font-size: 22px;
-    :hover{
-        background-color: $btnBack;
+    padding: 7px 27px;
+    text-decoration: none;
+    :hover {
+        background-color: $btnBack !important;
+        color: white !important;
     }
+}
+.imgSection {
+    height: 585.65px;
+    width: 398.65px;
+}
+
+.categorie-home {
+    border: black solid 1px;
+    padding: 2px 20px;
+    font-weight: 600;
+    font-family: "Istok Web", sans-serif;
+}
+.categorie-home-white {
+    border: white solid 1px;
+    color: white;
+    padding: 2px 20px;
+    font-weight: 600;
+    font-family: "Istok Web", sans-serif;
 }
 .section1 {
     padding-top: 26px;
-    padding-bottom: 253px;
+    padding-bottom: 7%;
     h1,
     p {
         color: white;
@@ -22,7 +44,7 @@
         font-family: "Gentium Book Plus", serif;
         margin-top: 24px;
     }
-    .btnSl{
+    .btnSl {
         margin-top: 12%;
     }
     .sendEmail {
@@ -75,6 +97,10 @@
 .section2 {
     padding-top: 50px;
     padding-bottom: 50px;
+    .btn-third {
+        background-color: $btnBackGreenLight;
+        color: white;
+    }
 
     h2 {
         font-size: 60px;
@@ -87,6 +113,17 @@
     }
 }
 .section3 {
+    .btn-third {
+        background-color: $btnBackGreenDark;
+        color: white;
+    }
+    .col-md-6.position-relative {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .img {
+        width: 60%;
+    }
     h2,
     p {
         color: white;
@@ -105,6 +142,10 @@
 .section4 {
     padding-top: 50px;
     padding-bottom: 50px;
+    .btn-third {
+        background-color: $btnBackGreenLight;
+        color: white;
+    }
 
     h2 {
         font-size: 60px;
@@ -116,7 +157,33 @@
         margin-top: 45px;
     }
 }
-
+.section5 {
+    .col-md-6.position-relative {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .btn-third {
+        background-color: $btnBackGreenDark;
+        color: white;
+    }
+    .img {
+        width: 60%;
+    }
+    h2,
+    p {
+        color: white;
+    }
+    h2 {
+        padding-top: 45px;
+        font-size: 60px;
+        font-family: "Gloock", serif;
+    }
+    p {
+        font-size: 32px;
+        font-family: "Gentium Book Plus", serif;
+        margin-top: 45px;
+    }
+}
 @media only screen and (max-width: $landscapeTablets) {
     .section1 {
         padding-bottom: 89px;
@@ -252,6 +319,10 @@
         text-align: center;
 
         h2,
+        .col-md-6.position-relative {
+            display: flex;
+            justify-content: flex-end;
+        }
         p {
             color: white;
         }

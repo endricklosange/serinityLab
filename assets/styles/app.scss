@@ -1,47 +1,54 @@
-@import 'variables.scss';
+@import "variables.scss";
 @import "~bootstrap/scss/bootstrap";
-@import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Gloock&display=swap');
-@import 'navbar.scss';
-@import 'footer.scss';
-@import 'home.scss';
-@import 'login.scss';
-@import 'filter.scss';
-@import 'activitydetail.scss';
+@import url("https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Gloock&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Istok+Web&display=swap");
+@import "navbar.scss";
+@import "footer.scss";
+@import "home.scss";
+@import "login.scss";
+@import "filter.scss";
+@import "activitydetail.scss";
 
 body {
-    background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
 }
 
-
- 
-  .wrapper .range-slider {
-    max-width: 400px;
-    width: 100%;
-    margin: 0 10px;
-    appearance: none;
-    height: 18px;
-    border-radius: 25px;
-    background-color: #ededed;
-    box-shadow: 0 0 0 2px #ededed;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  .range-slider::-webkit-slider-thumb {
-    appearance: none;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    background-color: #4070f4;
-    box-shadow: -208px 0 0 200px #4070f4;
-  }
-  .wrapper .slide-value {
-    font-size: 27px;
-    font-weight: 500;
-    color: #333;
-    width: 70px;
-    text-align: center;
-  }
-  .container {
-    position: relative;
+.wrapper .range-slider {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 10px;
+  appearance: none;
+  height: 18px;
+  border-radius: 25px;
+  background-color: #ededed;
+  box-shadow: 0 0 0 2px #ededed;
+  overflow: hidden;
+  cursor: pointer;
+}
+.range-slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background-color: #4070f4;
+  box-shadow: -208px 0 0 200px #4070f4;
+}
+.wrapper .slide-value {
+  font-size: 27px;
+  font-weight: 500;
+  color: #333;
+  width: 70px;
+  text-align: center;
+}
+.container {
+  position: relative;
+}
+input.btn-primary {
+  background-color: $btnBackGreenDark!important;
+  box-shadow: 4px 4px 10px 0px #00000040;
+  border-radius: 0 !important;
+ color:white;
+  border: none;
+  padding: 5px 20px;
 }

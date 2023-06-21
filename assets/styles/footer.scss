@@ -1,15 +1,58 @@
-.footer{
+.footer {
     text-align: center;
-    h3{
+    h3 {
+        font-family: "Gentium Book Plus", serif;
+        text-transform: uppercase;
         font-size: 24px;
         color: white;
     }
-    li{
-        a{
+    li {
+        a {
             font-size: 20px;
             color: white;
             text-decoration: none;
         }
         list-style: none;
+    }
+}
+.footerHome {
+    text-align: center;
+    h3 {
+        width: 40%;
+        margin: auto;
+        margin-bottom: 5%;
+        padding-bottom: 2%;
+        font-family: "Gentium Book Plus", serif;
+        text-transform: uppercase;
+        font-size: 24px;
+        color: black;
+        border-bottom: black 1px solid;
+    }
+    li {
+        a {
+            font-family: 'Gentium Book Plus', serif;
+            font-size: 20px;
+            color: black;
+            text-decoration: none;
+        }
+        list-style: none;
+    }
+    input {
+        border: 0;
+        border-bottom: #858585 1px solid;
+        background: transparent;
+        font-size: 25px;
+    }
+    p {
+        font-size: 27px;
+    }
+    .socialMedia{
+        display: flex;
+        align-items: center;
+    }
+    .lastDivFooter{
+        a{
+            text-decoration: none;
+        }
     }
 }
