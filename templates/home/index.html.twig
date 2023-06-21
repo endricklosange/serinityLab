@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>
-      {% block title %}SerinityLab!{% endblock %}
+      {% block title %}SerinityLab{% endblock %}
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="SerinityLab"/>
@@ -66,7 +66,7 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
               <p class="paragraph2">Que vous cherchiez un massage suédois revitalisant, un massage thaïlandais traditionnel ou une séance de réflexologie pour stimuler votre énergie vitale, notre plateforme vous permettra de trouver facilement le praticien idéal dans votre région. Profitez d'un moment de détente totale et laissez les soucis s'envoler tandis que vous vous abandonnez aux bienfaits apaisants d'un massage professionnel.
               </p>
               <div class="d-flex justify-content-end">
-                <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+                <a class="btn btn-third" href="{{ path('app_activity_category', { 'id': 1}) }}">Voir plus</a>
               </div>
             </div>
           </div>
@@ -77,11 +77,11 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
           <div class="row">
             <div class="col-md-6">
               <span class="categorie-home-white">Spa</span>
-              <h2>Spas partenaires offrent des services de bien-être et traitements supérieurs.</h2>
+              <h2>Spas partenaires offrent des services de bien-être et traitements supérieurs</h2>
               <p class="paragraph1">Découvrez une oasis de calme et de sérénité où vous pourrez vous détendre dans des bains à remous revigorants, vous faire chouchouter avec des soins du visage et du corps haut de gamme, ou simplement profiter de l'ambiance apaisante de saunas et hammams.</p>
               <p class="paragraph2">Que vous souhaitiez prendre soin de votre peau, relâcher les tensions musculaires ou simplement vous offrir un moment de pure détente, notre sélection de spas de qualité vous garantit une expérience bien-être inoubliable, adaptée à vos besoins et à vos préférences.</p>
               <div class="d-flex justify-content-end">
-                <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+                <a class="btn btn-third" href="{{ path('app_activity_category', { 'id': 2}) }}">Voir plus</a>
               </div>
             </div>
             <div class="col-md-6 position-relative">
@@ -98,13 +98,13 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
               </div>
               <div class="col-md-6">
                 <span class="categorie-home">Salle de sport</span>
-                <h2>Discutez et échangez avec les utilisateurs du site</h2>
-                <p class="paragraph1">Grâce à notre catégorie exclusive de massages. Laissez-vous emporter par des mains expertes qui sauront apaiser vos tensions et vous offrir une expérience sensorielle unique.
+                <h2>Donnez à votre corps l'attention qu'il mérite avec nos salles de sport</h2>
+                <p class="paragraph1">Que vous soyez un adepte du cardio, de la musculation, du yoga ou de toute autre discipline, vous trouverez l'endroit idéal pour vous entraîner et repousser vos limites. Nos partenaires offrent une variété d'installations modernes et d'équipements de pointe pour vous permettre de vous exercer efficacement. 
                 </p>
-                <p class="paragraph2">Grâce à notre catégorie exclusive de massages. Laissez-vous emporter par des mains expertes qui sauront apaiser vos tensions et vous offrir une expérience sensorielle unique.
+                <p class="paragraph2">Que vous soyez débutant ou athlète confirmé, nos salles de sport vous offrent un environnement motivant et stimulant pour atteindre vos objectifs de remise en forme. Faites un pas vers une vie saine et énergique en rejoignant dès maintenant une salle de sport près de chez vous.
                 </p>
                 <div class="d-flex justify-content-end">
-                  <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+                  <a class="btn btn-third" href="{{ path('app_activity_category', { 'id': 3}) }}">Voir plus</a>
                 </div>
               </div>
 
@@ -117,13 +117,13 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
 
               <div class="col-md-6">
                 <span class="categorie-home-white">Salon de beauté</span>
-                <h2>Retrouvez le filtre pour vous trouvez l’activité qui est faites pour vous</h2>
-                <p class="paragraph1">Grâce à notre catégorie exclusive de massages. Laissez-vous emporter par des mains expertes qui sauront apaiser vos tensions et vous offrir une expérience sensorielle unique.
+                <h2>Profitez d'un moment de détente et laissez nos salons révéler toute votre beauté.</h2>
+                <p class="paragraph1">Des coupes de cheveux tendance aux traitements capillaires revitalisants, en passant par les soins du visage personnalisés et les manucures impeccables, nos experts en beauté sont là pour vous sublimer.
                 </p>
-                <p class="paragraph2">Grâce à notre catégorie exclusive de massages. Laissez-vous emporter par des mains expertes qui sauront apaiser vos tensions et vous offrir une expérience sensorielle unique.
+                <p class="paragraph2">Laissez-vous dorloter dans une atmosphère chaleureuse et professionnelle, où chaque détail est pensé pour vous offrir une expérience de beauté exceptionnelle. Découvrez les dernières tendances, les produits de qualité et les techniques innovantes pour révéler votre meilleur vous-même.
                 </p>
                 <div class="d-flex justify-content-end">
-                  <a class="btn btn-third" href="{{ path('app_activity')}}">Voir plus</a>
+                  <a class="btn btn-third" href="{{ path('app_activity_category', { 'id': 4}) }}">Voir plus</a>
                 </div>
               </div>
               <div class="col-md-6 position-relative">

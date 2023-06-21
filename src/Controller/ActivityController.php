@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/activity')]
+#[Route('/activités')]
 class ActivityController extends AbstractController
 {
     #[Route('/', name: 'app_activity')]
@@ -75,7 +75,7 @@ class ActivityController extends AbstractController
             ]);
         }
     }
-    #[Route('/favorite', name: 'app_activity_favorite')]
+    #[Route('/favoris', name: 'app_activity_favorite')]
     public function favorite(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository): Response
     {
         $data = new Search();
@@ -97,7 +97,7 @@ class ActivityController extends AbstractController
 
         ]);
     }
-    #[Route('/search/', name: 'app_activity_search')]
+    #[Route('/recherche/', name: 'app_activity_search')]
     public function search(ActivityRepository $activityRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
 
@@ -137,7 +137,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/category/{id}', name: 'app_activity_category', methods: ['GET'])]
+    #[Route('/categorie/{id}', name: 'app_activity_category', methods: ['GET'])]
     public function showByCategory(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository,FilterService $filterService, SearchFormService $searchFormService, int $id): Response
     {
         $category = $categoryRepository->find($id);

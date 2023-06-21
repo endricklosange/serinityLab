@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class LandingPageController extends AbstractController
+class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home_page')]
     public function sendEmail(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository,ContactRepository $contactRepository, FilterService $filterService, SearchFormService $searchFormService): Response
