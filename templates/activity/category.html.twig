@@ -1,17 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{category.name}}{% endblock %}
+{% block title %}{{category.name}}
+{% endblock %}
 
 {% block body %}
-  <div class="container ">
-   {% for category in categories %}
-      <a href="{{ path('app_activity_category', { 'id': category.id }) }}">{{ category.name }}</a>
-    {% endfor %}
-  <h1>{{category.name}}</h1>
+  <div class="container categories">
+    <div class="row">
+      {% include 'activity/_categories.html.twig' %}
+    </div>
+    <h1>{{category.name}}</h1>
     <div class="row my-5">
       <div class="row my-5">
-            {% include 'activity/_product.html.twig' %}
-    </div>
+        {% include 'activity/_product.html.twig' %}
+      </div>
     </div>
   </div>
 {% endblock %}

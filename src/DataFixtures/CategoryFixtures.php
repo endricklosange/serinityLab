@@ -11,13 +11,33 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $categories = ['Massage', 'Spa', 'Salle de sport', 'Salon de beauté'];
+        $categories = [
+            [
+                'name' => 'Massage',
+                'image' => 'imgMassageCat.png',
+                'logo' => 'logoMassage.png'
+            ], [
+                'name' => 'Spa',
+                'image' => 'imgSpaCat.png',
+                'logo' => 'logoSpa.png'
+            ], [
+                'name' => 'Salle de sport',
+                'image' => 'imgGymCat.png',
+                'logo' => 'logoGym.png'
+            ], [
+                'name' => 'Salon de beauté',
+                'image' => 'imgSalonCat.png',
+                'logo' => 'logoSalon.png'
+            ]
+        ];
 
-        foreach ($categories as $categoryName) {
-            $category = new Category();
-            $category->setName($categoryName);
+        foreach ($categories as $category) {
+            $categoryEntity = new Category();
+            $categoryEntity->setName($category['name']);
+            $categoryEntity->setLogo($category['logo']);
+            $categoryEntity->setImage($category['image']);
 
-            $manager->persist($category);
+            $manager->persist($categoryEntity);
         }
 
         $manager->flush();
@@ -26,5 +46,4 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface
     {
         return 1;
     }
-    
 }

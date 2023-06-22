@@ -9,3 +9,16 @@
         padding: 30px;
     }
 }
+.btn-filterBtn{
+    background-color: $primary;
+    color: white;
+    padding: 7px 15px;
+    border-radius: 20px;
+    .img-fluid {
+        padding-left: 40px;
+    }
+    :hover{
+        background-color: $primary;
+    }
+    
+}

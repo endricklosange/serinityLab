@@ -28,6 +28,12 @@ class Category
     #[ORM\Column(nullable:true)]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $logo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
@@ -107,6 +113,30 @@ class Category
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(string $logo): self
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
     }
 
 }

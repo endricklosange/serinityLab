@@ -3,12 +3,16 @@
 {% block title %}Activités{% endblock %}
 
 {% block body %}
+    <div class="row categories">
+      <div class="container">
+        <div class="row">
+          {% include 'activity/_categories.html.twig' %}
+        </div>
+      </div>
+    </div>
   <div class="container ">
-    {% for category in categories %}
-      <a href="{{ path('app_activity_category', { 'id': category.id }) }}">{{ category.name }}</a>
-    {% endfor %}
     <div class="row my-5">
-            {% include 'activity/_product.html.twig' %}
+      {% include 'activity/_product.html.twig' %}
     </div>
   </div>
 {% endblock %}
