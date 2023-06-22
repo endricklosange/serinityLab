@@ -26,7 +26,7 @@ class StripeController extends AbstractController
             return $this->render('stripe/index.html.twig', [
                 'stripe_key' => $_ENV["STRIPE_KEY"],
                 'orderSession' => $order,
-                'form' => $form,
+                'searchForm' => $form,
 
             ]);
         }

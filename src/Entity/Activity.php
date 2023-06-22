@@ -58,12 +58,16 @@ class Activity
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Reservation::class)]
     private Collection $reservations;
 
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Review::class)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->activityImages = new ArrayCollection();
         $this->favorite = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -296,5 +300,35 @@ class Activity
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getActivity() === $this) {
+                $review->setActivity(null);
+            }
+        }
+
+        return $this;
     }
 }

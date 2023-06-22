@@ -26,7 +26,7 @@
           <div class="row my-2">
             <div class="col-4">
               {% if order.reservation.activity.activityImages %}
-                {% for activityImage in order.reservation.activity.activityImages|slice(0, 1) %}
+                {% for activityImage in order.reservation.activity.activityImages | slice(0, 1) %}
                   {% if activityImage %}
                     <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}" class="img-fluid">
                   {% endif %}
@@ -45,6 +45,8 @@
             </div>
           </div>
         {% endfor %}
+        <a href="{{ path('app_review_new') }}">Ajouter un commentaire</a>
+
       {% else %}
         <div class="row">
           <div class="col">

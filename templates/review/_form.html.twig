@@ -1,0 +1,51 @@
+{{ form_start(form, {'attr': {'id': 'review-form'}}) }}
+<div>
+  {{ form_row(form.comment) }}
+</div>
+
+<div class="form-group">
+  {{ form_label(form.score.price_quality, 'Qualité - prix :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="wrapper">
+    {{ form_widget(form.score.price_quality, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': 0, 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
+    <span class="slide-value">1{{ form.score.price_quality.vars.value }}</span>
+  </div>
+</div>
+
+<div class="form-group">
+  {{ form_label(form.score.cleanliness, 'Propreté :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="wrapper">
+    {{ form_widget(form.score.cleanliness, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': 0, 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
+    <span class="slide-value">1{{ form.score.cleanliness.vars.value }}</span>
+  </div>
+</div>
+
+<div class="form-group">
+  {{ form_label(form.score.location, 'Emplacement :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="wrapper">
+    {{ form_widget(form.score.location, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': 0, 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
+    <span class="slide-value">1{{ form.score.location.vars.value }}</span>
+  </div>
+</div>
+
+<div class="form-group">
+  {{ form_label(form.score.product, 'Produit :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="wrapper">
+    {{ form_widget(form.score.product, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': 0, 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
+    <span class="slide-value">1{{ form.score.product.vars.value }}</span>
+  </div>
+</div>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+<script>
+  const rangeSliders = document.querySelectorAll(".range-slider");
+  const slideValues = document.querySelectorAll(".slide-value");
+
+  rangeSliders.forEach((slider, index) => {
+    slider.addEventListener("input", () => {
+      let rangeVal = slider.value;
+      slideValues[index].innerText = rangeVal;
+    });
+  });
+</script>

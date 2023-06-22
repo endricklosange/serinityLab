@@ -33,7 +33,7 @@ class UserController extends AbstractController
         return $this->render('/activity/favorites.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'activities' =>  $user->getFavorite(),
-            'form' => $form,
+            'searchForm' => $form,
 
         ]);
     }
@@ -55,7 +55,7 @@ class UserController extends AbstractController
         return $this->render('/order/index.html.twig', [
             'categories' => $categoryRepository->findAll(),
             'orders' =>  $user->getOrders(),
-            'form' => $form,
+            'searchForm' => $form,
 
         ]);
     }
