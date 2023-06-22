@@ -8,19 +8,35 @@
       <div class="row">
         {% include 'activity/_categories.html.twig' %}
         <div class="col-2">
-          <button type="button" name="filterBtn" id="filterBtn" class="btn btn-filterBtn">Filtre
-            <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre">
-          </button>
+          <div class="wrapper btn-filterBtn">
+            <a href="#demo-modal">Filtre
+              <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre"></a>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="container">
-    <div class="row my-5">
 
-      <div id="filterContent">
-        {% include 'activity/_filter.html.twig' %}
+    <div class="row my-5">
+      <div id="demo-modal" class="modal">
+        <div class="modal__content">
+          <h2>Choisissez vos filtres</h2>
+
+          <p>
+            {% include 'activity/_filter.html.twig' %}
+          </p>
+
+          <div class="modal__footer">
+            Made with
+            <i class="fa fa-heart"></i>, by
+            <a href="https://twitter.com/denicmarko" target="_blank">@denicmarko</a>
+          </div>
+
+          <a href="#" class="modal__close crosseClose">&times;</a>
+        </div>
       </div>
+      <div id="filterContent"></div>
       <div class="row">
         {% include 'activity/_product.html.twig' %}
       </div>

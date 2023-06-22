@@ -1,12 +1,9 @@
-{{ form_start(formFilter) }}
-
-<div class="form-group">
-  {{ form_label(formFilter.categories, null, {'label_attr': {'class': 'sr-only'}}) }}
-  {{ form_widget(formFilter.categories, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher'}}) }}
-</div>
+{{ form_start(formFilter, {'attr': {'id': 'filterForm','class':'filterForm'}}) }}
 
 <div class="form-row">
   <div class="row">
+  <h2>Prix</h2>
+    <div id="priceSlider" data-min="{{min}}" data-max="{{max}}"></div>
     <div class="col-6">
       {{ form_label(formFilter.min, null, {'label_attr': {'class': 'sr-only'}}) }}
       {{ form_widget(formFilter.min, {'attr': {'id': 'min','class': 'form-control', 'placeholder': 'Prix minimum'}}) }}
@@ -16,22 +13,34 @@
       {{ form_widget(formFilter.max, {'attr': {'id': 'max','class': 'form-control', 'placeholder': 'Prix maximum',}}) }}
     </div>
   </div>
-  <div id="priceSlider" data-min="{{min}}" data-max="{{max}}"></div>
+</div>
+<div class="form-group">
+  <h2>Catégories</h2>
+  {{ form_label(formFilter.categories, null, {'label_attr': {'class': 'sr-only'}}) }}
+  {{ form_widget(formFilter.categories, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher'}}) }}
 </div>
 
-<div class="form-group">
-  {{ form_label(formFilter.ray, 'Dans un rayon de :', {'label_attr': {'class': 'sr-only'}}) }}
-  <div class="wrapper">
-    <i class="uil uil-volume-mute" id="icon"></i>
-    {{ form_widget(formFilter.ray, {'attr': {'class': 'form-control range-slider','type': 'range','value': 0, 'placeholder': 'Rayon', 'min': 0, 'max': 100}}) }}
-    <span class="slide-value">{{ formFilter.ray.vars.value }}
-      Km</span>
+<div class="row">
+  <h2>Déstination</h2>
+  <div class="col-md-6">
+    <div class="form-group">
+      {{ form_label(formFilter.places, null, {'label_attr': {'class': 'sr-only'}}) }}
+      {{ form_widget(formFilter.places, {'attr': {'class': 'form-control', 'placeholder': 'lieu'}}) }}
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      {{ form_label(formFilter.ray, 'Dans un rayon de :', {'label_attr': {'class': 'sr-only'}}) }}
+      <div class="wrapper">
+        <i class="uil uil-volume-mute" id="icon"></i>
+        {{ form_widget(formFilter.ray, {'attr': {'class': 'form-control range-slider','type': 'range','value': 0, 'placeholder': 'Rayon', 'min': 0, 'max': 100}}) }}
+        <span class="slide-value">{{ formFilter.ray.vars.value }}
+          Km</span>
+      </div>
+    </div>
   </div>
 </div>
-<div class="form-group">
-  {{ form_label(formFilter.places, null, {'label_attr': {'class': 'sr-only'}}) }}
-  {{ form_widget(formFilter.places, {'attr': {'class': 'form-control', 'placeholder': 'lieu'}}) }}
-</div>
+
 <a href="{{ path('app_activity_search')}}">Tout effacer</a>
 <button type="submit" class="btn btn-primary">Valider</button>
 
@@ -63,7 +72,7 @@
         icon.classList.replace("uil-volume-up", "uil-volume");
       }
     });
-        filterContent.style.display = 'none';
+    filterContent.style.display = 'none';
 
     filterBtn.addEventListener('click', () => {
       if (filterContent.style.display === 'none') {
@@ -72,6 +81,21 @@
         filterContent.style.display = 'none';
       }
     });
+  </script>
+  <script>
+    const form = document.getElementById('filterForm');
+
+    form.addEventListener('submit', (event) => {
+      // Vérifier si l'URL contient "demo-modal"
+      if (window.location.href.includes('demo-modal')) {
+        // Remplacer "demo-modal" par une chaîne de caractères vide
+        const newUrl = window.location.href.replace('demo-modal', '');
+        window.location.href = newUrl;
+
+        // Empêcher le comportement par défaut du formulaire
+      }
+    });
+    // Le reste de votre code JavaScript ici...
   </script>
 
 {% endblock %}
