@@ -7,13 +7,13 @@ use App\Entity\Category;
 use App\Form\ServiceType;
 use App\Form\ActivityImageType;
 use Symfony\Component\Form\AbstractType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ActivityType extends AbstractType
@@ -22,7 +22,7 @@ class ActivityType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('description', TextareaType::class)
+            ->add('description', CKEditorType::class)
             ->add('category_id', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',

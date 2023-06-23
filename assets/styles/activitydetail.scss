@@ -1,19 +1,66 @@
 .has-hours {
     color: red;
-  }
-  .fc-daygrid-day-events {
+}
+.fc-daygrid-day-events {
     display: none;
 }
 .fc-daygrid-day-top {
     justify-content: center;
-    a{
+    a {
         text-decoration: none !important;
     }
 }
 .fc-scrollgrid-sync-inner {
-    a{
+    a {
         text-decoration: none !important;
     }
 }
+.ckeditor {
+    img {
+        width: 100%;
+        height: 100%;
+    }
+}
 
-
+button.fc-today-button.fc-button.fc-button-primary {
+    display: none;
+}
+.formCalandar {
+    font-size: 20px;
+    select.select {
+        color: #000;
+        font-size: 20px;
+        font-family: Gentium Book Plus;
+        width: 100%;
+    }
+    h3 {
+        color: #000;
+        text-align: center;
+        font-size: 22px;
+        font-family: Gentium Book Plus;
+    }
+    #calendar {
+        border-radius: 12px;
+        border: 1px solid #090a0c;
+        background: $primary;
+        box-shadow: 5px 5px 10px 0px #aaa;
+        h2 {
+            color: white;
+            padding-left: 15px;
+            text-transform: capitalize;
+        }
+        button {
+            background: $primary;
+            border: none;
+        }
+    }
+    table,td,.fc-day{
+        border: none !important;
+    }
+    a {
+        color: white;
+    }
+    .fc-day-today{
+        background: $primary !important;
+    }
+}

@@ -98,17 +98,17 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity7->setName('Soins du visage Opéra');
                     $activity7->setDescription('Offrez-vous un moment de détente avec nos soins du visage professionnels.');
                     $activity7->setPrice(60.00);
-                    $activity7->setAddress('7 rue des Salons, 75004 Paris');
+                    $activity7->setAddress('108 Rue Saint-Lazare, 75008 Paris');
                     $activity7->setLatitude(48.86561659919562);
                     $activity7->setLongitude(2.3350409648712707);
                     $activity7->setCategoryId($category); // lier l'activité à la catégorie 'Salon de beauté'
 
 
                     $activity8 = new Activity();
-                    $activity8->setName('Manucure et pédicure Chatlet');
+                    $activity8->setName('Manucure et pédicure Chatelet');
                     $activity8->setDescription('Prenez soin de vos mains et de vos pieds avec nos services de manucure et pédicure.');
                     $activity8->setPrice(40.00);
-                    $activity8->setAddress('8 rue des Salons, 75004 Paris');
+                    $activity8->setAddress('Chatelet, 75001 Paris');
                     $activity8->setLatitude(48.859670308425294);
                     $activity8->setLongitude(2.347835970426229);
                     $activity8->setCategoryId($category); // lier l'activité à la catégorie 'Salon de beauté'

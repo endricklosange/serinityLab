@@ -1,5 +1,5 @@
 {% for activity in activities %}
-  <div class="col-md-4">
+  <div class="col-md-3">
     {% if is_granted("ROLE_USER") %}
     
       {% for favorite in activity.favorite %}
@@ -19,8 +19,8 @@
     </a>
     <a href="{{ path('app_activity_show', {'id': activity.id}) }}" class="card">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-        {% if activity.activityImages[0] is defined %}
-          <img src="/images/activity/{{activity.activityImages[0].name}}" class="img-fluid"/>
+        {% if activity.activityImages[2] is defined %}
+          <img src="/images/activity/{{activity.activityImages[2].name}}" class="img-fluid"/>
         {% else %}
           <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
         {% endif %}

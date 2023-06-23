@@ -65,20 +65,38 @@ class ActivityRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+    public function findSearchLocation(Search $search, $userLocation): array
+{
+    $query = $this->createQueryBuilder('a')
+        ->leftJoin('a.category_id', 'c')
+        ->select('a, (6371 * ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(a.latitude)) * COS(RADIANS(a.longitude) - RADIANS(:longitude)) + SIN(RADIANS(:latitude)) * SIN(RADIANS(a.latitude)))) AS HIDDEN distance')
+        ->where('c.name LIKE :search OR a.name LIKE :search OR a.address LIKE :search')
+        ->setParameter('search', '%' . $search . '%')
+        ->orderBy('distance', 'ASC')
+        ->setParameter('latitude', $userLocation['latitude'])
+        ->setParameter('longitude', $userLocation['longitude'])
+        ->getQuery();
+
+    return $query->getResult();
+}
+
+
+
     public function findFilter(Filter $filter, array $userLocation)
-    {   
+    {
         return $this->getSearchQuery($filter, $userLocation)->getQuery()->getResult();
     }
 
     public function findMinMax(Filter $filter): array
     {
-        $results = $this->getSearchQuery($filter,[],true)
-        ->select('MIN(a.price) AS min', 'MAX(a.price) AS max')
-        ->getQuery()
-        ->getScalarResult();
+        $results = $this->getSearchQuery($filter, [], true)
+            ->select('MIN(a.price) AS min', 'MAX(a.price) AS max')
+            ->getQuery()
+            ->getScalarResult();
         return [$results[0]['min'], $results[0]['max']];
     }
-    private function getSearchQuery(Filter $filter,array $userLocation = [], $inorePrice = false ){
+    private function getSearchQuery(Filter $filter, array $userLocation = [], $inorePrice = false)
+    {
         $queryBuilder = $this->createQueryBuilder('a');
 
         // Filtre sur les catégories

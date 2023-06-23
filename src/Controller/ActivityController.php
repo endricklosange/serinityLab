@@ -30,7 +30,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ActivityController extends AbstractController
 {
     #[Route('/', name: 'app_activity')]
-    public function index(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, SearchFormService $searchFormService): Response
+    public function index(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, FilterService $filterService, SearchFormService $searchFormService): Response
     {
         if ($request->isMethod('POST')) {
             // Stocker les coordonnées dans les variables de session
@@ -117,6 +117,7 @@ class ActivityController extends AbstractController
             'default_max' => $max,
         ]);
         $formFilter->handleRequest($request);
+
         if ($formFilter->isSubmitted() && $formFilter->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
@@ -129,7 +130,7 @@ class ActivityController extends AbstractController
         }
         return $this->render('/activity/search.html.twig', [
             'categories' => $categoryRepository->findAll(),
-            'activities' => $activityRepository->findSearch($data),
+            'activities' => $activityRepository->findSearchLocation($data,$userLocation),
             'searchForm' => $searchForm,
             'formFilter' => $formFilter,
             'min' => $min,

@@ -4,30 +4,24 @@
 {% endblock %}
 
 {% block body %}
-  <h1>Activity</h1>
-  {% if activity.activityImages %}
-    {% for activityImage in activity.activityImages %}
-      {% if activityImage %}
-        <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}">
-      {% endif %}
-      {% else %}
-          <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
-    {% endfor %}
-  {% endif %}
 
-  <div class="container">
+  <div class="container-product my-4">
+    {% if activity.activityImages %}
+      {% for activityImage in activity.activityImages %}
+        {% if activityImage %}
+          <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}">
+        {% endif %}
+      {% else %}
+        <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+      {% endfor %}
+    {% endif %}
     <div class="row">
-      <p>All img</p>
-    </div>
-    <div class="row">
-      <div class="col-md-8">
-        <p>All Containt</p>
+      <div class="col-md-8 mt-5 ckeditor">
+        {{ activity.description|raw }}
       </div>
-      <div class="col-md-4">
-        <h1>{{ activity.name }}</h1>
-        <p>prestations</p>
-        <p>Disponibilités</p>
-        <form method="POST" action="{{ path('app_activity_show', {'id': activity.id}) }}">
+      <div class="col-md-4 mt-5 formCalandar">
+        <h1 class="mb-3">{{ activity.name }}</h1>
+        <form class="mt-5" method="POST" action="{{ path('app_activity_show', {'id': activity.id}) }}">
           <select class="select" name="service" onchange="updateTotal()">
             <option value="" disabled="disabled" selected="selected" hidden="hidden">Découvrez les prestations</option>
             {% for service in activity.services %}
@@ -38,6 +32,7 @@
 
             {% endfor %}
           </select>
+          <h3 class="mt-4 mb-3">Disponibilités <img src="{{ asset('build/images/symbols_calendar.svg') }}"/></h3>
           {% include 'activity/_calendar.html.twig' %}
           <div class="d-flex justify-content-between">
             <p>Total</p>
@@ -45,6 +40,7 @@
           </div>
           <button type="submit">Reservez</button>
         </form>
+
       </div>
     </div>
   </div>
