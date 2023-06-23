@@ -13,6 +13,7 @@
 
 body {
   background-color: rgb(255, 255, 255);
+  height: 100vh;
 }
 
 .wrapper .range-slider {
@@ -45,10 +46,10 @@ body {
 }
 
 input.btn-primary {
-  background-color: $btnBackGreenDark!important;
+  background-color: $btnBackGreenDark !important;
   box-shadow: 4px 4px 10px 0px #00000040;
   border-radius: 0 !important;
- color:white;
+  color: white;
   border: none;
   padding: 5px 20px;
 }
@@ -65,7 +66,6 @@ input#query {
   align-items: center;
   justify-content: center;
   /* End center */
-
 }
 
 .wrapper a {
@@ -86,8 +86,8 @@ input#query {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(77, 77, 77, .7);
-  transition: all .4s;
+  background: rgba(77, 77, 77, 0.7);
+  transition: all 0.4s;
 }
 
 .modal:target {
@@ -117,8 +117,22 @@ input#query {
   color: #585858;
   text-decoration: none;
 }
-.crosseClose{
+.crosseClose {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+.userConnexion {
+  height: 100%;
+  h1 {
+    color: #000;
+    text-align: center;
+    font-size: 27px;
+    font-family: Gloock;
+  }
+  h2{
+    text-align: center;
+    font-size: 35px;
+    font-family: Gentium Book Plus;
+  }
 }

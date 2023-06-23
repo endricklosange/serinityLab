@@ -21,11 +21,32 @@
         height: 100%;
     }
 }
+#hours-container {
+    margin-top: 10%;
+    border: solid black 1px;
+    div:first-child{
+        border-bottom: solid black 1px;
+    }
+    .col-md-4{
+        padding: 3%;
+        text-align: center;
+    }
+    .col-md-4:hover{
+        background-color: $primary !important;
+        color:white !important;
+    }
+    .col-md-4:active{
+        background-color: $primary !important;
+        color:white !important;
+    }
+}
 
 button.fc-today-button.fc-button.fc-button-primary {
     display: none;
 }
 .formCalandar {
+    border: solid black 1px;
+    padding: 28px;
     font-size: 20px;
     select.select {
         color: #000;

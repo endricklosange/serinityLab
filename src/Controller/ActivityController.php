@@ -202,6 +202,8 @@ class ActivityController extends AbstractController
                 $entityManager->persist($reservation);
                 $entityManager->persist($order);
                 $entityManager->flush();
+                return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+
             } else {
             }
         }
