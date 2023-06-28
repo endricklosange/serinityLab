@@ -130,7 +130,7 @@ class ActivityController extends AbstractController
         }
         return $this->render('/activity/search.html.twig', [
             'categories' => $categoryRepository->findAll(),
-            'activities' => $activityRepository->findSearchLocation($data,$userLocation),
+            'activities' => $activityRepository->findSearchLocation($data, $userLocation),
             'searchForm' => $searchForm,
             'formFilter' => $formFilter,
             'min' => $min,
@@ -139,7 +139,7 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/categorie/{id}', name: 'app_activity_category', methods: ['GET'])]
-    public function showByCategory(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository,FilterService $filterService, SearchFormService $searchFormService, int $id): Response
+    public function showByCategory(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, FilterService $filterService, SearchFormService $searchFormService, int $id): Response
     {
         $category = $categoryRepository->find($id);
 
@@ -166,7 +166,7 @@ class ActivityController extends AbstractController
                 'formFilter' => $filterForm,
                 'min' => $min,
                 'max' => $max,
-                
+
             ]);
         }
         return $this->render('/activity/category.html.twig', [
@@ -179,17 +179,26 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_activity_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository, Activity $activity, ReservationRepository $reservationRepository, ServiceRepository $serviceRepository,EntityManagerInterface $entityManager,FilterService $filterService, SearchFormService $searchFormService): Response
-    {
+    public function show(
+        Request $request,
+        CategoryRepository $categoryRepository,
+        ActivityRepository $activityRepository,
+        Activity $activity,
+        ReservationRepository $reservationRepository,
+        ServiceRepository $serviceRepository,
+        EntityManagerInterface $entityManager,
+        FilterService $filterService,
+        SearchFormService $searchFormService
+    ): Response {
         $session = $request->getSession();
         $eventId = $session->get('eventId');
 
         if ($request->isMethod('POST')) {
-            $session = $request->getSession();
             $service = $request->request->get('service');
             $setEventId = $request->request->get('eventId');
             $session->set('eventId', $setEventId);
             $service = $request->request->get('service');
+
             if (!empty($service) && !empty($eventId)) {
                 $reservation = $reservationRepository->find($eventId);
                 $reservation->setStatus(true);
@@ -203,20 +212,20 @@ class ActivityController extends AbstractController
                 $entityManager->persist($order);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
-
-            } else {
             }
         }
+
         $dataFilter = new Filter();
         [$min, $max] = $activityRepository->findMinMax($dataFilter);
         $data = new Search;
-        $userLocation = array(
+        $userLocation = [
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
-        );
+        ];
         $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
         $searchForm = $searchFormService->createFormSearch($data);
-        if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
+
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' =>  $activityRepository->findSearch($data),
@@ -224,13 +233,14 @@ class ActivityController extends AbstractController
                 'formFilter' => $filterForm,
                 'min' => $min,
                 'max' => $max,
-                
             ]);
         }
+
         $reservations = $activity->getReservations();
         $reservationsFormat = [];
+
         foreach ($reservations as $reservation) {
-            if (!$reservation->isStatus() === true) {
+            if (!$reservation->isStatus()) {
                 // Access reservation properties
                 $reservationsFormat[] = [
                     'id' => $reservation->getId(),
@@ -243,12 +253,13 @@ class ActivityController extends AbstractController
                 ];
             }
         }
+
         $reservationsJson = json_encode($reservationsFormat);
+
         return $this->render('/activity/show.html.twig', [
             'activity' => $activity,
             'searchForm' => $searchForm,
             'reservationsJson' => $reservationsJson
-
         ]);
     }
 
