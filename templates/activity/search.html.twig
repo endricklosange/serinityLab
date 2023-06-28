@@ -3,38 +3,39 @@
 {% block title %}Activités{% endblock %}
 
 {% block body %}
-  <div class="categories">
-    <div class="container">
-      <div class="row">
-        {% include 'activity/_categories.html.twig' %}
-        <div class="col-2">
-          <div class="wrapper btn-filterBtn">
-            <a href="#demo-modal">Filtre
-              <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre"></a>
+  <section class="product">
+    <div class="categories">
+      <div class="container">
+        <div class="row">
+          {% include 'activity/_categories.html.twig' %}
+          <div class="col-2">
+            <div class="wrapper btn-filterBtn">
+              <a href="#demo-modal">Filtre
+                <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre"></a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="container">
+    <div class="container">
 
-    <div class="row my-5">
-      <div id="demo-modal" class="modal">
-        <div class="modal__content">
-        <div class="title-modal">
-          <h2>Choisissez vos filtres</h2>
+      <div class="row my-5">
+        <div id="demo-modal" class="modal">
+          <div class="modal__content">
+            <div class="title-modal">
+              <h2>Choisissez vos filtres</h2>
+            </div>
+            <p>
+              {% include 'activity/_filter.html.twig' %}
+            </p>
+
+            <a href="#" class="modal__close crosseClose">&times;</a>
+          </div>
         </div>
-          <p>
-            {% include 'activity/_filter.html.twig' %}
-          </p>
-
-
-          <a href="#" class="modal__close crosseClose">&times;</a>
+        <div class="row">
+          {% include 'activity/_product.html.twig' %}
         </div>
-      </div>
-      <div class="row">
-        {% include 'activity/_product.html.twig' %}
       </div>
     </div>
-  </div>
+  </section>
 {% endblock %}

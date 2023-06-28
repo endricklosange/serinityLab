@@ -3,16 +3,18 @@
 {% block title %}Activités{% endblock %}
 
 {% block body %}
-    <div class="row categories">
-      <div class="container">
-        <div class="row">
-          {% include 'activity/_categories.html.twig' %}
-        </div>
+  <div class="row categories">
+    <div class="container">
+      <div class="row">
+        {% include 'activity/_categories.html.twig' %}
       </div>
     </div>
-  <div class="container ">
-    <div class="row my-5">
-      {% include 'activity/_product.html.twig' %}
-    </div>
   </div>
+  <section class="product">
+    <div class="container ">
+      <div class="row my-5">
+        {% include 'activity/_product.html.twig' %}
+      </div>
+    </div>
+  </section>
 {% endblock %}

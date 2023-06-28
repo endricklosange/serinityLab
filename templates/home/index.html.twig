@@ -99,7 +99,7 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
               <div class="col-md-6">
                 <span class="categorie-home">Salle de sport</span>
                 <h2>Donnez à votre corps l'attention qu'il mérite avec nos salles de sport</h2>
-                <p class="paragraph1">Que vous soyez un adepte du cardio, de la musculation, du yoga ou de toute autre discipline, vous trouverez l'endroit idéal pour vous entraîner et repousser vos limites. Nos partenaires offrent une variété d'installations modernes et d'équipements de pointe pour vous permettre de vous exercer efficacement. 
+                <p class="paragraph1">Que vous soyez un adepte du cardio, de la musculation, du yoga ou de toute autre discipline, vous trouverez l'endroit idéal pour vous entraîner et repousser vos limites. Nos partenaires offrent une variété d'installations modernes et d'équipements de pointe pour vous permettre de vous exercer efficacement.
                 </p>
                 <p class="paragraph2">Que vous soyez débutant ou athlète confirmé, nos salles de sport vous offrent un environnement motivant et stimulant pour atteindre vos objectifs de remise en forme. Faites un pas vers une vie saine et énergique en rejoignant dès maintenant une salle de sport près de chez vous.
                 </p>
@@ -134,7 +134,7 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
           <footer class="footerHome bg-light p-5">
             <div class="container">
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-6 col-md-4">
                   <h3>Navigation</h3>
                   <ul>
                     <li>
@@ -155,7 +155,7 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
                     </li>
                   </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-6 col-md-4">
                   <h3>INFORMATIONS</h3>
                   <ul>
                     <li>
@@ -188,43 +188,31 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
 
                 </div>
               </div>
-              <div class="row my-4">
-                <div class="col-md-4 d-flex justify-content-between">
-                  <p>SUIVEZ-NOUS!</p>
-                  <ul>
-                    <li class="socialMedia d-flex">
-                      <img class="ic_baseline-facebook" src="{{ asset('build/images/facebookBlack.svg') }}" alt="facebook">
-                      <img class="instagram mx-2" src="{{ asset('build/images/instagramBlack.svg') }}" alt="instagram">
-                      <img class="pinterest" src="{{ asset('build/images/pinterestLogoBlack.svg') }}" alt="tiktok">
-                      <img class="tiktok" src="{{ asset('build/images/tiktokBlack.svg') }}" alt="tiktok">
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                  <form method="POST" class="d-flex">
-                    <input type="email" id="email" name="email" required="required" placeholder="Newsletter">
-                    <input type="submit" value="Envoyer" class="btn-primary mx-1">
-                  </form>
-                </div>
-
+              <div class="d-md-flex justify-content-center">
+                <p>SUIVEZ-NOUS!</p>
+                <ul>
+                  <li class="socialMedia d-flex justify-content-center">
+                    <img class="ic_baseline-facebook" src="{{ asset('build/images/facebookBlack.svg') }}" alt="facebook">
+                    <img class="instagram mx-2" src="{{ asset('build/images/instagramBlack.svg') }}" alt="instagram">
+                    <img class="pinterest" src="{{ asset('build/images/pinterestLogoBlack.svg') }}" alt="tiktok">
+                    <img class="tiktok mx-2" src="{{ asset('build/images/tiktokBlack.svg') }}" alt="tiktok">
+                  </li>
+                </ul>
               </div>
             </div>
-            <div class="row lastDivFooter">
-              <div class="col-md-3">
+            <div class="row lastDivFooter mt-5">
+              <div class="col-4">
                 <a href="">Mentions légales</a>
               </div>
-              <div class="col-md-3">
+              <div class="col-4">
                 <a href="">Droits d’auteur</a>
               </div>
-              <div class="col-md-3">
+              <div class="col-4">
                 <a href="">Propriété intellectuelle</a>
-              </div>
-              <div class="col-md-3">
-                <a href="">Utilisation des cookies</a>
               </div>
             </div>
           </footer>
+
         {% endblock %}
       </body>
     </html>
