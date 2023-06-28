@@ -17,6 +17,9 @@
 }
 .footerHome {
     text-align: center;
+    ul {
+        padding:0
+    }
     h3 {
         width: 40%;
         margin: auto;
@@ -30,7 +33,7 @@
     }
     li {
         a {
-            font-family: 'Gentium Book Plus', serif;
+            font-family: "Gentium Book Plus", serif;
             font-size: 20px;
             color: black;
             text-decoration: none;
@@ -47,13 +50,85 @@
         font-size: 27px;
         font-family: "Gentium Book Plus", serif;
     }
-    .socialMedia{
+    .socialMedia {
         display: flex;
         align-items: center;
     }
-    .lastDivFooter{
-        a{
+    .lastDivFooter {
+        a {
             text-decoration: none;
+        }
+    }
+}
+.footer {
+    text-align: center;
+    ul {
+        padding:0
+    }
+    h3 {
+        width: 40%;
+        margin: auto;
+        margin-bottom: 5%;
+        padding-bottom: 2%;
+        font-family: "Gentium Book Plus", serif;
+        text-transform: uppercase;
+        font-size: 24px;
+        color: rgb(255, 255, 255);
+        border-bottom: rgb(255, 255, 255) 1px solid;
+    }
+    li {
+        a {
+            font-family: "Gentium Book Plus", serif;
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        list-style: none;
+    }
+    input {
+        border: 0;
+        border-bottom: #ffffff 1px solid;
+        background: transparent;
+        font-size: 25px;
+    }
+    p {
+        font-size: 27px;
+        font-family: "Gentium Book Plus", serif;
+        color: rgb(255, 255, 255);
+    }
+    .socialMedia {
+        display: flex;
+        align-items: center;
+    }
+    .lastDivFooter {
+        a {
+            text-decoration: none;
+            color: rgb(255, 255, 255);
+        }
+    }
+}
+@media only screen and (max-width: $portraitTablets) {
+    .footer,.footerHome {
+        .container {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        h3 {
+            width: 100%;
+            font-size: 20px;
+        }
+        li {
+            a {
+                font-size: 16px;
+            }
+        }
+        p {
+            font-size: 20px;
+        }
+        .lastDivFooter {
+            a {
+                font-size: 13px;
+            }
         }
     }
 }
