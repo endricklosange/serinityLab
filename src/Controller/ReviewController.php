@@ -35,8 +35,8 @@ class ReviewController extends AbstractController
         $form->handleRequest($request);
         $session = $request->getSession();
         $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter);
         $data = new Search;
+        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
         $userLocation = array(
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -46,7 +46,7 @@ class ReviewController extends AbstractController
         if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data),
+                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
                 'searchForm' => $searchFormService->createFormSearch($data),
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -68,7 +68,6 @@ class ReviewController extends AbstractController
 
         foreach ($user->getOrders() as $order) {
             if ($order->ispay() === true && $order->getReservation()->getActivity()->getId()) {
-                dump($order->getReservation()->getActivity()->getId());
                 if ($form->isSubmitted() && $form->isValid()) {
 
                     $review->setUser($user);

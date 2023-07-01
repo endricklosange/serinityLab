@@ -39,23 +39,47 @@ class ActivityController extends AbstractController
             $session->set('longitude', $request->request->get('longitude'));
         }
         $session = $request->getSession();
+        $dataFilter = new Filter();
+        $data = new Search;
+        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
         $userLocation = array(
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
         );
-        $data = new Search();
-        $form = $this->createForm(SearchFormType::class, $data);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
+        $searchForm = $searchFormService->createFormSearch($data);
+        if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
+            dump($min.' '.$max);
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data),
-                'searchForm' => $form,
+                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
+                'searchForm' => $searchFormService->createFormSearch($data),
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
 
             ]);
         }
-
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' => $activityRepository->findFilter($dataFilter, $userLocation),
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+            ]);
+        }
         if ($userLocation['latitude'] === null || $userLocation['longitude'] === null) {
             return $this->render('/activity/index.html.twig', [
                 'categories' => $categoryRepository->findAll(),
@@ -63,20 +87,24 @@ class ActivityController extends AbstractController
                     [],
                     ['created_at' => 'ASC']
                 ),
-                'searchForm' => $form
-
+                'searchForm' => $searchForm,
+                'min' => $min,
+                'max' => $max,
+                'formFilter' => $filterForm
             ]);
         } else {
             return $this->render('/activity/index.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' => $activityRepository->findByLocation($userLocation['latitude'], $userLocation['longitude']),
-                'searchForm' => $form,
-
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max
             ]);
         }
     }
     #[Route('/favoris', name: 'app_activity_favorite')]
-    public function favorite(Request $request, CategoryRepository $categoryRepository, ActivityRepository $activityRepository): Response
+    public function favorite(Request $request,Filter $filter , CategoryRepository $categoryRepository, ActivityRepository $activityRepository): Response
     {
         $data = new Search();
         $user = $this->getUser();
@@ -85,7 +113,7 @@ class ActivityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data),
+                'activities' =>  $activityRepository->findSearch($data,$filter),
                 'form' => $form,
 
             ]);
@@ -111,7 +139,7 @@ class ActivityController extends AbstractController
 
         $searchForm = $this->createForm(SearchFormType::class, $data);
         $searchForm->handleRequest($request);
-        [$min, $max] = $activityRepository->findMinMax($dataFilter);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
         $formFilter = $this->createForm(FilterType::class, $dataFilter, [
             'default_min' => $min,
             'default_max' => $max,
@@ -128,14 +156,6 @@ class ActivityController extends AbstractController
                 'max' => $max,
             ]);
         }
-        return $this->render('/activity/search.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-            'activities' => $activityRepository->findSearchLocation($data, $userLocation),
-            'searchForm' => $searchForm,
-            'formFilter' => $formFilter,
-            'min' => $min,
-            'max' => $max,
-        ]);
     }
 
     #[Route('/categorie/{id}', name: 'app_activity_category', methods: ['GET'])]
@@ -147,11 +167,11 @@ class ActivityController extends AbstractController
             return $this->redirectToRoute('app_activity', [], Response::HTTP_SEE_OTHER);
         }
         $session = $request->getSession();
+        $data = new Search;
         $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data,$category);
 
         $activities = $category->getActivities();
-        $data = new Search;
         $userLocation = array(
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -161,7 +181,7 @@ class ActivityController extends AbstractController
         if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data),
+                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
                 'searchForm' => $searchForm,
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -169,12 +189,24 @@ class ActivityController extends AbstractController
 
             ]);
         }
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' => $activityRepository->findFilter($dataFilter, $userLocation, false, $category),
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+            ]);
+        }
         return $this->render('/activity/category.html.twig', [
             'category' => $category,
             'categories' => $categoryRepository->findAll(),
             'activities' => $activities,
             'searchForm' => $searchForm,
-
+            'formFilter' => $filterForm,
+            'min' => $min,
+            'max' => $max,
         ]);
     }
 
@@ -214,10 +246,9 @@ class ActivityController extends AbstractController
                 return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
             }
         }
-
-        $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter);
         $data = new Search;
+        $dataFilter = new Filter();
+        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
         $userLocation = [
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -228,7 +259,7 @@ class ActivityController extends AbstractController
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data),
+                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
                 'searchForm' => $searchForm,
                 'formFilter' => $filterForm,
                 'min' => $min,

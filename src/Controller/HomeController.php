@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Filter;
 use App\Entity\Search;
 use App\Entity\Contact;
+use App\Form\FilterType;
 use App\Form\ContactType;
 use App\Service\FilterService;
 use App\Service\SearchFormService;
@@ -25,9 +26,9 @@ class HomeController extends AbstractController
         $formContact = $this->createForm(ContactType::class, $contact);
         $formContact->handleRequest($request);
         $session = $request->getSession();
-        $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter);
         $data = new Search;
+        $dataFilter = new Filter();
+        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
         $userLocation = array(
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -35,9 +36,14 @@ class HomeController extends AbstractController
         $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
         $searchForm = $searchFormService->createFormSearch($data);
         if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data),
+                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
                 'searchForm' => $searchFormService->createFormSearch($data),
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -46,6 +52,11 @@ class HomeController extends AbstractController
             ]);
         }
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
                 'activities' => $activityRepository->findFilter($dataFilter, $userLocation),

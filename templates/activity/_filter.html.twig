@@ -15,12 +15,15 @@
     </div>
   </div>
 </div>
+{% if app.request.attributes.get('_route') != 'app_activity_category' %}
 <div class="form-group">
   <h2>Catégories</h2>
   
   {{ form_label(formFilter.categories, null, {'label_attr': {'class': 'sr-only'}}) }}
   {{ form_widget(formFilter.categories, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher'}}) }}
 </div>
+{% endif %}
+
 
 <div class="row">
   <h2>Déstination</h2>
@@ -43,7 +46,7 @@
   </div>
 </div>
 
-<a href="{{ path('app_activity_search')}}">Tout effacer</a>
+<a href="{{ path('app_activity')}}">Tout effacer</a>
 <button type="submit" class="btn btn-primary">Valider</button>
 
 {% block javascripts %}

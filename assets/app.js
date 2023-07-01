@@ -26,7 +26,7 @@ if (slider) {
             'max': parseInt(slider.dataset.max)
         }
     });
-    
+    console.log( min.value + " " + max.value);
     range.on('slide', function (values, handle) {
         if (handle === 0) {
             min.value = Math.round(values[0])

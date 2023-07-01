@@ -7,32 +7,43 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class FilterType extends AbstractType
 {
+    private $requestStack;
+    public function __construct(RequestStack $requestStack)
+{
+    $this->requestStack = $requestStack;
+}
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $currentRoute = $this->requestStack->getCurrentRequest()->attributes->get('_route');
+        if ($currentRoute !== 'app_activity_category') {
+            $builder
+                ->add('categories', EntityType::class, [
+                    'required' => false,
+                    'class' => Category::class,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'attr' => [
+                        'placeholder' => 'Rechercher'
+                    ]
+                ]);
+        }
+    
         $builder
-            ->add('categories', EntityType::class, [
-                'required' => false,
-                'class' => Category::class,
-                'expanded' => true,
-                'multiple' => true,
-                'attr' => [
-                    'placeholder' => 'Rechercher'
-                ]
-            ])
             ->add('min', NumberType::class, [
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Prix minimum',
                     'value' => $options['default_min'], 
-
+    
                 ]
             ])
             ->add('max', NumberType::class, [
