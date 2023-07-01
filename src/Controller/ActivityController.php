@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Filter;
@@ -244,6 +245,11 @@ class ActivityController extends AbstractController
                 $entityManager->persist($order);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+            }if (empty($service)){
+                $this->addFlash('error', "Veuillez choisir une prestation");
+            }
+            if (empty($eventId)){
+                $this->addFlash('error', "Veuillez choisir une date de réservation");
             }
         }
         $data = new Search;
@@ -269,10 +275,9 @@ class ActivityController extends AbstractController
 
         $reservations = $activity->getReservations();
         $reservationsFormat = [];
-
+        $currentDateTime = new DateTime();
         foreach ($reservations as $reservation) {
-            if (!$reservation->isStatus()) {
-                // Access reservation properties
+            if (!$reservation->isStatus() && $reservation->getReservationStart() > $currentDateTime) {
                 $reservationsFormat[] = [
                     'id' => $reservation->getId(),
                     'start' => $reservation->getReservationStart()->format('Y-m-d H:i'),

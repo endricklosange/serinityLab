@@ -27,11 +27,16 @@ class AdminActivityController extends AbstractController
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
+        dd( $activity->getActivityImages() );
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepository->save($activity, true);
+            if (count($activity->getActivityImages()) > 5) {
+                $this->addFlash('error', 'Vous ne pouvez pas ajouter plus de 5 images à cette activité.');
+            } else {
+                $activityRepository->save($activity, true);
 
-            return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->renderForm('admin/activity/new.html.twig', [
@@ -55,8 +60,12 @@ class AdminActivityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepository->save($activity, true);
-            return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
+            if (count($activity->getActivityImages()) > 5) {
+                $this->addFlash('error', 'Vous ne pouvez pas ajouter plus de 5 images à cette activité.');
+            } else {
+                $activityRepository->save($activity, true);
+                return $this->redirectToRoute('app_admin_activity_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->renderForm('admin/activity/edit.html.twig', [
@@ -68,7 +77,7 @@ class AdminActivityController extends AbstractController
     #[Route('/{id}', name: 'app_activity_delete', methods: ['POST'])]
     public function delete(Request $request, Activity $activity, ActivityRepository $activityRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$activity->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $activity->getId(), $request->request->get('_token'))) {
             $activityRepository->remove($activity, true);
         }
 

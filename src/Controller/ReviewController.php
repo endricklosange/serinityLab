@@ -75,7 +75,7 @@ class ReviewController extends AbstractController
            
                     $reviewRepository->save($review, true);
         
-                    return $this->redirectToRoute('app_review_index', [], Response::HTTP_SEE_OTHER);
+                    return $this->redirectToRoute('app_activity', [], Response::HTTP_SEE_OTHER);
                 }
             }
         }

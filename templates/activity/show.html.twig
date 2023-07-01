@@ -21,6 +21,11 @@
       </div>
       <div class="col-md-4 mt-5 formCalandar">
         <h1 class="mb-3">{{ activity.name }}</h1>
+        {% for error in app.flashes('error') %}
+          <div class="alert alert-danger">
+            {{ error }}
+          </div>
+        {% endfor %}
         <form class="mt-5" method="POST" action="{{ path('app_activity_show', {'id': activity.id}) }}">
           <select class="select" name="service" onchange="updateTotal()">
             <option value="" disabled="disabled" selected="selected" hidden="hidden">Découvrez les prestations</option>

@@ -1,3 +1,8 @@
+{% for error in app.flashes('error') %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+{% endfor %}
 {{ form_start(form) }}
 
 {{ form_widget(form._token)}}
