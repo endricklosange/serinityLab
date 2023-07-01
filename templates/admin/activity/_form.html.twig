@@ -13,13 +13,30 @@
   {{ form_label(form.category_id, 'Catégorie') }}
   {{ form_widget(form.category_id, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div id="services" class="form-group" data-prototype="{{ form_row(form.services.vars.prototype)|e('html_attr') }}">
-  {{ form_row(form.services) }}
-  <span></span>
+<div class="form-group">
+  {{ form_label(form.services, 'Services') }}
+  <ul id="services" data-prototype="{{ form_widget(form.services.vars.prototype)|e('html_attr') }}">
+    {% for serviceForm in form.services %}
+      <li>
+        {{ form_row(serviceForm) }}
+        <button type="button" class="remove-btn">Remove Service</button>
+      </li>
+    {% endfor %}
+  </ul>
+  <button type="button" class="add-btn" data-collection-holder-class="services">Add Service</button>
 </div>
-<div id="activityImages" class="form-group" data-prototype="{{ form_row(form.activityImages.vars.prototype)|e('html_attr') }}">
-  {{ form_row(form.activityImages) }}
-  <span></span>
+
+<div class="form-group">
+  {{ form_label(form.activityImages, 'Activity Images') }}
+  <ul id="activityImages" data-prototype="{{ form_widget(form.activityImages.vars.prototype)|e('html_attr') }}">
+    {% for imageForm in form.activityImages %}
+      <li>
+        {{ form_row(imageForm) }}
+        <button type="button" class="remove-btn">Remove Image</button>
+      </li>
+    {% endfor %}
+  </ul>
+  <button type="button" class="add-btn" data-collection-holder-class="activityImages">Add Image</button>
 </div>
 <div class="form-group">
   {{ form_label(form.price, 'Prix') }}
@@ -41,82 +58,42 @@
 {{ form_end(form, {render_rest: false}) }}
 
 {% block javascripts %}
-  <script>
-  let collection,
-    boutonAjout,
-    span;
-  window.onload = () => {
-    collection = document.querySelector("#services");
-    span = collection.querySelector("span");
-
-    boutonAjout = document.createElement("button");
-    boutonAjout.className = "ajout-services btn btn-secondary";
-    boutonAjout.innerText = "Ajouter un service";
-
-    let nouveauBouton = span.append(boutonAjout);
-
-    collection.dataset.index = collection.querySelectorAll("input").length;
-
-    boutonAjout.addEventListener("click", function () {
-      addButton(collection, nouveauBouton);
+ <script>
+    document.querySelectorAll('.add-btn').forEach(btn => {
+      btn.addEventListener("click", addFormToCollection);
     });
 
-    // Code pour le champ "activityImages"
-    let activityImagesCollection = document.querySelector("#activityImages");
-    let activityImagesSpan = activityImagesCollection.querySelector("span");
-
-    let activityImagesBoutonAjout = document.createElement("button");
-    activityImagesBoutonAjout.className = "ajout-activityImages btn btn-secondary";
-    activityImagesBoutonAjout.innerText = "Ajouter une image";
-
-    let activityImagesNouveauBouton = activityImagesSpan.append(activityImagesBoutonAjout);
-
-    activityImagesCollection.dataset.index = activityImagesCollection.querySelectorAll("input").length;
-
-    activityImagesBoutonAjout.addEventListener("click", function () {
-      addButton(activityImagesCollection, activityImagesNouveauBouton);
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener("click", removeFormFromCollection);
     });
 
-    // Code pour les boutons de suppression existants lors de l'édition
-    let existingServicesDeleteButtons = document.querySelectorAll(".delete-service");
-    existingServicesDeleteButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        deleteButton(this);
-      });
-    });
+    function addFormToCollection(e) {
+      const collectionHolderClass = e.currentTarget.dataset.collectionHolderClass;
+      const collectionHolder = document.querySelector('#' + collectionHolderClass);
 
-    let existingImagesDeleteButtons = document.querySelectorAll(".delete-image");
-    existingImagesDeleteButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        deleteButton(this);
-      });
-    });
-  };
+      if (!collectionHolder) {
+        console.error('Collection holder element not found:', collectionHolderClass);
+        return;
+      }
 
-  function addButton(collection, nouveauBouton) {
-    let prototype = collection.dataset.prototype;
-    let index = collection.dataset.index;
-    prototype = prototype.replace(/__name__/g, index);
-    let content = document.createElement("html");
-    content.innerHTML = prototype;
-    let newForm = content.querySelector("div");
-    let boutonSuppr = document.createElement("button");
-    boutonSuppr.type = "button";
-    boutonSuppr.className = "delete-service btn red btn btn-danger"; // Ajout de la classe "delete-service"
-    boutonSuppr.id = "delete-services-" + index;
-    boutonSuppr.innerText = "Supprimer";
-    newForm.append(boutonSuppr);
-    collection.dataset.index++;
-    let boutonAjout = collection.querySelector(".ajout-departement");
-    span.insertBefore(newForm, boutonAjout);
-    boutonSuppr.addEventListener("click", function () {
-      deleteButton(this);
-    });
-  }
+      const item = document.createElement('li');
+      item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
 
-  function deleteButton(button) {
-    button.previousElementSibling.parentElement.remove();
-  }
-</script>
+      // Add a "Remove" button to the new field
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.textContent = 'Remove';
+      removeBtn.classList.add('remove-btn');
+      removeBtn.addEventListener('click', removeFormFromCollection);
+      item.appendChild(removeBtn);
 
+      collectionHolder.appendChild(item);
+      collectionHolder.dataset.index++;
+    }
+
+    function removeFormFromCollection(e) {
+      const item = e.currentTarget.parentNode;
+      item.remove();
+    }
+  </script>
 {% endblock %}
