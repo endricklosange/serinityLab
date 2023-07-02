@@ -27,9 +27,18 @@ class Review
     #[ORM\JoinColumn(nullable: false)]
     private ?Score $score = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $created_at = null;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getActivity(): ?Activity
@@ -76,6 +85,18 @@ class Review
     public function setScore(?Score $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(?\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

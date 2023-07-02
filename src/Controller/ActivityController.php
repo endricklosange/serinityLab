@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Filter;
+use App\Entity\Review;
 use App\Entity\Search;
 use App\Data\SearchData;
 use App\Entity\Activity;
@@ -13,7 +14,9 @@ use App\Form\FilterType;
 use App\Form\SearchFormType;
 use App\Form\ServiceBookType;
 use App\Service\FilterService;
+use App\Service\ReviewService;
 use App\Service\SearchFormService;
+use App\Repository\ReviewRepository;
 use App\Repository\ServiceRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\ActivityRepository;
@@ -42,7 +45,7 @@ class ActivityController extends AbstractController
         $session = $request->getSession();
         $dataFilter = new Filter();
         $data = new Search;
-        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
         $userLocation = array(
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -50,15 +53,14 @@ class ActivityController extends AbstractController
         $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
         $searchForm = $searchFormService->createFormSearch($data);
         if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
-            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
             $filterForm = $this->createForm(FilterType::class, $dataFilter, [
                 'default_min' => $min,
                 'default_max' => $max,
             ]);
-            dump($min.' '.$max);
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
+                'activities' =>  $activityRepository->findSearch($data, $dataFilter),
                 'searchForm' => $searchFormService->createFormSearch($data),
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -67,7 +69,7 @@ class ActivityController extends AbstractController
             ]);
         }
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
             $filterForm = $this->createForm(FilterType::class, $dataFilter, [
                 'default_min' => $min,
                 'default_max' => $max,
@@ -105,7 +107,7 @@ class ActivityController extends AbstractController
         }
     }
     #[Route('/favoris', name: 'app_activity_favorite')]
-    public function favorite(Request $request,Filter $filter , CategoryRepository $categoryRepository, ActivityRepository $activityRepository): Response
+    public function favorite(Request $request, Filter $filter, CategoryRepository $categoryRepository, ActivityRepository $activityRepository): Response
     {
         $data = new Search();
         $user = $this->getUser();
@@ -114,7 +116,7 @@ class ActivityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data,$filter),
+                'activities' =>  $activityRepository->findSearch($data, $filter),
                 'form' => $form,
 
             ]);
@@ -140,7 +142,7 @@ class ActivityController extends AbstractController
 
         $searchForm = $this->createForm(SearchFormType::class, $data);
         $searchForm->handleRequest($request);
-        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
         $formFilter = $this->createForm(FilterType::class, $dataFilter, [
             'default_min' => $min,
             'default_max' => $max,
@@ -170,7 +172,7 @@ class ActivityController extends AbstractController
         $session = $request->getSession();
         $data = new Search;
         $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data,$category);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data, $category);
 
         $activities = $category->getActivities();
         $userLocation = array(
@@ -182,7 +184,7 @@ class ActivityController extends AbstractController
         if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
+                'activities' =>  $activityRepository->findSearch($data, $dataFilter),
                 'searchForm' => $searchForm,
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -221,10 +223,14 @@ class ActivityController extends AbstractController
         ServiceRepository $serviceRepository,
         EntityManagerInterface $entityManager,
         FilterService $filterService,
-        SearchFormService $searchFormService
+        SearchFormService $searchFormService,
+        ReviewService $reviewService,
+        ReviewRepository $reviewRepository
     ): Response {
         $session = $request->getSession();
         $eventId = $session->get('eventId');
+        $review = new Review();
+        $reviewForm = $reviewService->createFormReview($review);
 
         if ($request->isMethod('POST')) {
             $service = $request->request->get('service');
@@ -245,16 +251,17 @@ class ActivityController extends AbstractController
                 $entityManager->persist($order);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
-            }if (empty($service)){
+            }
+            if (empty($service)) {
                 $this->addFlash('error', "Veuillez choisir une prestation");
             }
-            if (empty($eventId)){
+            if (empty($eventId)) {
                 $this->addFlash('error', "Veuillez choisir une date de réservation");
             }
         }
         $data = new Search;
         $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
         $userLocation = [
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -265,7 +272,7 @@ class ActivityController extends AbstractController
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
+                'activities' =>  $activityRepository->findSearch($data, $dataFilter),
                 'searchForm' => $searchForm,
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -289,13 +296,30 @@ class ActivityController extends AbstractController
                 ];
             }
         }
-
         $reservationsJson = json_encode($reservationsFormat);
+        $user = $this->getUser();
+
+        if ($user) {
+            foreach ($user->getOrders() as $order) {
+                if ($order->ispay() === true && $order->getReservation()->getActivity()->getId() && $order->getReservation()->getActivity()->getId() === $activity->getId()) {
+                    if ($reviewForm->isSubmitted() && $reviewForm->isValid()) {
+                        $review->setUser($user);
+                        $review->setCreatedAt($currentDateTime);
+                        $review->setActivity($order->getReservation()->getActivity());
+                        $reviewRepository->createReviewWithScore($review);
+                        return $this->redirectToRoute('app_activity', [], Response::HTTP_SEE_OTHER);
+                    }
+                }
+            }
+        }
 
         return $this->render('/activity/show.html.twig', [
             'activity' => $activity,
             'searchForm' => $searchForm,
-            'reservationsJson' => $reservationsJson
+            'reservationsJson' => $reservationsJson,
+            'reviewForm' => $reviewForm,
+            'user' => $user,
+            'reviews' => $reviewRepository->findByActivityId($activity),
         ]);
     }
 
