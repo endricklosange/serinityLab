@@ -79,7 +79,7 @@
         {% endif %}
       {% endfor %}
       {% for order in user.orders %}
-        {% if not hasReviewed and order.reservation.activity.id == activity.id and order.pay == true %}
+        {% if not hasReviewed and order.reservation.activity.id == activity.id and order.pay == true and order.reservation.reservationEnd|date('Y-m-d H:i:s') <  currentDateTime|date('Y-m-d H:i:s') %}
           <button id="showReviewFormButton">Ajouter un avis</button>
           <div >
             {{ include('review/_form.html.twig') }}

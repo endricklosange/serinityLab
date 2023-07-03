@@ -17,28 +17,24 @@ class ScoreType extends AbstractType
             'attr' => [
                 'min' => 1,
                 'max' => 5,
-                'id' => 'price_quality_range',
             ],
         ])
         ->add('cleanliness', RangeType::class, [
             'attr' => [
                 'min' => 1,
                 'max' => 5,
-                'id' => 'cleanliness_range',
             ],
         ])
         ->add('location', RangeType::class, [
             'attr' => [
                 'min' => 1,
                 'max' => 5,
-                'id' => 'location_range',
             ],
         ])
         ->add('product', RangeType::class, [
             'attr' => [
                 'min' => 1,
                 'max' => 5,
-                'id' => 'product_range',
             ],
         ]);
     }
