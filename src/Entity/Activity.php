@@ -61,6 +61,10 @@ class Activity
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Review::class)]
     private Collection $reviews;
 
+    #[ORM\OneToOne(inversedBy: 'activity', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -328,6 +332,18 @@ class Activity
                 $review->setActivity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(? Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }

@@ -2,12 +2,14 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
     private $passwordEncoder;
 
@@ -17,14 +19,23 @@ class UserFixtures extends Fixture
     }
     public function load(ObjectManager $manager): void
     {
-        // Création d’un utilisateur de type “company”
-        $user = new User();
-        $user->setEmail('contact@serinitylab.fr');
-        $user->setRoles(['ROLE_ADMIN']);
-        $user->setPassword( $this->passwordEncoder->hashPassword($user, 'test123456789'));
-        
-        $manager->persist($user);
+        $faker = Factory::create();
+
+        for ($i = 0; $i < 8; $i++) {
+            $user = new User();
+            $user->setEmail($faker->email);
+            $user->setFirstName($faker->firstName);
+            $user->setLastName($faker->lastName);
+            $user->setRoles(['ROLE_COMPANY']);
+            $user->setPassword($this->passwordEncoder->hashPassword($user, 'test123'));
+
+            $manager->persist($user);
+        }
         $manager->flush();
     }
-}
+    public function getOrder()
+    {
+        return 1;
+    }
 
+}

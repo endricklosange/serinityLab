@@ -284,8 +284,6 @@ class ActivityController extends AbstractController
         $reservationsFormat = [];
         $currentDateTime = new DateTime();
         foreach ($reservations as $reservation) {
-            dump($reservation->getReservationStart()->format('Y-m-d H:i'));
-                dump($currentDateTime->format('Y-m-d H:i'));
             if (!$reservation->isStatus() && $reservation->getReservationStart() > $currentDateTime) {
                 $reservationsFormat[] = [
                     'id' => $reservation->getId(),

@@ -1,0 +1,11 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+  <div class="container userConnexion mt-5">
+    <h1>Création d'entreprise</h1>
+    <h2>Bienvenue sur SerinityLab</h2>
+    {{ include('admin/company/_form.html.twig') }}
+  </div>
+{% endblock %}

@@ -44,6 +44,6 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface
     }
     public function getOrder()
     {
-        return 1;
+        return 3;
     }
 }

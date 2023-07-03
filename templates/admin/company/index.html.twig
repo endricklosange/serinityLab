@@ -1,0 +1,35 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Company index{% endblock %}
+
+{% block body %}
+    <h1>Company index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CompanyName</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for company in companies %}
+            <tr>
+                <td>{{ company.id }}</td>
+                <td>{{ company.companyName }}</td>
+                <td>
+                    <a href="{{ path('app_admin_company_show', {'id': company.id}) }}">show</a>
+                    <a href="{{ path('app_admin_company_edit', {'id': company.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_company_new') }}">Create new</a>
+{% endblock %}

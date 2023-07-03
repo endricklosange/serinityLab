@@ -30,9 +30,11 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity1->setDescription('Un massage doux et relaxant pour se sentir bien dans son corps.');
                     $activity1->setPrice(50.00);
                     $activity1->setAddress('1 rue des Massages, 75001 Ascoux');
-                    $activity1->setLatitude(48.1045278);
-                    $activity1->setLongitude(2.8560571);
+                    $activity1->setLatitude(48.1248263651712); 
+                    $activity1->setLongitude(2.2493757260740694);
                     $activity1->setCategoryId($category); // lier l'activité à la catégorie 'Massage'
+                    $activity1->setCompany($this->getReference('company_1')); // Lier l'activité à l'entreprise 1
+
 
                     $activity2 = new Activity();
                     $activity2->setName('Massage sportif Etampe');
@@ -42,6 +44,8 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity2->setLatitude(48.44416949206742);
                     $activity2->setLongitude(2.200397175722377);
                     $activity2->setCategoryId($category); // lier l'activité à la catégorie 'Massage'
+                    $activity2->setCompany($this->getReference('company_2')); // Lier l'activité à l'entreprise 1
+
                     $manager->persist($activity1);
                     $manager->persist($activity2);
                     break;
@@ -55,6 +59,7 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity3->setLatitude(48.622311553880735);
                     $activity3->setLongitude(2.421876852119094);
                     $activity3->setCategoryId($category); // lier l'activité à la catégorie 'Spa'
+                    $activity3->setCompany($this->getReference('company_3')); // Lier l'activité à l'entreprise 1
 
                     $activity4 = new Activity();
                     $activity4->setName('Spa bien-être Paris');
@@ -64,6 +69,7 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity4->setLatitude(48.85301745062181);
                     $activity4->setLongitude(2.3691774205693465);
                     $activity4->setCategoryId($category); // lier l'activité à la catégorie 'Spa'
+                    $activity4->setCompany($this->getReference('company_4')); // Lier l'activité à l'entreprise 1
 
                     $manager->persist($activity3);
                     $manager->persist($activity4);
@@ -78,6 +84,7 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity5->setLatitude(48.17600673805905);
                     $activity5->setLongitude(2.256948717866266);
                     $activity5->setCategoryId($category); // lier l'activité à la catégorie 'Salle de sport'
+                    $activity5->setCompany($this->getReference('company_5')); // Lier l'activité à l'entreprise 1
 
                     $activity6 = new Activity();
                     $activity6->setName('Salle de danse MDS');
@@ -87,6 +94,7 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity6->setLatitude(48.85901341824348);
                     $activity6->setLongitude(2.3750291011138933);
                     $activity6->setCategoryId($category); // lier l'activité à la catégorie 'Salle de sport'
+                    $activity6->setCompany($this->getReference('company_6')); // Lier l'activité à l'entreprise 1
 
                     $manager->persist($activity5);
                     $manager->persist($activity6);
@@ -102,6 +110,7 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity7->setLatitude(48.86561659919562);
                     $activity7->setLongitude(2.3350409648712707);
                     $activity7->setCategoryId($category); // lier l'activité à la catégorie 'Salon de beauté'
+                    $activity7->setCompany($this->getReference('company_7')); // Lier l'activité à l'entreprise 1
 
 
                     $activity8 = new Activity();
@@ -112,6 +121,7 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
                     $activity8->setLatitude(48.859670308425294);
                     $activity8->setLongitude(2.347835970426229);
                     $activity8->setCategoryId($category); // lier l'activité à la catégorie 'Salon de beauté'
+                    $activity8->setCompany($this->getReference('company_8')); // Lier l'activité à l'entreprise 1
 
                     $manager->persist($activity7);
                     $manager->persist($activity8);
@@ -192,6 +202,6 @@ class ActivityFixtures extends Fixture implements OrderedFixtureInterface
     }
     public function getOrder()
     {
-        return 2;
+        return 4;
     }
 }
