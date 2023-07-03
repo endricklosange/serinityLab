@@ -12,6 +12,7 @@ use App\Service\SearchFormService;
 use App\Repository\ContactRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\ReviewRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home_page')]
-    public function sendEmail(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository,ContactRepository $contactRepository, FilterService $filterService, SearchFormService $searchFormService): Response
+    public function sendEmail(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, ContactRepository $contactRepository, FilterService $filterService, SearchFormService $searchFormService,ReviewRepository $reviewRepository): Response
     {
         $contact = new Contact();
         $formContact = $this->createForm(ContactType::class, $contact);
@@ -28,7 +29,7 @@ class HomeController extends AbstractController
         $session = $request->getSession();
         $data = new Search;
         $dataFilter = new Filter();
-        [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
         $userLocation = array(
             'latitude' => $session->get('latitude'),
             'longitude' => $session->get('longitude')
@@ -36,23 +37,23 @@ class HomeController extends AbstractController
         $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
         $searchForm = $searchFormService->createFormSearch($data);
         if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
-            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
             $filterForm = $this->createForm(FilterType::class, $dataFilter, [
                 'default_min' => $min,
                 'default_max' => $max,
             ]);
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data,$dataFilter),
+                'activities' =>  $activityRepository->findSearch($data, $dataFilter),
                 'searchForm' => $searchFormService->createFormSearch($data),
                 'formFilter' => $filterForm,
                 'min' => $min,
                 'max' => $max,
-                
+
             ]);
         }
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            [$min, $max] = $activityRepository->findMinMax($dataFilter,$data);
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
             $filterForm = $this->createForm(FilterType::class, $dataFilter, [
                 'default_min' => $min,
                 'default_max' => $max,
