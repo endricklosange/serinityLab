@@ -31,7 +31,7 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
         $users = $this->userRepository->findAll();
         foreach ($users as $index => $user) { // Ajouter la variable $index pour obtenir l'index de la boucle
             $company = new Company();
-            $company->setCompanyName($faker->company . ' ' . ($index + 1));
+            $company->setCompanyName($faker->company);
 
             // Lier l'entreprise à l'utilisateur
             $user->setCompany($company);
