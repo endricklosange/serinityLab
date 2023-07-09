@@ -1,0 +1,57 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+
+{% block body %}
+  <h1>Reservation index</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Début de réservation</th>
+        <th>Fin de réservation</th>
+        <th>Réserver</th>
+        <th>Nom prénom</th>
+        <th>Téléphone</th>
+        <th>Email</th>
+        <th>Payer</th>
+
+        <th>actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for reservation in reservations %}
+        <tr>
+          <td>{{ reservation.id }}</td>
+          <td>{{ reservation.reservationStart ? reservation.reservationStart|date('Y-m-d H:i') : '' }}</td>
+          <td>{{ reservation.reservationEnd ? reservation.reservationEnd|date('Y-m-d H:i') : '' }}</td>
+          <td>{{ reservation.status ? 'Oui' : 'Non' }}</td>
+          {% if reservation.orderService %}
+            <td>{{ reservation.orderService.lastname}}</td>
+            <td>{{ reservation.orderService.phone }}</td>
+            <td>{{ reservation.orderService.firstname }}</td>
+            <td>{{ reservation.orderService.pay ? 'Oui' : 'Non' }}</td>
+          {% else %}
+            <td></td>
+            <td></td>
+            <td></td>
+          {% endif %}
+
+          <td>
+            {% if reservation.status == false %}
+              <a href="{{ path('app_company_edit', {'id': reservation.id}) }}">edit</a>
+            {% endif %}
+              {{ include('company/_delete_form.html.twig') }}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="10">no records found</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{{ path('app_company_new') }}">Ajouter une réservation</a>
+{% endblock %}

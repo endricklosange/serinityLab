@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reservation;
-use App\Form\ReservationType;
+use App\Form\AdminReservationType;
 use App\Repository\ReservationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,7 @@ class AdminReservationController extends AbstractController
     public function new(Request $request, ReservationRepository $reservationRepository): Response
     {
         $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation);
+        $form = $this->createForm(AdminReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,7 +51,7 @@ class AdminReservationController extends AbstractController
     #[Route('/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reservation $reservation, ReservationRepository $reservationRepository): Response
     {
-        $form = $this->createForm(ReservationType::class, $reservation);
+        $form = $this->createForm(AdminReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
