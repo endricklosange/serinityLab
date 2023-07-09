@@ -44,7 +44,7 @@ class ActivityRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByLocation($latitude, $longitude)
+    public function findByLocation(float $latitude,float $longitude)
     {
         $qb = $this->createQueryBuilder('a');
 

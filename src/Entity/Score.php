@@ -27,7 +27,7 @@ class Score
     #[ORM\Column]
     private ?int $product = null;
 
-    #[ORM\OneToMany(mappedBy: 'score', targetEntity: Review::class)]
+    #[ORM\OneToOne(mappedBy: 'score', targetEntity: Review::class)]
     private Collection $reviews;
 
     public function __construct()
@@ -38,6 +38,12 @@ class Score
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getPriceQuality(): ?int

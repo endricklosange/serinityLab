@@ -1,26 +1,52 @@
 <script>
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
-    }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, errorHandler);
+  } else {
+    alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+  }
 
   function showPosition(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "{{ path('app_activity') }}", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        // Traitement de la réponse du serveur
-      } else {
-        // Gestion des erreurs
-      }
-    };
-    var data = "latitude=" + encodeURIComponent(latitude) + "&longitude=" + encodeURIComponent(longitude);
-    console.log(data);
-    xhr.send(data);
+    if (isValidCoordinates(latitude, longitude)) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "{{ path('app_activity') }}", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          console.log("Réponse du serveur");
+        } else {
+          console.error("Erreur de la requête. Statut :", xhr.status);
+        }
+      };
+      var data = "latitude=" + encodeURIComponent(latitude) + "&longitude=" + encodeURIComponent(longitude);
+      console.log(data);
+      xhr.send(data);
+    } else {
+      console.error("Coordonnées de géolocalisation invalides !");
+    }
+  }
+
+  function errorHandler(error) {
+    switch (error.code) {
+
+      case error.POSITION_UNAVAILABLE:
+        alert("Les informations de géolocalisation ne sont pas disponibles.");
+        break;
+      case error.TIMEOUT:
+        alert("La demande de géolocalisation a expiré.");
+        break;
+      case error.UNKNOWN_ERROR:
+        alert("Une erreur inconnue s'est produite lors de la géolocalisation.");
+        break;
+    }
+  }
+
+  function isValidCoordinates(latitude, longitude) {
+    if (typeof latitude === "number" && typeof longitude === "number") {
+      return true;
+    }
+    return false;
   }
 </script>

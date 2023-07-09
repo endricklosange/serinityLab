@@ -239,6 +239,7 @@ class ActivityController extends AbstractController
             $service = $request->request->get('service');
 
             if (!empty($service) && !empty($eventId)) {
+                dd($request->request->get('service'));
                 $reservation = $reservationRepository->find($eventId);
                 $reservation->setStatus(true);
                 $order = new Order();
@@ -262,10 +263,6 @@ class ActivityController extends AbstractController
         $data = new Search;
         $dataFilter = new Filter();
         [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
-        $userLocation = [
-            'latitude' => $session->get('latitude'),
-            'longitude' => $session->get('longitude')
-        ];
         $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
         $searchForm = $searchFormService->createFormSearch($data);
 

@@ -21,11 +21,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home_page')]
-    public function sendEmail(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, ContactRepository $contactRepository, FilterService $filterService, SearchFormService $searchFormService,ReviewRepository $reviewRepository): Response
+    public function index(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, ContactRepository $contactRepository, FilterService $filterService, SearchFormService $searchFormService,ReviewRepository $reviewRepository): Response
     {
-        $contact = new Contact();
-        $formContact = $this->createForm(ContactType::class, $contact);
-        $formContact->handleRequest($request);
         $session = $request->getSession();
         $data = new Search;
         $dataFilter = new Filter();
@@ -69,7 +66,6 @@ class HomeController extends AbstractController
         }
         return $this->render('home/index.html.twig', [
             'searchForm' => $searchFormService->createFormSearch($data),
-            'formContact' => $formContact,
             'formFilter' => $filterForm
         ]);
     }

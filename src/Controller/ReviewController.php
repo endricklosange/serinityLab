@@ -101,7 +101,7 @@ class ReviewController extends AbstractController
             ]);
         }
         $user = $this->getUser();
-
+        
         foreach ($user->getOrders() as $order) {
             if ($order->ispay() === true && $order->getReservation()->getActivity()->getId()) {
                 if ($reviewForm->isSubmitted() && $reviewForm->isValid()) {

@@ -97,7 +97,7 @@ class RegistrationController extends AbstractController
             'searchForm' => $searchForm,
         ]);
     }
-    #[Route('admin/entreprise', name: 'app_register')]
+    #[Route('admin/entreprise', name: 'app_register_')]
     public function registerAdmin(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $company = new Company();
