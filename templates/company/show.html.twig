@@ -1,0 +1,36 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Reservation{% endblock %}
+
+{% block body %}
+  <h1>Reservation</h1>
+
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ reservation.id }}</td>
+      </tr>
+      <tr>
+                <th>Début de réservation</th>
+        <td>{{ reservation.reservationStart ? reservation.reservationStart|date('Y-m-d H:i') : '' }}</td>
+      </tr>
+      <tr>
+                <th>Fin de réservation</th>
+        <td>{{ reservation.reservationEnd ? reservation.reservationEnd|date('Y-m-d H:i') : '' }}</td>
+      </tr>
+      <tr>
+                <th>Réserver</th>
+        <td>{{ reservation.status ? 'Yes' : 'No' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a href="{{ path('app_company_index') }}">back to list</a>
+
+  {% if reservation.status == false %}
+    <a href="{{ path('app_company_edit', {'id': reservation.id}) }}">edit</a>
+  {% endif %}
+
+  {{ include('company/_delete_form.html.twig') }}
+{% endblock %}

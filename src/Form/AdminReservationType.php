@@ -10,11 +10,18 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
-class ReservationType extends AbstractType
+class AdminReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('activity', EntityType::class, [
+                'class' => Activity::class,
+                'choice_label' => 'name',
+                'label' => 'Activity',
+                'multiple' => false,
+                'expanded' => false,
+            ])
             ->add('reservation_start', DateTimeType::class,[
                 'date_widget' => 'single_text'
             ])
