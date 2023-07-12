@@ -24,17 +24,23 @@
 #hours-container {
     margin-top: 10%;
     border: solid black 1px;
-    div:first-child{
-        border-bottom: solid black 1px;
+    div:first-child {
     }
-    .col-md-4{
+    .row {
+        border-top: solid black 1px;
+        padding: 10px 0px;
+    }
+    p {
         padding: 3%;
+        margin: 0;
         text-align: center;
         cursor: pointer;
+        background-color: $btnBackGreenLight;
+        color: white;
+        border-radius: 5px;
     }
-    .active{
+    .active {
         background-color: $primary !important;
-        color:white !important;
     }
 }
 
@@ -72,13 +78,15 @@ button.fc-today-button.fc-button.fc-button-primary {
             border: none;
         }
     }
-    table,td,.fc-day{
+    table,
+    td,
+    .fc-day {
         border: none !important;
     }
     a {
         color: white;
     }
-    .fc-day-today{
+    .fc-day-today {
         background: $primary !important;
     }
 }

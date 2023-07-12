@@ -1,5 +1,5 @@
 <div id="calendar"></div>
-<div id="hours-container" class="row"></div>
+<div id="hours-container" class="container-fluid"></div>
 {% block javascripts %}
 
   <script>
@@ -36,17 +36,24 @@
           dateElement.textContent = formattedDate;
           hoursContainer.appendChild(dateElement);
 
+          const parentDiv = document.createElement('div');
+          parentDiv.classList.add('row');
+
           hours.forEach(hour => {
             const {id: eventId, status: eventStatus, activity_id} = hour;
             const hourElement = document.createElement('div');
-            hourElement.textContent = hour.hour;
             hourElement.classList.add('col-md-4');
-            hoursContainer.appendChild(hourElement);
+
+            const pElement = document.createElement('p'); 
+            pElement.classList.add('hour');
+            pElement.textContent = hour.hour; 
+            hourElement.appendChild(pElement); 
+            parentDiv.appendChild(hourElement); 
 
             hourElement.addEventListener('click', (event) => {
               const target = event.target;
-              if (target.classList.contains('col-md-4')) {
-                const activeHours = document.querySelectorAll('.col-md-4.active');
+              if (target.classList.contains('hour')) {
+                const activeHours = document.querySelectorAll('.hour.active');
                 activeHours.forEach((hour) => {
                   hour.classList.remove('active');
                 });
@@ -68,6 +75,8 @@
               xhr.send(data);
             });
           });
+
+          hoursContainer.appendChild(parentDiv); // Ajout de la div parente à hoursContainer
         }
       });
       calendar.render();
@@ -82,7 +91,7 @@
 
         if (!eventHarness) {
           dayFrame.classList.add('fc-day-other');
-        }else{
+        } else {
           dayFrame.style.cursor = 'pointer'
         }
       });

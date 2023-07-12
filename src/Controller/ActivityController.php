@@ -231,32 +231,33 @@ class ActivityController extends AbstractController
         $eventId = $session->get('eventId');
         $review = new Review();
         $reviewForm = $reviewService->createFormReview($review);
+        if ($this->isCsrfTokenValid('activity', $request->request->get('_csrf_token'))) {
+            if ($request->isMethod('POST')) {
+                $service = $request->request->get('service');
+                $setEventId = $request->request->get('eventId');
+                $session->set('eventId', $setEventId);
+                $service = $request->request->get('service');
 
-        if ($request->isMethod('POST')) {
-            $service = $request->request->get('service');
-            $setEventId = $request->request->get('eventId');
-            $session->set('eventId', $setEventId);
-            $service = $request->request->get('service');
-
-            if (!empty($service) && !empty($eventId)) {
-                $reservation = $reservationRepository->find($eventId);
-                $reservation->setStatus(true);
-                $order = new Order();
-                $order->setService($serviceRepository->find($service));
-                $order->setReservation($reservation);
-                $order->setUser($this->getUser());
-                $order->setPay(false);
-                $session->set('order', $order);
-                $entityManager->persist($reservation);
-                $entityManager->persist($order);
-                $entityManager->flush();
-                return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
-            }
-            if (empty($service)) {
-                $this->addFlash('error', "Veuillez choisir une prestation");
-            }
-            if (empty($eventId)) {
-                $this->addFlash('error', "Veuillez choisir une date de réservation");
+                if (!empty($service) && !empty($eventId)) {
+                    $reservation = $reservationRepository->find($eventId);
+                    $reservation->setStatus(true);
+                    $order = new Order();
+                    $order->setService($serviceRepository->find($service));
+                    $order->setReservation($reservation);
+                    $order->setUser($this->getUser());
+                    $order->setPay(false);
+                    $session->set('order', $order);
+                    $entityManager->persist($reservation);
+                    $entityManager->persist($order);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+                }
+                if (empty($service)) {
+                    $this->addFlash('error', "Veuillez choisir une prestation");
+                }
+                if (empty($eventId)) {
+                    $this->addFlash('error', "Veuillez choisir une date de réservation");
+                }
             }
         }
         $data = new Search;
@@ -343,7 +344,7 @@ class ActivityController extends AbstractController
         $entityManager->persist($user); // Persistez les modifications de l'utilisateur en base de données
         $entityManager->flush();
 
-    return new JsonResponse(['isFavorite' => false]);
+        return new JsonResponse(['isFavorite' => false]);
         //return new Response('Activité ajoutée en favori avec succès');
     }
 }
