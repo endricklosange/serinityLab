@@ -230,34 +230,44 @@ class ActivityController extends AbstractController
         $session = $request->getSession();
         $eventId = $session->get('eventId');
         $review = new Review();
-        $reviewForm = $reviewService->createFormReview($review);
-        if ($this->isCsrfTokenValid('activity', $request->request->get('_csrf_token'))) {
-            if ($request->isMethod('POST')) {
-                $service = $request->request->get('service');
-                $setEventId = $request->request->get('eventId');
-                $session->set('eventId', $setEventId);
-                $service = $request->request->get('service');
+        $servicesList = [];
 
+        $reviewForm = $reviewService->createFormReview($review);
+        if ($request->isMethod('POST')) {
+            $setEventId = $request->request->get('eventId');
+            $session->set('eventId', $setEventId);
+            $service = $request->request->get('service');
+            $reservation = $reservationRepository->find($eventId);
+            foreach ($reservation->getActivity()->getServices() as $serviceData) {
+                $servicesList[] = $serviceData->getId();
+            }
+            if (in_array($service, $servicesList)) {
                 if (!empty($service) && !empty($eventId)) {
-                    $reservation = $reservationRepository->find($eventId);
-                    $reservation->setStatus(true);
-                    $order = new Order();
-                    $order->setService($serviceRepository->find($service));
-                    $order->setReservation($reservation);
-                    $order->setUser($this->getUser());
-                    $order->setPay(false);
-                    $session->set('order', $order);
-                    $entityManager->persist($reservation);
-                    $entityManager->persist($order);
-                    $entityManager->flush();
-                    return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+                    if ($this->isCsrfTokenValid('activity', $request->request->get('token'))) {
+                        $reservation->setStatus(true);
+                        $order = new Order();
+                        $order->setService($serviceRepository->find($service));
+                        $order->setReservation($reservation);
+                        $order->setUser($this->getUser());
+                        $order->setPay(false);
+                        $session->set('order', $order);
+                        $entityManager->persist($reservation);
+                        $entityManager->persist($order);
+                        $entityManager->flush();
+                        return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+                    } else {
+                        $this->addFlash('error', "le csrf token est invalide");
+                    }
                 }
-                if (empty($service)) {
-                    $this->addFlash('error', "Veuillez choisir une prestation");
-                }
-                if (empty($eventId)) {
-                    $this->addFlash('error', "Veuillez choisir une date de réservation");
-                }
+            } else {
+                $this->addFlash('error', "La réservation n'existe pas ou n'est pas liée à cette activité.");
+            }
+            if (empty($service)) {
+                $this->addFlash('error', "Veuillez choisir une prestation");
+            }
+
+            if (empty($eventId)) {
+                $this->addFlash('error', "Veuillez choisir une date de réservation");
             }
         }
         $data = new Search;

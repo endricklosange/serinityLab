@@ -64,7 +64,7 @@
             {% else %}
               <a href="{{ path('app_login')}}" class="btn btn-primary ">Se connecter pour réserver</a>
             {% endif %}
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('activity') }}">
+            <input type="hidden" name="token" value="{{ csrf_token('activity') }}"/>
           </div>
         </form>
 
