@@ -239,7 +239,6 @@ class ActivityController extends AbstractController
             $service = $request->request->get('service');
 
             if (!empty($service) && !empty($eventId)) {
-                dd($request->request->get('service'));
                 $reservation = $reservationRepository->find($eventId);
                 $reservation->setStatus(true);
                 $order = new Order();

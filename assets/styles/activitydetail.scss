@@ -30,12 +30,9 @@
     .col-md-4{
         padding: 3%;
         text-align: center;
+        cursor: pointer;
     }
-    .col-md-4:hover{
-        background-color: $primary !important;
-        color:white !important;
-    }
-    .col-md-4:active{
+    .active{
         background-color: $primary !important;
         color:white !important;
     }

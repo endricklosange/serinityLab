@@ -3,66 +3,75 @@
 {% block javascripts %}
 
   <script>
-function getHoursForDate(clickedDate, events) {
-  let filteredEvents = events.filter(event => new Date(event.start).toDateString() === clickedDate.toDateString());
-  return filteredEvents.map(event => ({
-    id: event.id,
-    activity_id: event.activity_id,
-    status: event.status,
-    hour: new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  }));
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const calendarEl = document.getElementById('calendar');
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    locale: 'fr',
-    timeZone: 'Europe/Paris',
-    events: {{reservationsJson|raw}},
-    selectable: true,
-    dateClick: info => {
-      const clickedDate = info.date;
-      const formattedDate = moment(clickedDate).format("dddd D MMMM YYYY");
-      const events = {{reservationsJson|raw}};
-      const hours = getHoursForDate(clickedDate, events);
-
-      const hoursContainer = document.getElementById('hours-container');
-      hoursContainer.innerHTML = '';
-      const dateElement = document.createElement('div');
-      dateElement.textContent = formattedDate;
-      hoursContainer.appendChild(dateElement);
-
-      hours.forEach(hour => {
-        const { id: eventId, status: eventStatus, activity_id } = hour;
-        const hourElement = document.createElement('div');
-        hourElement.textContent = hour.hour;
-        hourElement.classList.add('col-md-4');
-        hoursContainer.appendChild(hourElement);
-
-        hourElement.addEventListener('click', () => {
-          console.log('ID de l\'événement:', eventId, eventStatus);
-          const xhr = new XMLHttpRequest();
-          xhr.open("POST", '/activités/' + activity_id, true);
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          const data = 'eventId=' + encodeURIComponent(eventId);
-          xhr.onreadystatechange = () => {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-              if (xhr.status === 200) {
-                console.log('Réponse du serveur:', data);
-              } else {
-                console.error('Erreur lors de la requête:', xhr.status);
-              }
-            }
-          };
-          xhr.send(data);
-        });
-      });
+    function getHoursForDate(clickedDate, events) {
+      let filteredEvents = events.filter(event => new Date(event.start).toDateString() === clickedDate.toDateString());
+      return filteredEvents.map(event => ({
+        id: event.id,
+        activity_id: event.activity_id,
+        status: event.status,
+        hour: new Date(event.start).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      }));
     }
-  });
-  calendar.render();
-});
 
+    document.addEventListener('DOMContentLoaded', () => {
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        timeZone: 'Europe/Paris',
+        events: {{reservationsJson|raw}},
+        selectable: true,
+        dateClick: info => {
+          const clickedDate = info.date;
+          const formattedDate = moment(clickedDate).format("dddd D MMMM YYYY");
+          const events = {{reservationsJson|raw}};
+          const hours = getHoursForDate(clickedDate, events);
+
+          const hoursContainer = document.getElementById('hours-container');
+          hoursContainer.innerHTML = '';
+          const dateElement = document.createElement('div');
+          dateElement.textContent = formattedDate;
+          hoursContainer.appendChild(dateElement);
+
+          hours.forEach(hour => {
+            const {id: eventId, status: eventStatus, activity_id} = hour;
+            const hourElement = document.createElement('div');
+            hourElement.textContent = hour.hour;
+            hourElement.classList.add('col-md-4');
+            hoursContainer.appendChild(hourElement);
+
+            hourElement.addEventListener('click', (event) => {
+              const target = event.target;
+              if (target.classList.contains('col-md-4')) {
+                const activeHours = document.querySelectorAll('.col-md-4.active');
+                activeHours.forEach((hour) => {
+                  hour.classList.remove('active');
+                });
+                target.classList.add('active');
+              }
+              const xhr = new XMLHttpRequest();
+              xhr.open("POST", '/activités/' + activity_id, true);
+              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+              const data = 'eventId=' + encodeURIComponent(eventId);
+              xhr.onreadystatechange = () => {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                  if (xhr.status === 200) {
+                    console.log('Réponse du serveur:', data);
+                  } else {
+                    console.error('Erreur lors de la requête:', xhr.status);
+                  }
+                }
+              };
+              xhr.send(data);
+            });
+          });
+        }
+      });
+      calendar.render();
+    });
   </script>
   <script>
     function applyClassToDayFrames() {

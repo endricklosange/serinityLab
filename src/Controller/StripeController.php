@@ -6,6 +6,7 @@ use Stripe;
 use App\Entity\Search;
 use App\Form\SearchFormType;
 use App\Repository\OrderRepository;
+use Stripe\Exception\ApiErrorException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,8 +30,7 @@ class StripeController extends AbstractController
                 'searchForm' => $form,
 
             ]);
-        }
-        else{
+        } else {
             return $this->redirectToRoute('app_home_page');
         }
     }
@@ -49,12 +49,24 @@ class StripeController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
         Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
-        Stripe\Charge::create([
-            "amount" => $order->getService()->getPrice() * 100,
-            "currency" => "eur",
-            "source" => $request->request->get('stripeToken'),
-            "description" => "Payment Test"
-        ]);
+        try {
+            // ...
+            Stripe\Charge::create([
+                "amount" => $order->getService()->getPrice() * 100,
+                "currency" => "eur",
+                "source" => $request->request->get('stripeToken'),
+                "description" => "Payment Test"
+            ]);
+            // ...
+        } catch (ApiErrorException $e) {
+            // Gérer l'échec du paiement ici
+            $this->addFlash(
+                'error',
+                'Payment Failed: ' . $e->getMessage()
+            );
+            return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+        }
+
         $this->addFlash(
             'success',
             'Payment Successful!'
