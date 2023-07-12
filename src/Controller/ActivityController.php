@@ -331,7 +331,7 @@ class ActivityController extends AbstractController
         $entityManager->persist($user); // Persistez les modifications de l'utilisateur en base de données
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_activity');
+        return new JsonResponse(['isFavorite' => true]);
         //return new Response('Activité ajoutée en favori avec succès');
     }
     #[Route('favorite/delete/{id}', name: 'app_activity_delete_favorite')]
@@ -344,7 +344,7 @@ class ActivityController extends AbstractController
         $entityManager->persist($user); // Persistez les modifications de l'utilisateur en base de données
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_activity');
+    return new JsonResponse(['isFavorite' => false]);
         //return new Response('Activité ajoutée en favori avec succès');
     }
 }

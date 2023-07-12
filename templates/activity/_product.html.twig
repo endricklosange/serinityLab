@@ -1,40 +1,65 @@
 {% for activity in activities %}
   <div class="col-md-3">
     {% if is_granted("ROLE_USER") %}
-    
       {% for favorite in activity.favorite %}
         {% if favorite.id == app.user.id %}
-        <a href="{{ path('app_activity_delete_favorite', {'id': activity.id}) }}" class="favoritesLink"><img src="{{ asset('build/images/fullHeart.png') }}" class="img-fluid" width="20px"/>
-
+          <a href="#" class="favoritesLink favoriteBtn" data-action="{{ path('app_activity_delete_favorite', {'id': activity.id}) }}" ><img src="{{ asset('build/images/fullHeart.png') }}" class="img-fluid" width="20px"/></a>
         {% else %}
-
         {% endif %}
-        {% else %}
-        <a href="{{ path('app_activity_add_favorite', {'id': activity.id}) }}" class="favoritesLink"><img src="{{ asset('build/images/emptyHeart.png') }}" class="img-fluid" width="20px"/>
+      {% else %}
+        <a href="#" class="favoritesLink favoriteBtn" data-action="{{ path('app_activity_add_favorite', {'id': activity.id}) }}" ><img src="{{ asset('build/images/emptyHeart.png') }}" class="img-fluid" width="20px"/></a>
       {% endfor %}
     {% else %}
 
-      {% endif %}
+    {% endif %}
 
-    </a>
-    <a href="{{ path('app_activity_show', {'id': activity.id}) }}" class="card">
-      <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-        {% if activity.activityImages[2] is defined %}
-          <img src="/images/activity/{{activity.activityImages[2].name}}" class="img-fluid"/>
-        {% else %}
-          <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
-        {% endif %}
-        <a href="#!">
-          <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-        </a>
-      </div>
-      <div class="card-body">
-        <h5 class="card-title">{{activity.name}}</h5>
-        <p class="card-text">{{activity.price}}€</p>
-      </div>
-    </a>
-  </div>
-  {% else %}
-  <h2>Aucune activité trouvée</h2>
-          <p>Nous sommes désolés, mais aucune activité correspondant à votre recherche n'a été trouvée. </p>
+  </a>
+  <a href="{{ path('app_activity_show', {'id': activity.id}) }}" class="card">
+    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+      {% if activity.activityImages[2] is defined %}
+        <img src="/images/activity/{{activity.activityImages[2].name}}" class="img-fluid"/>
+      {% else %}
+        <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+      {% endif %}
+      <a href="#!">
+        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+      </a>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{activity.name}}</h5>
+      <p class="card-text">{{activity.price}}€</p>
+    </div>
+  </a>
+</div>
+{% else %}
+<h2>Aucune activité trouvée</h2>
+<p>Nous sommes désolés, mais aucune activité correspondant à votre recherche n'a été trouvée.
+</p>
 {% endfor %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Sélectionnez tous les boutons avec la classe "favoriteBtn"
+  const favoriteBtns = document.querySelectorAll('.favoriteBtn');
+
+  // Parcourez chaque bouton et ajoutez un écouteur d'événement pour le clic
+  favoriteBtns.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const url = btn.getAttribute('data-action');
+
+      // Envoyez une requête AJAX pour ajouter ou supprimer l'activité des favoris
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          location.reload();
+        } else {
+          console.error('Une erreur s\'est produite lors de la requête AJAX');
+        }
+      };
+      xhr.send();
+    });
+  });
+});
+</script>
