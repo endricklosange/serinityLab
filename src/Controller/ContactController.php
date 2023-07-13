@@ -2,87 +2,82 @@
 
 namespace App\Controller;
 
+use App\Entity\Filter;
+use App\Entity\Search;
 use App\Entity\Contact;
+use App\Form\FilterType;
 use App\Form\ContactType;
+use App\Service\FilterService;
+use App\Service\MailerService;
+use App\Service\SearchFormService;
 use App\Repository\ContactRepository;
-use Symfony\Component\Form\FormError;
+use App\Repository\ActivityRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-
-#[Route('admin/contact')]
-#[Security("is_granted('ROLE_ADMIN')")]
 
 class ContactController extends AbstractController
 {
-    #[Route('/', name: 'app_contact_index', methods: ['GET'])]
-    public function index(ContactRepository $contactRepository): Response
+    #[Route('/contact', name: 'app_contact')]
+    public function index(Request $request, MailerService $mailerService, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, FilterService $filterService, SearchFormService $searchFormService): Response
     {
+        $session = $request->getSession();
+        $contactData = new Contact;
+        $form = $this->createForm(ContactType::class, $contactData);
+        $form->handleRequest($request);
+
+        $data = new Search;
+        $dataFilter = new Filter();
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
+        $userLocation = array(
+            'latitude' => $session->get('latitude'),
+            'longitude' => $session->get('longitude')
+        );
+        $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
+        $searchForm = $searchFormService->createFormSearch($data);
+        if ($searchFormService->createFormSearch($data)->isSubmitted() && $searchFormService->createFormSearch($data)->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' =>  $activityRepository->findSearch($data, $dataFilter),
+                'searchForm' => $searchFormService->createFormSearch($data),
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+
+            ]);
+        }
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' => $activityRepository->findFilter($dataFilter, $userLocation),
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+            ]);
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $subject = 'Sérinitylab Formulaire de contact';
+            $to = 'contact@sérinitylab.com';
+            $linkTemplate = 'emails/contact.html.twig';
+            $mailerService->sendEmail($to, $subject,$linkTemplate, $contactData);
+            $this->addFlash('success', "Votre message est reçu");
+        }
         return $this->render('contact/index.html.twig', [
-            'contacts' => $contactRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_contact_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ContactRepository $contactRepository): Response
-    {
-        $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $existingContact = $contactRepository->findOneBy(['email' => $contact->getEmail()]);
-            if ($existingContact) {
-                $errorMessage = 'Cette adresse email est déjà utilisée. Veuillez choisir une adresse e-mail différente ou utiliser l\'option de récupération de mot de passe si vous avez oublié votre mot de passe.';
-                $form->get('email')->addError(new FormError($errorMessage));
-            } else {
-                $contactRepository->save($contact, true);
-                return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
-            }
-        }
-
-        return $this->renderForm('contact/new.html.twig', [
-            'contact' => $contact,
             'form' => $form,
+            'searchForm' => $searchFormService->createFormSearch($data),
         ]);
-    }
-
-    #[Route('/{id}', name: 'app_contact_show', methods: ['GET'])]
-    public function show(Contact $contact): Response
-    {
-        return $this->render('contact/show.html.twig', [
-            'contact' => $contact,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_contact_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Contact $contact, ContactRepository $contactRepository): Response
-    {
-        $form = $this->createForm(ContactType::class, $contact);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $contactRepository->save($contact, true);
-
-            return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('contact/edit.html.twig', [
-            'contact' => $contact,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_contact_delete', methods: ['POST'])]
-    public function delete(Request $request, Contact $contact, ContactRepository $contactRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$contact->getId(), $request->request->get('_token'))) {
-            $contactRepository->remove($contact, true);
-        }
-
-        return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -1,35 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact index{% endblock %}
+{% block title %}Formulaire de contact{% endblock %}
 
 {% block body %}
-    <h1>Contact index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for contact in contacts %}
-            <tr>
-                <td>{{ contact.id }}</td>
-                <td>{{ contact.email }}</td>
-                <td>
-                    <a href="{{ path('app_contact_show', {'id': contact.id}) }}">show</a>
-                    <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <div class="container contact">
+    <div class="row">
+      <h1 class="my-5 text-center">Quelque chose à nous dire ?
+        <br>La page contact est faite pour sa.</h1>
+      <h2 class="my-5">Formulaire de contact</h2>
+    </div>
+    {{ form_start(form,{attr: {novalidate: 'novalidate'}}) }}
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          {{ form_errors(form.lastname) }}
+          {{ form_label(form.lastname) }}
+          {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          {{ form_errors(form.firstname) }}
+          {{ form_label(form.firstname) }}
+          {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          {{ form_errors(form.email) }}
+          {{ form_label(form.email) }}
+          {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          {{ form_errors(form.message) }}
+          {{ form_label(form.message) }}
+          {{ form_widget(form.message, {'attr': {'class': 'form-control'}}) }}
+        </div>
+      </div>
+      <div class="d-flex justify-content-end my-5">
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </div>
+    </div>
+    {{ form_end(form) }}
+    {% for flashMessage in app.flashes('success') %}
+      <div class="alert alert-success">
+        {{ flashMessage }}
+      </div>
+    {% endfor %}
 
-    <a href="{{ path('app_contact_new') }}">Create new</a>
+  </div>
 {% endblock %}

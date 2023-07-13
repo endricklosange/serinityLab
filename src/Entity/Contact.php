@@ -8,24 +8,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
-#[ORM\Entity(repositoryClass: ContactRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'Cette adresse e-mail est déjà utilisée.')]
 
 class Contact
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255, unique: true)]
-    #[Assert\Email(message: 'L\'email {{ value }} n\'est pas valide.',)]
+    #[Assert\Type("string")]
     private ?string $email = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    #[Assert\Type("string")]
+    private ?string $firstname = null;
+
+    #[Assert\Type("string")]
+    private ?string $lastname = null;
+
+    #[Assert\Type("string")]
+    private ?string $message = null;
 
     public function getEmail(): ?string
     {
@@ -35,6 +31,42 @@ class Contact
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): self
+    {
+        $this->message = $message;
 
         return $this;
     }
