@@ -231,41 +231,44 @@ class ActivityController extends AbstractController
         $eventId = $session->get('eventId');
         $review = new Review();
         $servicesList = [];
-
         $reviewForm = $reviewService->createFormReview($review);
+
         if ($request->isMethod('POST')) {
             $setEventId = $request->request->get('eventId');
             $session->set('eventId', $setEventId);
             $service = $request->request->get('service');
-            $reservation = $reservationRepository->find($eventId);
-            foreach ($reservation->getActivity()->getServices() as $serviceData) {
+
+            if ($eventId) {
+                $reservation = $reservationRepository->find($eventId);
+            }
+            foreach ($activity->getServices() as $serviceData) {
                 $servicesList[] = $serviceData->getId();
             }
-            if (in_array($service, $servicesList)) {
-                if (!empty($service) && !empty($eventId)) {
+            if ($service !== null) {
+                if (in_array($service, $servicesList)) {
                     if ($this->isCsrfTokenValid('activity', $request->request->get('token'))) {
-                        $reservation->setStatus(true);
-                        $order = new Order();
-                        $order->setService($serviceRepository->find($service));
-                        $order->setReservation($reservation);
-                        $order->setUser($this->getUser());
-                        $order->setPay(false);
-                        $session->set('order', $order);
-                        $entityManager->persist($reservation);
-                        $entityManager->persist($order);
-                        $entityManager->flush();
-                        return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+                        if ($eventId) {
+                            $reservation->setStatus(true);
+                            $order = new Order();
+                            $order->setService($serviceRepository->find($service));
+                            $order->setReservation($reservation);
+                            $order->setUser($this->getUser());
+                            $order->setPay(false);
+                            $session->set('order', $order);
+                            $entityManager->persist($reservation);
+                            $entityManager->persist($order);
+                            $entityManager->flush();
+                            return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+                        }
                     } else {
-                        $this->addFlash('error', "le csrf token est invalide");
+                        $this->addFlash('error', "Le token CSRF est invalide");
                     }
+                } else {
+                    $this->addFlash('error', "La prestation n'existe pas ou n'est pas liée à cette activité.");
                 }
             } else {
-                $this->addFlash('error', "La réservation n'existe pas ou n'est pas liée à cette activité.");
-            }
-            if (empty($service)) {
                 $this->addFlash('error', "Veuillez choisir une prestation");
             }
-
             if (empty($eventId)) {
                 $this->addFlash('error', "Veuillez choisir une date de réservation");
             }
@@ -279,7 +282,7 @@ class ActivityController extends AbstractController
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             return $this->render('/activity/search.html.twig', [
                 'categories' => $categoryRepository->findAll(),
-                'activities' =>  $activityRepository->findSearch($data, $dataFilter),
+                'activities' => $activityRepository->findSearch($data, $dataFilter),
                 'searchForm' => $searchForm,
                 'formFilter' => $filterForm,
                 'min' => $min,
@@ -290,6 +293,7 @@ class ActivityController extends AbstractController
         $reservations = $activity->getReservations();
         $reservationsFormat = [];
         $currentDateTime = new DateTime();
+
         foreach ($reservations as $reservation) {
             if (!$reservation->isStatus() && $reservation->getReservationStart() > $currentDateTime) {
                 $reservationsFormat[] = [
@@ -303,6 +307,7 @@ class ActivityController extends AbstractController
                 ];
             }
         }
+
         $reservationsJson = json_encode($reservationsFormat);
         $user = $this->getUser();
 
@@ -330,6 +335,7 @@ class ActivityController extends AbstractController
             'reviews' => $reviewRepository->findByActivityId($activity),
         ]);
     }
+
 
     #[Route('favorite/add/{id}', name: 'app_activity_add_favorite')]
     public function addFavorite(Activity $activity, EntityManagerInterface $entityManager): Response
