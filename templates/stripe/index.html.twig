@@ -56,7 +56,7 @@
           </div>
           <div class="form-group">
             <label for="cardholder-name">Titulaire de la carte</label>
-            <input type="text" class="form-control" id="cardholder-name" name="cardholderName" required="required">
+            <input type="text" class="form-control" id="cardholder-name" name="cardholder-name">
           </div>
           <label for="card-element" class="mb-1">Carte bancaire</label>
           <div id="card-element" class="form-control"></div>
@@ -117,13 +117,13 @@
 
     function createToken() {
       document.getElementById("pay-btn").disabled = true;
-      stripe.createToken(cardElement, {name: document.getElementById("cardholder-name").value}).then(function (result) {
+      var cardholderName = document.getElementById("cardholder-name").value; // Récupérer la valeur du champ du titulaire de la carte
+      stripe.createToken(cardElement, {name: cardholderName}).then(function (result) {
         if (typeof result.error != 'undefined') {
           document.getElementById("pay-btn").disabled = false;
           alert(result.error.message);
         }
 
-        // creating token success
         if (typeof result.token != 'undefined') {
           document.getElementById("stripe-token-id").value = result.token.id;
           document.getElementById('checkout-form').submit();

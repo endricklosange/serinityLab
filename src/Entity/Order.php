@@ -20,7 +20,7 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?Service $service = null;
 
-    #[ORM\OneToOne(inversedBy: 'orderService', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'orderService')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Reservation $reservation = null;
 
@@ -45,6 +45,12 @@ class Order
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
+
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $idpayment = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reference = null;
 
     public function getId(): ?int
     {
@@ -157,6 +163,30 @@ class Order
     public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getIdpayment(): ?string
+    {
+        return $this->idpayment;
+    }
+
+    public function setIdpayment(?string $idpayment): self
+    {
+        $this->idpayment = $idpayment;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): self
+    {
+        $this->reference = $reference;
 
         return $this;
     }
