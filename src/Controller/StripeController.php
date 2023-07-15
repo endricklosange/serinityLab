@@ -8,6 +8,7 @@ use App\Form\SearchFormType;
 use App\Repository\OrderRepository;
 use Stripe\Exception\ApiErrorException;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\ReferenceGeneratorService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,7 +38,7 @@ class StripeController extends AbstractController
 
 
     #[Route('/stripe/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
-    public function createCharge(Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
+    public function createCharge(Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager,ReferenceGeneratorService $referenceGeneratorService): Response
     {
         $session = $request->getSession();
         Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
@@ -46,6 +47,7 @@ class StripeController extends AbstractController
             $order->setLastname($request->request->get('lastname'));
             $order->setFirstname($request->request->get('firstname'));
             $order->setPhone($request->request->get('phone'));
+            $order->setReference($referenceGeneratorService->generateReference());
             $order->setPay(true);
             $charge = Stripe\Charge::create([
                 "amount" => $order->getService()->getPrice() * 100,
