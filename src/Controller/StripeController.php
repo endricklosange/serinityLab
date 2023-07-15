@@ -40,39 +40,37 @@ class StripeController extends AbstractController
     public function createCharge(Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
         $session = $request->getSession();
-        $order = $orderRepository->find($session->get('order')->getId());
-
-        $order->setLastname($request->request->get('lastname'));
-        $order->setFirstname($request->request->get('firstname'));
-        $order->setPhone($request->request->get('phone'));
-        $order->setPay(true);
-        $entityManager->persist($order);
-        $entityManager->flush();
         Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
         try {
-            // ...
-            Stripe\Charge::create([
+            $order = $orderRepository->find($session->get('order')->getId());
+            $order->setLastname($request->request->get('lastname'));
+            $order->setFirstname($request->request->get('firstname'));
+            $order->setPhone($request->request->get('phone'));
+            $order->setPay(true);
+            $charge = Stripe\Charge::create([
                 "amount" => $order->getService()->getPrice() * 100,
                 "currency" => "eur",
                 "source" => $request->request->get('stripeToken'),
                 "description" => "Payment Test"
             ]);
-            // ...
-        } catch (ApiErrorException $e) {
-            // Gérer l'échec du paiement ici
+            $order->setIdpayment($charge->id);
+            $entityManager->persist($order);
+            $entityManager->flush();
+        } catch (ApiErrorException) {
+            $order->getReservation()->setStatus(false);
+            $orderRepository->remove($order, true);
             $this->addFlash(
                 'error',
-                'Payment Failed: ' . $e->getMessage()
+                'Échec du paiement'
             );
-            return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_activity_show', ['id' => $order->getReservation()->getActivity()->getId()], Response::HTTP_SEE_OTHER);
         }
-
         $this->addFlash(
             'success',
-            'Payment Successful!'
+            'Le paiement réussit'
         );
         $session->remove('order');
 
-        return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_user_reservation', [], Response::HTTP_SEE_OTHER);
     }
 }
