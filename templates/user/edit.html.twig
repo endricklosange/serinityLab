@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="container userConnexion mt-5">
+
+    <h1>Modifier votre compte</h1>
+    {{ form_start(formEdit) }}
+    {% for flashMessage in app.flashes('success') %}
+      <div class="alert alert-success">
+        {{ flashMessage }}
+      </div>
+    {% endfor %}
+    <div class="form-group mb-3">
+      {{ form_label(formEdit.email, 'Adresse e-mail') }}
+      {{ form_widget(formEdit.email, {'attr': {'class': 'form-control'}}) }}
+      {{ form_errors(formEdit.email) }}
+    </div>
+
+    <div class=" form-groupmb-3">
+      {{ form_label(formEdit.plainPassword, 'Nouveau mot de passe') }}
+      {{ form_widget(formEdit.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+      {{ form_errors(formEdit.plainPassword.first) }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form_label(formEdit.plainPassword.second, 'Confirmez le mot de passe') }}
+      {{ form_widget(formEdit.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+      {{ form_errors(formEdit.plainPassword.second) }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form_label(formEdit.firstName, 'Prénom') }}
+      {{ form_widget(formEdit.firstName, {'attr': {'class': 'form-control'}}) }}
+      {{ form_errors(formEdit.firstName) }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form_label(formEdit.lastName, 'Nom') }}
+      {{ form_widget(formEdit.lastName, {'attr': {'class': 'form-control'}}) }}
+      {{ form_errors(formEdit.lastName) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+    {{ form_end(formEdit) }}
+  </div>
+
+{% endblock %}
