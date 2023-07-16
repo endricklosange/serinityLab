@@ -5,12 +5,12 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -23,14 +23,22 @@ class EditUserFormType extends AbstractType
                 'label' => 'Adresse e-mail',
                 'attr' => [
                     'placeholder' => 'Adresse e-mail',
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer une adresse e-mail',
+                    ]),
+                    new Email([
+                        'message' => 'Veuillez entrer une adresse e-mail valide',
+                    ]),
+                ],
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'required' => false,
                 'first_options' => [
                     'attr' => [
-                        'autocomplete' => 'new-password', 
+                        'autocomplete' => 'new-password',
                         'class' => 'form-control',
                         'placeholder' => 'Nouveau mot de passe',
                     ],
@@ -59,14 +67,24 @@ class EditUserFormType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Prénom',
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre prénom',
+                    ]),
+                ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => null,
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Nom',
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre nom',
+                    ]),
+                ],
             ]);
     }
 
