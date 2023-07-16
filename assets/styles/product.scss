@@ -1,14 +1,28 @@
-.container-product{
-    max-width:1355px;
-    margin-left: auto ;
-    margin-right: auto ;
-    h1{
+.container-product {
+    max-width: 1355px;
+    margin-left: auto;
+    margin-right: auto;
+    h1 {
         color: #000;
         text-align: center;
         font-size: 24px;
         font-family: Gloock;
-        }
+    }
 }
-.product{
+.product {
     height: 100%;
+}
+.product-detail {
+    .imageRow {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) 3fr repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-column-gap: 10px;
+        grid-row-gap: 0px;
+        img {
+            height: 100%;
+            object-fit: cover;
+            padding: 0;
+        }
+    }
 }

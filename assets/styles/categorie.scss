@@ -4,12 +4,32 @@
         display: flex;
         align-items: center;
     }
-    .col-2{
+    .col-2 {
         display: flex;
         align-items: center;
     }
-    .col-9{
+    .col-9 {
         border-right: 1px black solid;
     }
-   
+}
+.product-list {
+    .col-md-3 {
+        position: relative;
+        a.favoritesLink.favoriteBtn{
+            right: 32px;
+            top: 13px;
+            position: absolute;
+            z-index: 1000;
+            background-color: white;
+            padding: 5px;
+            border-radius: 4px !important;
+        }
+        .card {
+            img {
+                width: 327px;
+                height: 435px;
+                object-fit: cover;
+            }
+        }
+    }
 }
