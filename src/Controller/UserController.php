@@ -8,16 +8,21 @@ use App\Entity\Order;
 use App\Entity\Filter;
 use App\Entity\Search;
 use App\Form\FilterType;
+use App\Form\EditUserFormType;
 use App\Service\FilterService;
 use App\Service\SearchFormService;
 use App\Repository\OrderRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
 use Stripe\Exception\ApiErrorException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -155,4 +160,77 @@ class UserController extends AbstractController
             }
         }
     }
+    #[Route('/edit', name: 'app_user_edit')]
+    public function edit(Request $request, ActivityRepository $activityRepository, CategoryRepository $categoryRepository, FilterService $filterService, SearchFormService $searchFormService, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+    
+        $form = $this->createForm(EditUserFormType::class, $user);
+        $form->handleRequest($request);
+        $session = $request->getSession();
+        $data = new Search();
+        $dataFilter = new Filter();
+        [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
+        $userLocation = [
+            'latitude' => $session->get('latitude'),
+            'longitude' => $session->get('longitude')
+        ];
+        $filterForm = $filterService->filterActivities($min, $max, $dataFilter);
+        $searchForm = $searchFormService->createFormSearch($data);
+        
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' => $activityRepository->findSearch($data, $dataFilter),
+                'searchForm' => $searchFormService->createFormSearch($data),
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+            ]);
+        }
+        
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            [$min, $max] = $activityRepository->findMinMax($dataFilter, $data);
+            $filterForm = $this->createForm(FilterType::class, $dataFilter, [
+                'default_min' => $min,
+                'default_max' => $max,
+            ]);
+            return $this->render('/activity/search.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+                'activities' => $activityRepository->findFilter($dataFilter, $userLocation),
+                'searchForm' => $searchForm,
+                'formFilter' => $filterForm,
+                'min' => $min,
+                'max' => $max,
+            ]);
+        }
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hash the password if it has been changed
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword !== null) {
+                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            }
+            $entityManager->persist($user);
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Votre compte a été mis à jour.');
+    
+            return $this->redirectToRoute('app_user_edit');
+        }
+    
+        return $this->render('user/edit.html.twig', [
+            'formEdit' => $form->createView(),
+            'searchForm' => $searchFormService->createFormSearch($data),
+            'formFilter' => $filterForm,
+        ]);
+    }
+    
+    
+    
 }
