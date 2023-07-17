@@ -1,5 +1,12 @@
 <?php
 
+use App\Entity\Order;
+use App\Entity\Review;
+use App\Entity\Activity;
+use App\Repository\OrderRepository;
+use App\Repository\ReviewRepository;
+use App\Controller\ActivityController;
+use App\Repository\ActivityRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -26,7 +33,5 @@ class ReviewCRUDTest extends WebTestCase
         // Assert that the response contains the expected content
         $this->assertEquals(200, Response::HTTP_OK);
     }
-    
-
 }
 
