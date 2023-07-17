@@ -36,7 +36,7 @@
   <div class="col-md-6">
     <div class="form-group">
       {{ form_label(formFilter.ray, 'Dans un rayon de :', {'label_attr': {'class': 'sr-only'}}) }}
-      <div class="wrapper">
+      <div class="wrapperFilter">
         <i class="uil uil-volume-mute" id="icon"></i>
         {{ form_widget(formFilter.ray, {'attr': {'class': 'form-control range-slider','type': 'range','value': 0, 'placeholder': 'Rayon', 'min': 0, 'max': 100}}) }}
         <span class="slide-value">{{ formFilter.ray.vars.value }}
