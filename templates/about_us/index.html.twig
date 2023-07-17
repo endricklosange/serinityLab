@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AboutUsController!{% endblock %}
+
+{% block body %}
+  <div class="container aboutUs">
+    <h1 class="my-5">Notre site facilite l'accès à une variété d'activités liées au bien-être proposées par des professionnels passionnés et expérimentés.</h1>
+    <div class="row firstRow my-5">
+      <div class="col-6">
+        <p>Notre raison d'être en tant que groupe d'amis est de partager notre passion pour le bien-être en proposant une variété d'activités et en facilitant leur pratique pour aider chacun à se sentir mieux dans son corps et son esprit.
+        </p>
+      </div>
+      <div class="col-6">
+        <img class="img-fluid" src="{{ asset('build/images/imgApropos1.png') }}" alt="imgApropos1">
+      </div>
+    </div>
+    <div class="row secondRow">
+      <div class="col-6">
+        <img class="img-fluid" src="{{ asset('build/images/imgApropos2.png') }}" alt="imgApropos2">
+      </div>
+      <div class="col-6">
+        <p>Notre raison d'être en tant que groupe d'amis est de partager notre passion pour le bien-être en proposant une variété d'activités et en facilitant leur pratique pour aider chacun à se sentir mieux dans son corps et son esprit.
+        </p>
+      </div>
+    </div>
+    <div class="row thirdRow my-5">
+      <div class="col-4">
+        <img class="img-fluid imgApropos4" src="{{ asset('build/images/imgApropos4.png') }}" alt="imgApropos4" width='430'>
+      </div>
+      <div class="col-4">
+        <img class="img-fluid imgApropos5" src="{{ asset('build/images/imgApropos5.png') }}" alt="imgApropos5" width='430'>
+      </div>
+      <div class="col-4">
+        <img class="img-fluid imgApropos3" src="{{ asset('build/images/imgApropos3.png') }}" alt="imgApropos3" width='430'>
+      </div>
+    </div>
+    <div class="row fourthRow my-5">
+      <p>Nous espérons que vous avez trouvé les informations que vous cherchiez et que vous avez une meilleure idée de qui nous sommes et de notre mission. N'hésitez pas à nous contacter si vous avez des questions ou si vous souhaitez en savoir plus sur nos activités. Nous sommes ravis de faire partie de votre parcours de bien-être.</p>
+    </div>
+  </div>
+{% endblock %}
