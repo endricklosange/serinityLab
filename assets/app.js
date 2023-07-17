@@ -10,9 +10,6 @@ import './styles/app.scss';
 
 // start the Stimulus application
 import './bootstrap';
-import $ from 'jquery';
-import Popper from 'popper.js';
-
 import noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css'
 

@@ -1,13 +1,13 @@
 {% for activity in activities %}
-  <div class="col-md-3">
+  <div class="col-lg-3 col-md-6">
     {% if is_granted("ROLE_USER") %}
       {% for favorite in activity.favorite %}
         {% if favorite.id == app.user.id %}
-          <a href="#" class="favoritesLink favoriteBtn" data-action="{{ path('app_activity_delete_favorite', {'id': activity.id}) }}" ><img src="{{ asset('build/images/fullHeart.png') }}" class="img-fluid" width="20px"/></a>
+          <a href="#" class="favoritesLink favoriteBtn" data-action="{{ path('app_activity_delete_favorite', {'id': activity.id}) }}"><img src="{{ asset('build/images/fullHeart.png') }}" class="img-fluid" width="20px"/></a>
         {% else %}
         {% endif %}
       {% else %}
-        <a href="#" class="favoritesLink favoriteBtn" data-action="{{ path('app_activity_add_favorite', {'id': activity.id}) }}" ><img src="{{ asset('build/images/emptyHeart.png') }}" class="img-fluid" width="20px"/></a>
+        <a href="#" class="favoritesLink favoriteBtn" data-action="{{ path('app_activity_add_favorite', {'id': activity.id}) }}"><img src="{{ asset('build/images/emptyHeart.png') }}" class="img-fluid" width="20px"/></a>
       {% endfor %}
     {% else %}
 
@@ -37,13 +37,13 @@
 </p>
 {% endfor %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Sélectionnez tous les boutons avec la classe "favoriteBtn"
   const favoriteBtns = document.querySelectorAll('.favoriteBtn');
 
   // Parcourez chaque bouton et ajoutez un écouteur d'événement pour le clic
-  favoriteBtns.forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+  favoriteBtns.forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
       e.preventDefault();
       const url = btn.getAttribute('data-action');
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url);
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (xhr.status === 200) {
           location.reload();
         } else {
