@@ -54,7 +54,7 @@ class ReviewRepository extends ServiceEntityRepository
     public function findByActivityId(Activity $data): ?array
     {
         $pdo = $this->pdoConnexionService->getConnection();
-        $stmt = $pdo->prepare('SELECT r.*, u.last_name, u.first_name,
+        $stmt = $pdo->prepare('SELECT r.*, u.last_name, u.first_name, u.email,
                                      s.price_quality, s.cleanliness, s.location, s.product,
                                      (s.price_quality + s.cleanliness + s.location + s.product) / 4 as overall_average
                                FROM review r

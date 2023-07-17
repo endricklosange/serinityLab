@@ -76,8 +76,8 @@
 
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-8">
+      <div class="row review my-5">
+        <div class="col-md-8 mt-5">
           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             {% set hasReviewed = false %}
             {% for review in user.reviews %}
@@ -93,27 +93,30 @@
               {% endif %}
             {% endfor %}
           {% endif %}
+          <div class="reviewComment">
+            {% for review in reviews %}
+              {% set emailParts = review.email | split('@') %}
+              {% set username = emailParts[0] | capitalize %}
+              <div class="row">
+                <div class="d-flex">
+                  <div>
+                    <p class="m-b2 nameReview">{{ review.first_name ? review.first_name : username }}
+                    </p>
+                    <p class="dateReview mb-3">{{ review.created_at ? review.created_at|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
+                    </p>
 
-          {% for review in reviews %}
-            <div class="row">
-              <div class="d-flex">
-                <div>
-                  <p>{{ review.first_name }}
-                  </p>
-                  <p>{{ review.created_at ? review.created_at|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
-                  </p>
-
-                </div>
-                <div>
-                  <p>{{ review.overall_average}}/5</p>
+                  </div>
+                  <div>
+                    <p class="overallAverageReview">{{ review.overall_average|slice(0, 4)}}/5</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <p>{{ review.comment}}</p>
-            </div>
+              <div class="row">
+                <p>{{ review.comment}}</p>
+              </div>
+            {% endfor %}
+          </div>
 
-          {% endfor %}
         </div>
       </div>
     </div>
