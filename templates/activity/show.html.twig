@@ -25,7 +25,7 @@
         {% if activity.activityImages %}
           {% for activityImage in activity.activityImages %}
             {% if activityImage %}
-              <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}"class="img-fluid"/>
+              <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}" class="img-fluid"/>
             {% endif %}
           {% else %}
             <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
@@ -76,44 +76,46 @@
 
         </div>
       </div>
-
-      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {% set hasReviewed = false %}
-        {% for review in user.reviews %}
-          {% if review.activity.id == activity.id %}
-            {% set hasReviewed = true %}
+      <div class="row">
+        <div class="col-md-8">
+          {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% set hasReviewed = false %}
+            {% for review in user.reviews %}
+              {% if review.activity.id == activity.id %}
+                {% set hasReviewed = true %}
+              {% endif %}
+            {% endfor %}
+            {% for order in user.orders %}
+              {% if not hasReviewed and order.reservation.activity.id == activity.id and order.pay == true and order.reservation.reservationEnd|date('Y-m-d H:i:s') <  currentDateTime|date('Y-m-d H:i:s') %}
+                <div >
+                  {{ include('review/_form.html.twig') }}
+                </div>
+              {% endif %}
+            {% endfor %}
           {% endif %}
-        {% endfor %}
-        {% for order in user.orders %}
-          {% if not hasReviewed and order.reservation.activity.id == activity.id and order.pay == true and order.reservation.reservationEnd|date('Y-m-d H:i:s') <  currentDateTime|date('Y-m-d H:i:s') %}
-            <button id="showReviewFormButton">Ajouter un avis</button>
-            <div >
-              {{ include('review/_form.html.twig') }}
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
 
-      {% for review in reviews %}
-        <div class="row">
-          <div class="d-flex">
-            <div>
-              <p>{{ review.first_name }}
-              </p>
-              <p>{{ review.created_at ? review.created_at|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
-              </p>
+          {% for review in reviews %}
+            <div class="row">
+              <div class="d-flex">
+                <div>
+                  <p>{{ review.first_name }}
+                  </p>
+                  <p>{{ review.created_at ? review.created_at|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
+                  </p>
 
+                </div>
+                <div>
+                  <p>{{ review.overall_average}}/5</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p>{{ review.overall_average}}/5</p>
+            <div class="row">
+              <p>{{ review.comment}}</p>
             </div>
-          </div>
+
+          {% endfor %}
         </div>
-        <div class="row">
-          <p>{{ review.comment}}</p>
-        </div>
-
-      {% endfor %}
+      </div>
     </div>
   </section>
 

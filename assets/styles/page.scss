@@ -8,3 +8,11 @@
         }
     }
 }
+
+@media only screen and (max-width: $landscapeTablets) {
+    .aboutUs {
+        .thirdRow {
+           display: none;
+        }
+    }
+}

@@ -1,17 +1,20 @@
 {{ form_start(reviewForm, {'attr': {'id': 'review-form'}}) }}
-<div class="form-group">
+<div class="form-group reviewFirst">
   {{ form_row(reviewForm.comment) }}
+  <button id="showReviewFormButton" type="button">
+    <img  src="{{ asset('build/images/reviewbtn.svg') }}" alt="searchIcone">
+  </button>
 </div>
 <div id="reviewFormContainer" style="display: none;">
-  <div class="form-group">
-    {{ form_label(reviewForm.score.price_quality, 'Qualité - prix :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="form-group my-3">
+    {{ form_label(reviewForm.score.price_quality, 'Qualité & prix :', {'label_attr': {'class': 'sr-only'}}) }}
     <div class="wrapper">
       {{ form_widget(reviewForm.score.price_quality, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': reviewForm.score.price_quality.vars.value|default(0), 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
       <span class="slide-value">{{ reviewForm.score.price_quality.vars.value }}</span>
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group my-3">
     {{ form_label(reviewForm.score.cleanliness, 'Propreté :', {'label_attr': {'class': 'sr-only'}}) }}
     <div class="wrapper">
       {{ form_widget(reviewForm.score.cleanliness, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': reviewForm.score.price_quality.vars.value|default(0), 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
@@ -19,7 +22,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group my-3">
     {{ form_label(reviewForm.score.location, 'Emplacement :', {'label_attr': {'class': 'sr-only'}}) }}
     <div class="wrapper">
       {{ form_widget(reviewForm.score.location, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': reviewForm.score.location.vars.value|default(0), 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
@@ -27,14 +30,14 @@
     </div>
   </div>
 
-  <div class="form-group">
-    {{ form_label(reviewForm.score.product, 'Produit :', {'label_attr': {'class': 'sr-only'}}) }}
+  <div class="form-group my-3">
+    {{ form_label(reviewForm.score.product, 'Prestation :', {'label_attr': {'class': 'sr-only'}}) }}
     <div class="wrapper">
       {{ form_widget(reviewForm.score.product, {'attr': {'class': 'form-control range-slider', 'type': 'range', 'value': reviewForm.score.product.vars.value|default(0), 'placeholder': 'Rayon', 'min': 1, 'max': 5}}) }}
       <span class="slide-value">{{ reviewForm.score.product.vars.value }}</span>
     </div>
   </div>
-  <button class="btn">{{ button_label|default('Save') }}</button>
+  <button class="btn btn-primary my-2">{{ button_label|default('Ajouter mon commentaire') }}</button>
   {{ form_end(reviewForm) }}
 </div>
 
