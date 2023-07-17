@@ -11,11 +11,12 @@
 }
 .btn-filterBtn{
     background-color: $primary;
+    width: 80%;
     color: white;
     padding: 7px 15px;
     border-radius: 20px;
     .img-fluid {
-        padding-left: 40px;
+        padding-left: 25px;
     }
     :hover{
         background-color: $primary;

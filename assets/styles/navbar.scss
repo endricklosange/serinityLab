@@ -56,26 +56,25 @@ input.form-control.navRadius.search {
     border: none;
 }
 
-
 @media only screen and (min-width: $landscapeTablets) {
     .navbar {
         .searchIconeMobile {
             display: none;
         }
-        #navbarSupportedContent{
+        #navbarSupportedContent {
             display: none !important;
         }
     }
 }
 @media only screen and (max-width: $landscapeTablets) {
     .navbar {
-        .navbar-toggler:focus{
+        .navbar-toggler:focus {
             box-shadow: none;
-        } 
+        }
         .searchIconeMobile {
             width: 34px;
         }
-        button{
+        button {
             border: none;
         }
         .flex {
@@ -96,7 +95,7 @@ input.form-control.navRadius.search {
         flex-direction: row-reverse;
         li.nav-item {
             width: 100%;
-            a{
+            a {
                 color: white;
             }
         }
