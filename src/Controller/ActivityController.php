@@ -65,7 +65,7 @@ class ActivityController extends AbstractController
                 'formFilter' => $filterForm,
                 'min' => $min,
                 'max' => $max,
-
+                'searchData' => $data->getQuery()
             ]);
         }
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
