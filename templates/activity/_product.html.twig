@@ -1,5 +1,5 @@
 {% for activity in activities %}
-  <div class="col-lg-3 col-md-6">
+  <div class="col-lg-3 col-md-6 mb-3">
     {% if is_granted("ROLE_USER") %}
       {% for favorite in activity.favorite %}
         {% if favorite.id == app.user.id %}

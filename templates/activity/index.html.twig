@@ -9,9 +9,9 @@
         <div class="row my-2">
           {% include 'activity/_categories.html.twig' %}
           <div class="col-md-2 col-12">
-            <div class="wrapper btn-filterBtn">
+            <div class="wrapper btn-filterBtn desktopFilter">
               <a href="#demo-modal">Filtre
-              <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre">
+                <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre">
               </a>
             </div>
           </div>
@@ -20,6 +20,11 @@
     </div>
     <div class="container product-list">
       <div class="row my-5">
+        <div class="wrapper btn-filterBtn mobileFilter">
+          <a href="#demo-modal">Filtre
+            <img class="img-fluid" src="{{ asset('build/images/logoFilter.png') }}" alt="imageFiltre">
+          </a>
+        </div>
         <div id="demo-modal" class="modal">
           <div class="modal__content">
             <div class="title-modal">
