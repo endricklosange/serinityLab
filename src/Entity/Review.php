@@ -23,7 +23,7 @@ class Review
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\OneToOne(inversedBy: 'reviews', targetEntity: Score::class, cascade: ["persist"])]
+    #[ORM\ManyToOne(inversedBy: 'reviews', targetEntity: Score::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Score $score = null;
 
