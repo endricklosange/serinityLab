@@ -27,7 +27,7 @@ class Score
     #[ORM\Column]
     private ?int $product = null;
 
-    #[ORM\OneToOne(mappedBy: 'score', targetEntity: Review::class)]
+    #[ORM\OneToMany(mappedBy: 'score', targetEntity: Review::class)]
     private Collection $reviews;
 
     public function __construct()
