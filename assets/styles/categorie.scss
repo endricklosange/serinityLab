@@ -26,6 +26,7 @@
             border-radius: 4px !important;
         }
         .card {
+            border: none;
             img {
                 width: 327px;
                 height: 435px;
@@ -33,6 +34,14 @@
             }
         }
     }
+}
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mobileFilter {
+    display: none;
 }
 @media only screen and (max-width: $landscapeTablets) {
     .btn-filterBtn {
@@ -56,33 +65,40 @@
                 justify-content: center;
             }
         }
+        .desktopFilter {
+            display: none;
+        }
     }
     .btn-filterBtn {
-        position: absolute;
-        top: 22%;
         width: 33%;
     }
     .product-list {
-        margin-top: 80px;
+        margin-top: 40px;
+        .mobileFilter {
+            display: flex;
+            margin-bottom: 20px;
+        }
     }
 }
 @media only screen and (max-width: $landscapeMobile) {
     .btn-filterBtn {
-        position: absolute;
-        top: 28%;
         width: 33%;
     }
-    .rowProduct{
-        justify-content: center;
-        .col-lg-3.col-md-6 {
-            max-width: 327px;
+    .product-list {
+        .rowProduct {
+            margin: 0;
+            justify-content: center;
+            .col-lg-3.col-md-6 {
+                max-width: 327px;
+            }
+        }
+        .mobileFilter {
+            margin-left: 26px;
         }
     }
 }
 @media only screen and (max-width: $portraitMobile) {
     .btn-filterBtn {
-        position: absolute;
-        top: 28%;
         width: 42%;
     }
 }
@@ -92,7 +108,7 @@
             width: 33% !important;
         }
     }
-    #navbarSupportedContent{
-        display:none !important;
+    #navbarSupportedContent {
+        display: none !important;
     }
 }
