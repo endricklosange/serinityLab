@@ -36,7 +36,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary {
     background-color: #ffffff00;
     border-radius: 0;
     padding: 0px 57px 0 10px;
-    border-bottom: solid white  1.5px !important;
+    border-bottom: solid white 1.5px !important;
     margin: 0 1px;
     height: 40px;
 }
@@ -55,8 +55,50 @@ li.nav-item {
 input.form-control.navRadius.search {
     border: none;
 }
+
+
+@media only screen and (min-width: $landscapeTablets) {
+    .navbar {
+        .searchIconeMobile {
+            display: none;
+        }
+        #navbarSupportedContent{
+            display: none !important;
+        }
+    }
+}
+@media only screen and (max-width: $landscapeTablets) {
+    .navbar {
+        .navbar-toggler:focus{
+            box-shadow: none;
+        } 
+        .searchIconeMobile {
+            width: 34px;
+        }
+        button{
+            border: none;
+        }
+        .flex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            img {
+                width: 73px;
+            }
+        }
+    }
+}
 @media only screen and (max-width: $portraitTablets) {
     .userNav {
         display: none;
+    }
+    .navbar {
+        flex-direction: row-reverse;
+        li.nav-item {
+            width: 100%;
+            a{
+                color: white;
+            }
+        }
     }
 }
