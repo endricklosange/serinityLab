@@ -1,0 +1,37 @@
+.activityForm {
+    img {
+        width: 80px;
+        height: 80px;
+        margin: 10px;
+        object-fit: cover;
+    }
+    #activityImages,
+    #services {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+        li {
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            list-style: none;
+            padding: 20px;
+        }
+        .vich-image {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            div {
+                display: none;
+            }
+        }
+    }
+    #activityImages{
+        label {
+            display: none;
+        }
+    }
+
+    label {
+        font-family: $fontText;
+    }
+}

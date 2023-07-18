@@ -3,63 +3,63 @@
         {{ error }}
     </div>
 {% endfor %}
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'class': 'activityForm'}}) }}
 
 {{ form_widget(form._token)}}
 <div class="form-group">
   {{ form_label(form.name, 'Nom') }}
   {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.description, 'Description') }}
   {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.category_id, 'Catégorie') }}
   {{ form_widget(form.category_id, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.services, 'Services') }}
   <ul id="services" data-prototype="{{ form_widget(form.services.vars.prototype)|e('html_attr') }}">
     {% for serviceForm in form.services %}
       <li>
         {{ form_row(serviceForm) }}
-        <button type="button" class="remove-btn">Remove Service</button>
+        <button type="button" class="remove-btn btn btn-danger my-2">Remove Service</button>
       </li>
     {% endfor %}
   </ul>
-  <button type="button" class="add-btn" data-collection-holder-class="services">Add Service</button>
+  <button type="button" class="add-btn btn btn-primary" data-collection-holder-class="services">Ajouter un service</button>
 </div>
 
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.activityImages, 'Activity Images') }}
   <ul id="activityImages" data-prototype="{{ form_widget(form.activityImages.vars.prototype)|e('html_attr') }}">
     {% for imageForm in form.activityImages %}
       <li>
         {{ form_row(imageForm) }}
-        <button type="button" class="remove-btn">Remove Image</button>
+        <button type="button" class="remove-btn btn btn-danger my-2">Supprimer l'image</button>
       </li>
     {% endfor %}
   </ul>
-  <button type="button" class="add-btn" data-collection-holder-class="activityImages">Add Image</button>
+  <button type="button" class="add-btn btn btn-primary" data-collection-holder-class="activityImages">Ajouter une image</button>
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.price, 'Prix') }}
   {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.address, 'Adresse') }}
   {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.latitude, 'Latitude') }}
   {{ form_widget(form.latitude, {'attr': {'class': 'form-control'}}) }}
 </div>
-<div class="form-group">
+<div class="form-group my-2">
   {{ form_label(form.longitude, 'Longitude') }}
   {{ form_widget(form.longitude, {'attr': {'class': 'form-control'}}) }}
 </div>
-<button type="submit" class="btn btn-primary">Ajouter</button>
+<button type="submit" class="btn btn-primary my-2">Ajouter</button>
 {{ form_end(form, {render_rest: false}) }}
 
 {% block javascripts %}

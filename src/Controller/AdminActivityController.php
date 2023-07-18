@@ -27,7 +27,6 @@ class AdminActivityController extends AbstractController
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
-        dd( $activity->getActivityImages() );
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (count($activity->getActivityImages()) > 5) {
