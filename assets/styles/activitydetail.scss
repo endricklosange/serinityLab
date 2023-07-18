@@ -17,8 +17,8 @@
 }
 .ckeditor {
     img {
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
     }
     p {
         font-family: $fontText;
@@ -231,5 +231,16 @@ button.fc-today-button.fc-button.fc-button-primary {
         input[type="range"]:focus::-ms-fill-upper {
             background: #27382e;
         }
+    }     
+}
+@media only screen and (max-width: $landscapeMobile) {
+    .formCalandar{
+        th,td {
+            font-size: 14px !important;
+        }
+        h2 {
+            font-size: 25px !important;
+        }
     }
+    
 }

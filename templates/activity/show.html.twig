@@ -37,10 +37,10 @@
         </div>
       {% endif %}
       <div class="row">
-        <div class="col-md-8 mt-5 ckeditor">
+        <div class="col-lg-8 mt-5 ckeditor">
           {{ activity.description|raw }}
         </div>
-        <div class="col-md-4 mt-5 formCalandar">
+        <div class="col-lg-4 mt-5 formCalandar">
           <h1 class="mb-3">{{ activity.name }}</h1>
           {% for error in app.flashes('error') %}
             <div class="alert alert-danger">
