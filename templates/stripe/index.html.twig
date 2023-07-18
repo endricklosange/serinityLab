@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Paiement{% endblock %}
 {% block body %}
 
-  <div class="container">
+  <div class="container stripePage">
     {% set monthTranslations = {
       'January': 'janvier',
       'February': 'février',
@@ -19,59 +19,66 @@
       '/': 'h'
     } %}
     {% for message in app.flashes('success') %}
-      <div style="color: green;
-                                    border: 2px green solid;
-                                    text-align: center;
-                                    padding: 5px;margin-bottom: 10px;">
+      <div style="color: green;border: 2px green solid;text-align: center;padding: 5px;margin-bottom: 10px;">
         {{ message }}
       </div>
     {% endfor %}
+    <div class="d-flex align-items-center; my-5">
+      <a href="{{ path('app_activity_show', {'id': orderSession.reservation.activity.id}) }}"><img class="arrowBack mx-4" src="{{ asset('build/images/arrow-back.svg') }}" alt="logo"></a>
+      <h1>Paiement</h1>
+    </div>
 
     <form id='checkout-form' method='post' action="{{ path('app_stripe_charge') }}">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-6 paymentForm">
+          <h2 class="py-5">Reservation</h2>
           <input type='hidden' name='stripeToken' id='stripe-token-id'>
           <!-- Champs de l'entité Order -->
           <div class="row">
+            <h3 class="my-4">Information personnelle</h3>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="lastname">Nom</label>
-                <input type="text" class="form-control" id="lastname" name="lastname">
+                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Saisissez votre nom">
               </div>
               <div class="form-group">
                 <label for="firstname">Prénom</label>
-                <input type="text" class="form-control" id="firstname" name="firstname">
+                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Saisissez votre prénom">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="firstname">Email</label>
-                <input type="text" class="form-control" id="firstname" name="firstname" value="">
+                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Saisissez votre adresse e-mail">
               </div>
               <div class="form-group">
                 <label for="phone">Téléphone</label>
-                <input type="text" class="form-control" id="phone" name="phone">
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="Saisissez votre numéro">
               </div>
+              <input type="hidden" name="token" value="{{ csrf_token('stripeForm') }}"/>
             </div>
           </div>
+          <h3 class="my-4">Information bancaire</h3>
           <div class="form-group">
             <label for="cardholder-name">Titulaire de la carte</label>
-            <input type="text" class="form-control" id="cardholder-name" name="cardholder-name">
+            <input type="text" class="form-control" id="cardholder-name" name="cardholder-name" placeholder="Saisissez le nom">
           </div>
           <label for="card-element" class="mb-1">Carte bancaire</label>
-          <div id="card-element" class="form-control"></div>
+          <div id="card-element" class="form-control mb-lg-5"></div>
 
         </div>
-        <div class="col-md-6">
-          <div>
-            <h2>Votre détente</h2>
-            <div class="row">
+        <div class="col-lg-6 mt-5 yourRelaxation mb-5">
+          <div class="mt-5 yourRelaxationFirstDiv">
+            <h2 class="pb-4">Votre détente</h2>
+            <div class="row  mt-4 mb-5">
               <div class="col-4">
                 {% if orderSession.reservation.activity.activityImages %}
-                  {% for activityImage in orderSession.reservation.activity.activityImages | slice(0, 1) %}
-                    {% if activityImage %}
-                      <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }} " class="img-fluid">
+                  {% set counter = 0 %}
+                  {% for activityImage in orderSession.reservation.activity.activityImages %}
+                    {% if counter == 2 %}
+                      <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}" class="img-fluid">
                     {% endif %}
+                    {% set counter = counter + 1 %}
                   {% else %}
                     <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
                   {% endfor %}
@@ -88,12 +95,6 @@
             <div class="row">
               <div class="d-flex justify-content-between">
                 <p>Prix</p>
-                <p>{{orderSession.service.price}}€</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="d-flex justify-content-between">
-                <p>Total</p>
                 <p>{{orderSession.service.price}}€</p>
               </div>
             </div>

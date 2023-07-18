@@ -142,7 +142,7 @@ class UserController extends AbstractController
             try {
                 $stripe = new \Stripe\StripeClient($_ENV["STRIPE_SECRET"]);
                 $stripe->refunds->create([
-                    'charge' => $order->getIdpayment(),
+                    'charge' => base64_decode($order->getIdpayment()),
                 ]);
                 $this->addFlash(
                     'success',

@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class StripeController extends AbstractController
 {
     #[Route('/stripe', name: 'app_stripe')]
-    public function index(Request $request): Response
+    public function index(Request $request, OrderRepository $orderRepository): Response
     {
         $session = $request->getSession();
         $order = $session->get('order');
@@ -29,9 +29,8 @@ class StripeController extends AbstractController
         if ($order) {
             return $this->render('stripe/index.html.twig', [
                 'stripe_key' => $_ENV["STRIPE_KEY"],
-                'orderSession' => $order,
+                'orderSession' => $orderRepository->find($order),
                 'searchForm' => $form,
-
             ]);
         } else {
             return $this->redirectToRoute('app_home_page');
@@ -43,6 +42,8 @@ class StripeController extends AbstractController
         $session = $request->getSession();
         Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
         try {
+            if ($this->isCsrfTokenValid('stripeForm', $request->request->get('token'))) {
+
             $order = $orderRepository->find($session->get('order')->getId());
             $order->setLastname($request->request->get('lastname'));
             $order->setFirstname($request->request->get('firstname'));
@@ -55,9 +56,12 @@ class StripeController extends AbstractController
                 "source" => $request->request->get('stripeToken'),
                 "description" => "Payment Test"
             ]);
-            $order->setIdpayment($charge->id);
+            $order->setIdpayment(base64_encode($charge->id));
             $entityManager->persist($order);
             $entityManager->flush();
+        }else {
+            $this->addFlash('error', "Le token CSRF est invalide");
+        }
         } catch (ApiErrorException) {
             $order->getReservation()->setStatus(false);
             $orderRepository->remove($order, true);
