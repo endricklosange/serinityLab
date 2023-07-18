@@ -8,11 +8,52 @@
         }
     }
 }
+.orderPage,.favoritePage{
+    .row.my-2 {
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        padding: 10px;
+    }
+}
 
 @media only screen and (max-width: $landscapeTablets) {
     .aboutUs {
         .thirdRow {
            display: none;
+        }
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .orderPage,.favoritePage{
+        img.img-fluid {
+            max-width: 347px;
+            max-height: 229px;
+            width: 347px;
+            object-fit: cover;
+        }
+    }
+}
+@media only screen and (max-width: 1200px) {
+    .orderPage,.favoritePage{
+        
+        img.img-fluid {
+            max-height: 191px;
+            width: 288px;
+            object-fit: cover;
+        }
+    }
+}
+@media only screen and (max-width: 992px) {
+    .orderPage,.favoritePage{
+        
+        img.img-fluid {
+            max-height: 139px;
+        }
+    }
+}
+@media only screen and (max-width: $landscapeMobile) {
+    .orderPage,.favoritePage {
+        h3 {
+            font-size: 18px;
         }
     }
 }

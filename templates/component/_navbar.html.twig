@@ -43,6 +43,23 @@
   <div class="userNav">
     <img class="bodyMassage mx-2" src="{{ asset('build/images/bodyMassage.svg') }}" alt="bodyMassage">
     <a href="{{ path('app_activity')}}"><img class="ticketLogo mx-2" src="{{ asset('build/images/fluent_ticket-diagonal-16-regular.svg') }}" alt="ticketLogo"></a>
-    <img class="userLogo" src="{{ asset('build/images/mingcute_user-1-line.svg') }}" alt="userLogo">
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="userLogo" src="{{ asset('build/images/mingcute_user-1-line.svg') }}" alt="userLogo">
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{ path('app_user_favorite')}}">Favoris</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ path('app_user_reservation')}}">Réservation</a>
+          <a class="dropdown-item" href="{{ path('app_user_edit')}}">Compte</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ path('app_logout')}}">Deconnexion</a>
+        </div>
+      </div>
+      {% else %}
+          <a href="{{ path('app_login')}}"><img class="userLogo" src="{{ asset('build/images/mingcute_user-1-line.svg') }}" alt="userLogo"></a>
+    {% endif %}
+
   </div>
 </nav>

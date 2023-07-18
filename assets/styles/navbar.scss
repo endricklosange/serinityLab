@@ -3,8 +3,20 @@
 .form-inline {
     position: relative;
 }
+.dropdown-menu.show {
+    background: white;
+}
+.dropdown-toggle::after{
+    color: white;
+}
 img.userLogo {
     margin-left: 10px;
+}
+.userNav {
+    display: flex;
+    .dropdown-menu.show {
+        right: 0px;
+    }
 }
 nav.navbar.navbar-expand-lg.navbar-dark.bg-primary {
     border-bottom: #8b8b8b solid 2px;
@@ -56,6 +68,7 @@ input.form-control.navRadius.search {
     border: none;
 }
 
+
 @media only screen and (min-width: $landscapeTablets) {
     .navbar {
         .searchIconeMobile {
@@ -101,3 +114,5 @@ input.form-control.navRadius.search {
         }
     }
 }
+
+
