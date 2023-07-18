@@ -23,6 +23,8 @@ class StripeController extends AbstractController
         $order = $session->get('order');
         $data = new Search();
         $form = $this->createForm(SearchFormType::class, $data);
+        // Store a variable in the session that indicates if the code should be executed.
+        $session->set('should_execute_code', true);
         $form->handleRequest($request);
         if ($order) {
             return $this->render('stripe/index.html.twig', [
@@ -34,11 +36,9 @@ class StripeController extends AbstractController
         } else {
             return $this->redirectToRoute('app_home_page');
         }
-    }
-
-
+    }   
     #[Route('/stripe/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
-    public function createCharge(Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager,ReferenceGeneratorService $referenceGeneratorService): Response
+    public function createCharge(Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager, ReferenceGeneratorService $referenceGeneratorService): Response
     {
         $session = $request->getSession();
         Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
@@ -72,7 +72,6 @@ class StripeController extends AbstractController
             'Le paiement réussit'
         );
         $session->remove('order');
-
         return $this->redirectToRoute('app_user_reservation', [], Response::HTTP_SEE_OTHER);
     }
 }

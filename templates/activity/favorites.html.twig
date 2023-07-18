@@ -3,7 +3,7 @@
 {% block title %}Favoris{% endblock %}
 
 {% block body %}
-  <div class="container ">
+  <div class="container favoritePage">
     <div class="row my-5">
       <h1>Favoris</h1>
 
@@ -12,10 +12,12 @@
           <div class="row my-2">
             <div class="col-4">
               {% if activity.activityImages %}
-                {% for activityImage in activity.activityImages | slice(0, 1) %}
-                  {% if activityImage %}
-                    <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }} " class="img-fluid">
+                {% set counter = 0 %}
+                {% for activityImage in activity.activityImages %}
+                  {% if counter == 2 %}
+                    <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}" class="img-fluid">
                   {% endif %}
+                  {% set counter = counter + 1 %}
                 {% else %}
                   <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
                 {% endfor %}

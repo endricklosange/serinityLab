@@ -18,7 +18,7 @@
     'December': 'décembre',
     '/': 'h'
   } %}
-  <div class="container">
+  <div class="container orderPage">
 
     <div class="row my-5">
       <h1>Réservation</h1>
@@ -32,36 +32,47 @@
           {{ flashMessage }}
         </div>
       {% endfor %}
-      {% if orders %}
+      {% if orders%}
         {% for order in orders %}
-          <div class="row my-2">
-            <div class="col-4">
-              {% if order.reservation.activity.activityImages %}
-                {% for activityImage in order.reservation.activity.activityImages | slice(0, 1) %}
-                  {% if activityImage %}
-                    <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}" class="img-fluid">
-                  {% endif %}
-                {% else %}
-                  <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
-                {% endfor %}
-              {% endif %}
-            </div>
-            <div class="col-8">
-              <h3>{{ order.service.name }}</h3>
-              <p>{{ order.reservation.activity.address }}</p>
-              <p>
-                {{ order.reservation.reservationStart ? order.reservation.reservationStart|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
-              </p>
-              <a href="{{ path('app_activity_show', {'id': order.reservation.activity.id}) }}" class="btn btn-primary">Voir l’activité</a>
-              {% if currentDateTime|date('Y-m-d H:i') < order.reservation.reservationStart|date('Y-m-d H:i') %}
-                <form method="post" action="{{ path('app_user_reservation_delete', {'id': order.id}) }}" onsubmit="return confirm('Êtes-vous certain(e) que vous souhaitez annuler votre réservation ?');">
-                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
-                  <button class="btn btn-danger my-2">Annuler la réservation</button>
-                </form>
-              {% endif %}
-            </div>
-          </div>
+          {% if order.pay == true %}
 
+            <div class="row my-2">
+              <div class="col-4">
+                {% if order.reservation.activity.activityImages %}
+                  {% set counter = 0 %}
+                  {% for activityImage in order.reservation.activity.activityImages %}
+                    {% if counter == 2 %}
+                      <img src="{{ vich_uploader_asset(activityImage) }}" alt="{{ activityImage.name }}" class="img-fluid">
+                    {% endif %}
+                    {% set counter = counter + 1 %}
+                  {% else %}
+                    <img src="{{ asset('build/images/notfound.png') }}" class="img-fluid"/>
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <div class="col-8">
+                <h3>{{ order.service.name }}</h3>
+                <p>{{ order.reservation.activity.address }}</p>
+                <p>
+                  {{ order.reservation.reservationStart ? order.reservation.reservationStart|date('d F Y à H/i', 'Europe/Paris')|replace(monthTranslations) : '' }}
+                </p>
+                <div class="row">
+                  <div class="col-6 col-lg-12">
+                    <a href="{{ path('app_activity_show', {'id': order.reservation.activity.id}) }}" class="btn btn-primary">Voir l’activité</a>
+                  </div>
+                  <div class="col-6 col-lg-12">
+                    {% if currentDateTime|date('Y-m-d H:i') < order.reservation.reservationStart|date('Y-m-d H:i') %}
+                      <form method="post" action="{{ path('app_user_reservation_delete', {'id': order.id}) }}" onsubmit="return confirm('Êtes-vous certain(e) que vous souhaitez annuler votre réservation ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
+                        <button class="btn btn-danger my-lg-2">Annuler la réservation</button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          {% endif %}
         {% else %}
           <div class="row">
             <div class="col">

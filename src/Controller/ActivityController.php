@@ -21,6 +21,7 @@ use App\Repository\ServiceRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -215,7 +216,8 @@ class ActivityController extends AbstractController
         FilterService $filterService,
         SearchFormService $searchFormService,
         ReviewService $reviewService,
-        ReviewRepository $reviewRepository
+        ReviewRepository $reviewRepository,
+        OrderRepository $orderRepository
     ): Response {
         $session = $request->getSession();
         $eventId = $session->get('eventId');
@@ -262,6 +264,16 @@ class ActivityController extends AbstractController
             if (empty($eventId)) {
                 $this->addFlash('error', "Veuillez choisir une date de réservation");
             }
+        }
+        if ($session->get('should_execute_code') && $session->get('order')) {
+            $orderSession = $session->get('order');
+            $orderCode = $orderRepository->find($orderSession);
+            $orderCode->getReservation()->setStatus(false);
+            $orderRepository->deleteOrder($orderCode);
+            $entityManager->persist($orderCode);
+            $entityManager->flush();
+            $session->remove('order');
+            $session->remove('should_execute_code');  
         }
         $data = new Search;
         $dataFilter = new Filter();
