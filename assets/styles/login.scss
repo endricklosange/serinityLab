@@ -1,16 +1,31 @@
 .userConnexion {
-    height: 100%;
-    min-height: 46vh;
-    h1 {
-      color: #000;
-      text-align: center;
-      font-size: 27px;
-      font-family: Gloock;
-    }
-    h2{
-      text-align: center;
-      font-size: 35px;
-      font-family: Gentium Book Plus;
-    }
+  height: 100%;
+  min-height: 46vh;
+  h1 {
+    color: #000;
+    text-align: center;
+    font-size: 27px;
+    font-family: Gloock;
   }
-  
+  h2 {
+    text-align: center;
+    font-size: 35px;
+    font-family: Gentium Book Plus;
+  }
+  input,
+  div#registration_form_plainPassword {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  #registration_form_plainPassword {
+    padding: 0;
+  }
+  input{
+    border-bottom: #000 solid 1px;
+    border-radius: 0;
+  }
+  label{
+    font-family: $fontText;
+  }
+}

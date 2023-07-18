@@ -2,10 +2,24 @@
     h1 {
         font-family: $fontTitle;
     }
-    h2{
+    h2 {
         font-family: $fontTitle;
     }
-    label{
+    label {
         font-family: $fontText;
+    }
+    input,
+    textarea{
+        background-color: transparent;
+        box-shadow: none;
+        border: none;
+    }
+    #registration_form_plainPassword {
+        padding: 0;
+    }
+    input,
+    textarea {
+        border-bottom: #000 solid 1px;
+        border-radius: 0;
     }
 }

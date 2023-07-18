@@ -22,7 +22,7 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adresse e-mail',
                 'attr' => [
-                    'placeholder' => 'Adresse e-mail',
+                    'placeholder' => 'Saisissez votre adresse e-mail',
                 ]
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -31,7 +31,7 @@ class RegistrationFormType extends AbstractType
                     'attr' => [
                         'autocomplete' => 'new-password', 
                         'class' => 'form-control',
-                        'placeholder' => 'Mot de passe',
+                        'placeholder' => 'Saisissez votre mot de passe',
                     ],
                     'constraints' => [
                         new NotBlank([
@@ -44,7 +44,7 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => false,
+                    'label' => 'Mot de passe',
                 ],
                 'second_options' => [
                     'attr' => [
@@ -52,7 +52,7 @@ class RegistrationFormType extends AbstractType
                         'class' => 'my-2 form-control',
                         'placeholder' => 'Confirmez le mot de passe',
                     ],
-                    'label' => false,
+                    'label' => 'Confirmation de mot de passe',
                 ],
                 'invalid_message' => 'Les champs mot de passe doivent correspondre.',
                 'mapped' => false,

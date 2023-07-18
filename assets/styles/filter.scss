@@ -24,7 +24,7 @@
 .category-field {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    div{
+    div {
         display: flex;
         flex-direction: column-reverse;
         label {
@@ -201,5 +201,17 @@ div#priceSlider {
 .modal {
     h2 {
         font-size: 24px;
+    }
+}
+@media only screen and (max-width: $landscapeMobile) {
+    .category-field {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .modal {
+        h2,
+        h3 {
+            text-align: center;
+        }
     }
 }
