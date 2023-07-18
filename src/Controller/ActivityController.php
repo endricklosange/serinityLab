@@ -192,16 +192,6 @@ class ActivityController extends AbstractController
 
             ]);
         }
-        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            return $this->render('/activity/search.html.twig', [
-                'categories' => $categoryRepository->findAll(),
-                'activities' => $activityRepository->findFilter($dataFilter, $userLocation, false, $category),
-                'searchForm' => $searchForm,
-                'formFilter' => $filterForm,
-                'min' => $min,
-                'max' => $max,
-            ]);
-        }
         return $this->render('/activity/category.html.twig', [
             'category' => $category,
             'categories' => $categoryRepository->findAll(),

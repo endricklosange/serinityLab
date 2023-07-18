@@ -1,3 +1,67 @@
+.modal {
+    h2,
+    h3 {
+        font-family: $fontTitle;
+        font-size: 24px;
+    }
+    h2 {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: #b6b6b6 solid 1px;
+    }
+    h3 {
+        font-size: 24px;
+    }
+    .placeLabel {
+        opacity: 0;
+    }
+    input#places {
+        border-bottom: black solid 1px;
+        border-radius: 0;
+        padding: 0;
+    }
+}
+.category-field {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    div{
+        display: flex;
+        flex-direction: column-reverse;
+        label {
+            font-size: 14px;
+            text-align: center;
+        }
+    }
+}
+span.slide-value {
+    font-size: 16px !important;
+}
+.categoriesSlider {
+    border-bottom: #b6b6b6 solid 1px;
+}
+.priceSlider {
+    border-bottom: #b6b6b6 solid 1px;
+}
+div#priceSlider {
+    height: 4px;
+    margin: 26px 0;
+    .noUi-connect {
+        background: #27382e;
+    }
+}
+.noUi-horizontal .noUi-handle {
+    width: 35px !important;
+    height: 35px !important;
+    top: -15px !important;
+    background: #27382e;
+    border-radius: 50px;
+    border: none !important;
+    box-shadow: none;
+}
+.noUi-handle:before,
+.noUi-handle:after {
+    content: none !important;
+}
 #filterContent {
     position: absolute;
     z-index: 100;
@@ -9,7 +73,7 @@
         padding: 30px;
     }
 }
-.btn-filterBtn{
+.btn-filterBtn {
     background-color: $primary;
     width: 80%;
     color: white;
@@ -18,19 +82,124 @@
     .img-fluid {
         padding-left: 25px;
     }
-    :hover{
+    :hover {
         background-color: $primary;
     }
-    
 }
-.filterForm{
-    h2,h3{
+.filterForm {
+    .priceSlider {
+        .col-6 {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        input#max {
+            max-width: 39%;
+        }
+    }
+    h2,
+    h3 {
         font-size: 24px;
     }
+    input#ray,
+    input,
+    div#categories {
+        background-color: transparent;
+        box-shadow: none;
+        border: none;
+    }
+    input[type="range"] {
+        height: 24px;
+        -webkit-appearance: none;
+        margin: 10px 0;
+        width: 100%;
+    }
+    input[type="range"]:focus {
+        outline: none;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 3px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 0px 0px 0px #000000;
+        background: #27382e;
+        border-radius: 5px;
+        border: 0px solid #000000;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        box-shadow: 0px 0px 0px #000000;
+        border: 0px solid #000000;
+        height: 18px;
+        width: 18px;
+        border-radius: 50px;
+        background: #27382e;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -7.5px;
+    }
+    input[type="range"]:focus::-webkit-slider-runnable-track {
+        background: #27382e;
+    }
+    input[type="range"]::-moz-range-track {
+        width: 100%;
+        height: 3px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 0px 0px 0px #000000;
+        background: #27382e;
+        border-radius: 5px;
+        border: 0px solid #000000;
+    }
+    input[type="range"]::-moz-range-thumb {
+        box-shadow: 0px 0px 0px #000000;
+        border: 0px solid #000000;
+        height: 18px;
+        width: 18px;
+        border-radius: 50px;
+        background: #27382e;
+        cursor: pointer;
+    }
+    input[type="range"]::-ms-track {
+        width: 100%;
+        height: 3px;
+        cursor: pointer;
+        animate: 0.2s;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+    }
+    input[type="range"]::-ms-fill-lower {
+        background: #27382e;
+        border: 0px solid #000000;
+        border-radius: 10px;
+        box-shadow: 0px 0px 0px #000000;
+    }
+    input[type="range"]::-ms-fill-upper {
+        background: #27382e;
+        border: 0px solid #000000;
+        border-radius: 10px;
+        box-shadow: 0px 0px 0px #000000;
+    }
+    input[type="range"]::-ms-thumb {
+        margin-top: 1px;
+        box-shadow: 0px 0px 0px #000000;
+        border: 0px solid #000000;
+        height: 18px;
+        width: 18px;
+        border-radius: 50px;
+        background: #27382e;
+        cursor: pointer;
+    }
+    input[type="range"]:focus::-ms-fill-lower {
+        background: #27382e;
+    }
+    input[type="range"]:focus::-ms-fill-upper {
+        background: #27382e;
+    }
 }
-.modal{
-    h2{
+.modal {
+    h2 {
         font-size: 24px;
-
     }
 }

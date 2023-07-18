@@ -1,9 +1,8 @@
-
 {{ form_start(formFilter, {'attr': {'id': 'filterForm','class':'filterForm'}}) }}
 
-<div class="form-row">
+<div class="form-row priceSlider py-4">
   <div class="row">
-  <h2>Prix</h2>
+    <h3>Prix</h3>
     <div id="priceSlider" data-min="{{min}}" data-max="{{max}}"></div>
     <div class="col-6">
       {{ form_label(formFilter.min, null, {'label_attr': {'class': 'sr-only'}}) }}
@@ -16,21 +15,26 @@
   </div>
 </div>
 {% if app.request.attributes.get('_route') != 'app_activity_category' %}
-<div class="form-group">
-  <h2>Catégories</h2>
-  
-  {{ form_label(formFilter.categories, null, {'label_attr': {'class': 'sr-only'}}) }}
-  {{ form_widget(formFilter.categories, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher'}}) }}
-</div>
+  <div class="form-group py-4 categoriesSlider">
+    <h3>Catégories</h3>
+    <div class="category-field">
+      {% for category in formFilter.categories %}
+      <div>
+        {{ form_label(category) }}
+        {{ form_widget(category) }}
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
 {% endif %}
 
-
-<div class="row">
-  <h2>Déstination</h2>
+<div class="row my-5">
+  <h3>Déstination</h3>
   <div class="col-md-6">
     <div class="form-group">
-      {{ form_label(formFilter.places, null, {'label_attr': {'class': 'sr-only'}}) }}
-      {{ form_widget(formFilter.places, {'attr': {'class': 'form-control', 'placeholder': 'lieu'}}) }}
+      {{ form_label(formFilter.places, null, {'label_attr': {'class': 'sr-only placeLabel'}}) }}
+      {{ form_widget(formFilter.places, {'attr': {'class': 'form-control placeInput', 'placeholder': 'lieu'}}) }}
     </div>
   </div>
   <div class="col-md-6">

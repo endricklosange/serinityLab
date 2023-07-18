@@ -32,7 +32,12 @@ class FilterType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'attr' => [
-                        'placeholder' => 'Rechercher'
+                        'placeholder' => 'Rechercher',
+                        'class' => 'categorie-div'
+
+                    ],
+                    'label_attr' => [
+                        'class' => 'categorie-div'
                     ]
                 ]);
         }
