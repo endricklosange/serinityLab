@@ -34,7 +34,7 @@ class SearchFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Search::class,
             'method' => 'GET',
-            'csrf_protection' => false,
+            'csrf_protection' => true,
         ]);
     }
     public function getBlockPrefix()
