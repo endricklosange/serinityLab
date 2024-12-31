@@ -1,0 +1,41 @@
+# Use the php:8.2-apache as the base image
+FROM php:8.2-apache
+
+# Set the Apache server name to "localhost" in the Apache configuration
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Update package repositories and install necessary packages
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev curl gnupg;
+
+# Generate and configure UTF-8 locales
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
+
+# Download and install Composer globally
+RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
+    mv composer.phar /usr/local/bin/composer
+
+# Configure and install PHP extensions
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install pdo pdo_mysql gd opcache intl zip calendar dom mbstring zip gd xsl
+
+# Install and enable APCu extension
+RUN pecl install apcu && docker-php-ext-enable apcu
+
+# Install Symfony CLI
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
+RUN apt install symfony-cli -y
+
+# Install Node.js (LTS) and Yarn
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn
+
+# Change ownership of the /var/www directory to the www-data user and group
+RUN chown -R www-data:www-data /var/www
+
+# Set the working directory to /var/www/app
+WORKDIR /var/www/

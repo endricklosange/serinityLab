@@ -1,0 +1,39 @@
+services:
+  # Define the "db" service for a MySQL database.
+  db:
+    image: mysql:latest
+    container_name: db_docker_symfony
+    environment:
+      MYSQL_DATABASE: "dbSymfony"
+      MYSQL_PASSWORD: "root"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_TCP_PORT: 3305
+    ports:
+      - "3305:3305"
+    expose:
+      - "3305"
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - dev
+
+  # Define the "www" service, which appears to be a PHP application.
+  www:
+    build: docker/
+    container_name: www_docker_php
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/:/etc/apache2/sites-enabled
+      - ./:/var/www
+    restart: always
+    networks:
+      - dev
+
+networks:
+  # Define the "dev" network to allow communication between services.
+  dev:
+
+volumes:
+  # Create a volume named "my-db" for persisting database data.
+  my-db:
