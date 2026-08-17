@@ -103,9 +103,9 @@ COPY . .
 COPY --from=vendor /app/vendor ./vendor
 COPY --from=frontend_builder /app/public/build ./public/build
 
-RUN composer dump-autoload --no-dev --optimize --classmap-authoritative \
+RUN mkdir -p var/cache var/log public/uploads public/images/activity \
+    && composer dump-autoload --no-dev --optimize --classmap-authoritative \
     && chown -R www-data:www-data var public/uploads public/images/activity
-
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
