@@ -1,0 +1,97 @@
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: serinitylab_traefik
+    restart: unless-stopped
+    command:
+      - --providers.docker=true
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=app
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:?Set ACME_EMAIL in .env.prod}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certs:/letsencrypt
+    networks:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: serinitylab_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Set MYSQL_DATABASE in .env.prod}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env.prod}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env.prod}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env.prod}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  www:
+    build:
+      context: .
+      dockerfile: docker/dockerfile
+      target: prod
+    image: serinitylab-www:prod
+    container_name: serinitylab_www
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: "0"
+      APP_SECRET: ${APP_SECRET:?Set APP_SECRET in .env.prod}
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4
+      MESSENGER_TRANSPORT_DSN: ${MESSENGER_TRANSPORT_DSN:-doctrine://default?auto_setup=0}
+      MAILER_DSN: ${MAILER_DSN:?Set MAILER_DSN in .env.prod}
+      STRIPE_KEY: ${STRIPE_KEY:?Set STRIPE_KEY in .env.prod}
+      STRIPE_SECRET: ${STRIPE_SECRET:?Set STRIPE_SECRET in .env.prod}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:?Set TRUSTED_PROXIES in .env.prod}
+    volumes:
+      - app_var:/var/www/var
+      - uploads_images:/var/www/public/uploads
+      - activity_images:/var/www/public/images/activity
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.www.rule=Host(`${APP_DOMAIN:?Set APP_DOMAIN in .env.prod}`)
+      - traefik.http.routers.www.entrypoints=websecure
+      - traefik.http.routers.www.tls=true
+      - traefik.http.routers.www.tls.certresolver=letsencrypt
+      - traefik.http.services.www.loadbalancer.server.port=80
+
+networks:
+  app:
+
+volumes:
+  db_data:
+  app_var:
+  uploads_images:
+  activity_images:
+  traefik_certs:

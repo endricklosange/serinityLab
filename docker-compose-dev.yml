@@ -19,7 +19,10 @@ services:
 
   # Define the "www" service, which appears to be a PHP application.
   www:
-    build: docker/
+    build:
+      context: .
+      dockerfile: docker/dockerfile
+      target: dev
     container_name: www_docker_php
     ports:
       - "80:80"

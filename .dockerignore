@@ -1,0 +1,27 @@
+.git
+.github
+.vscode
+.idea
+
+node_modules
+vendor
+
+var/cache
+var/log
+var/sessions
+
+tests
+docker-compose*.yml
+
+# Note: .env is intentionally NOT ignored — Symfony's runtime requires it to
+# exist on disk even when real environment variables override its values.
+.env.local
+.env.local.php
+.env.prod
+.env.prod.local
+.env.test
+
+npm-debug.log
+yarn-error.log
+.phpunit.result.cache
+phpunit.xml
